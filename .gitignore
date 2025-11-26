@@ -1,0 +1,4 @@
+*.env
+.env
+careercompass-frontend/.env
+careercompass-backend/.env
