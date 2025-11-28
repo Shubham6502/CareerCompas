@@ -4,7 +4,7 @@ import { useUser } from "@clerk/clerk-react";
 import predictDomain from "../utils/predictDomain";
 import { useNavigate } from "react-router-dom";
 
-export default function TestScreen() {
+export default function GenerateTest() {
   const [questions, setQuestions] = useState([]);
   const { user } = useUser();
   const navigate = useNavigate();
@@ -20,13 +20,14 @@ export default function TestScreen() {
 
     const data = await res.json();
     setQuestions(data.questions);
+    
   };
 
   const handleSubmit = (answers) => {
 
    const answersArray = Object.values(answers);
     const result = predictDomain(answers);
-     console.log(result)
+     
     // redirect to result page
     navigate("/result", {
       state: {
@@ -68,6 +69,7 @@ export default function TestScreen() {
             </button>
           </div>
         ) : (
+          
           <TestPage questions={questions} onSubmit={handleSubmit} />
         )}
       </div>

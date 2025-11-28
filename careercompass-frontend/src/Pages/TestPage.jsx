@@ -6,8 +6,10 @@ export default function TestPage({ questions = [], onSubmit }) {
   const handleOptionClick = (qIndex, option) => {
     setAnswers({
       ...answers,
-      [qIndex]: option,
+      [qIndex]: option,   // store the full option object
+      
     });
+    console.log(answers);
   };
 
   const handleSubmit = () => {
@@ -19,11 +21,8 @@ export default function TestPage({ questions = [], onSubmit }) {
   };
 
   return (
-    <div className="min-h-screen  py-10 mt-10 px-4">
+    <div className="min-h-screen py-10 mt-10 px-4">
       <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-xl p-8">
-        {/* <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">
-          CareerCompass – Career Test
-        </h1> */}
 
         {questions.map((q, index) => (
           <div key={index} className="mb-6">
@@ -33,7 +32,7 @@ export default function TestPage({ questions = [], onSubmit }) {
 
             <div className="grid gap-3">
               {q.options.map((opt, optIndex) => {
-                const selected = answers[index] === opt;
+                const selected = answers[index]?.text === opt.text;
 
                 return (
                   <button
@@ -48,7 +47,7 @@ export default function TestPage({ questions = [], onSubmit }) {
                       }
                     `}
                   >
-                    {opt}
+                    {opt.text}
                   </button>
                 );
               })}
