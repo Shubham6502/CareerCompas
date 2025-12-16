@@ -10,6 +10,7 @@ export default function GenerateTest() {
   const navigate = useNavigate();
 
   const loadTest = async () => {
+    console.log("request hitted");
     const res = await fetch("http://localhost:5000/api/test/generate-test", {
       method: "POST",
       headers: {

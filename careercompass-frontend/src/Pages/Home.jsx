@@ -13,10 +13,10 @@ import { useNavigate } from "react-router-dom";
 const Home = () => {
    const { user } = useUser();
    const navigate=useNavigate();
-  const [hasTakenTest, setHasTakenTest] = useState(null);
+  const [hasTakenTest, setHasTakenTest] = useState(false);
     useEffect(() => {
     if (user) {
-      axios
+      axios //to get the user test status (true or false)
         .get(`http://localhost:5000/api/userTest/status/${user.id}`)
         .then((res) => setHasTakenTest(res.data.hasTakenTest))
         .catch((err) => console.log(err));
