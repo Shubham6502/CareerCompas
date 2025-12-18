@@ -13,6 +13,7 @@ import Roadmap from './Pages/Roadmap'
 import useSaveUser from './hooks/useSaveUser'
 import GenerateTest from "./Pages/GenerateTest"
 import Result from "./Pages/Result"
+import RoadmapView from "./Pages/RoadmapView"
 
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
       <Route path='/roadmap' element={<Roadmap/>}/>
      <Route path='/test' element={<GenerateTest/>}/>
      <Route path='/result' element={<Result/>}/>
+     <Route path='/roadmapView' element={<RoadmapView/>}/>
      </Routes>
      <Footer></Footer>
      
