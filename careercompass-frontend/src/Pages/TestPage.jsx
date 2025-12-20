@@ -9,7 +9,7 @@ export default function TestPage({ questions = [], onSubmit }) {
       [qIndex]: option,   // store the full option object
       
     });
-    console.log(answers);
+    
   };
 
   const handleSubmit = () => {

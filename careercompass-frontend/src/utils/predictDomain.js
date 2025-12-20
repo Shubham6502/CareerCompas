@@ -1,41 +1,27 @@
 const predictDomain = (answers) => {
-  const scoreMap = {
-    software: 0,
-    ai: 0,
-    data: 0,
-    web: 0,
-    cyber: 0,
-    cloud: 0,
-    devops: 0,
-    uiux: 0,
-    ba: 0,
-  };
+  const scoreMap = {};
 
-Object.values(answers).forEach((ans) => {
-    if (scoreMap[ans] !== undefined) {
-      scoreMap[ans] += 1;
+  Object.values(answers).forEach((ans) => {
+    const domain = ans.domain;
+
+    if (domain) {
+      scoreMap[domain] = (scoreMap[domain] || 0) + 1;
     }
   });
 
-  const topDomainKey = Object.keys(scoreMap).reduce(
-    (a, b) => (scoreMap[a] > scoreMap[b] ? a : b)
-  );
+  let maxScore = 0;
+  let selectedDomain = null;
 
-  const domainNames = {
-    software: "Software Development",
-    ai: "AI / Machine Learning",
-    data: "Data Science",
-    web: "Web Development",
-    cyber: "Cybersecurity",
-    cloud: "Cloud",
-    devops: "DevOps",
-    uiux: "UI/UX Design",
-    ba: "Business Analyst",
-  };
+  for (const domain in scoreMap) {
+    if (scoreMap[domain] > maxScore) {
+      maxScore = scoreMap[domain];
+      selectedDomain = domain;
+    }
+  }
 
   return {
-    domain: domainNames[topDomainKey],
-    score: scoreMap[topDomainKey],
+    domain: selectedDomain,
+    score: maxScore,
   };
 };
 

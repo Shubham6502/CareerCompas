@@ -17,7 +17,7 @@ const Navbar = () => {
       {user ? (
         <>
          <ul className="hidden md:flex space-x-8 text-gray-700 font-medium">
-          <Link to="/roadmapView" className="hover:text-blue-600 cursor-pointer">
+          <Link to="/roadmap" className="hover:text-blue-600 cursor-pointer">
               RoadMap
             </Link>
             <Link to="/" className="hover:text-blue-600 cursor-pointer">

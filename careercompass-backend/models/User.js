@@ -12,6 +12,9 @@ const userSchema = new mongoose.Schema({
         required: true
     },
       hasTakenTest: { type: Boolean, default: false },
+      domain:{
+        type:String,
+      }
 });
 
 export default mongoose.model("User", userSchema);
