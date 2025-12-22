@@ -1,67 +1,81 @@
 import { useState } from "react";
 
-export default function TestPage({ questions = [], onSubmit }) {
+const TestPage = ({ questions = [], onSubmit }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState({});
 
-  const handleOptionClick = (qIndex, option) => {
+  const currentQuestion = questions[currentIndex];
+  const selected = answers[currentIndex];
+
+  const handleOptionClick = (option) => {
     setAnswers({
       ...answers,
-      [qIndex]: option,   // store the full option object
-      
+      [currentIndex]: option,
     });
-    
+  };
+
+  const handleNext = () => {
+    if (!selected) return alert("Please select an option");
+    setCurrentIndex((prev) => prev + 1);
   };
 
   const handleSubmit = () => {
-    if (Object.keys(answers).length !== questions.length) {
-      alert("Please answer all questions before submitting.");
-      return;
-    }
+    if (!selected) return alert("Please select an option");
     onSubmit(answers);
   };
 
   return (
-    <div className="min-h-screen py-10 mt-10 px-4">
-      <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-xl p-8">
+    <div className="space-y-8 max-w-3xl">
 
-        {questions.map((q, index) => (
-          <div key={index} className="mb-6">
-            <h2 className="text-lg font-semibold text-gray-700 mb-3">
-              {index + 1}. {q.question}
-            </h2>
+      {/* Progress */}
+      <p className="text-sm text-gray-400">
+        Question {currentIndex + 1} of {questions.length}
+      </p>
 
-            <div className="grid gap-3">
-              {q.options.map((opt, optIndex) => {
-                const selected = answers[index]?.text === opt.text;
+      {/* Question */}
+      <div className="rounded-xl bg-[#0F172A] border border-white/10 p-6">
+        <h2 className="text-lg font-medium text-white mb-5">
+          {currentQuestion.question}
+        </h2>
 
-                return (
-                  <button
-                    key={optIndex}
-                    onClick={() => handleOptionClick(index, opt)}
-                    className={`
-                      w-full text-left px-4 py-3 rounded-lg border transition
-                      ${
-                        selected
-                          ? "bg-blue-600 text-white border-blue-700"
-                          : "bg-gray-50 border-gray-300 hover:bg-gray-200"
-                      }
-                    `}
-                  >
-                    {opt.text}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        ))}
+        <div className="space-y-3">
+          {currentQuestion.options.map((opt, idx) => (
+            <button
+              key={idx}
+              onClick={() => handleOptionClick(opt)}
+              className={`w-full text-left px-4 py-3 rounded-xl border transition
+                ${
+                  selected?.text === opt.text
+                    ? "bg-blue-600/90 border-blue-500 text-white"
+                    : "bg-[#0F172A] border-white/10 text-gray-300 hover:bg-white/5"
+                }`}
+            >
+              {opt.text}
+            </button>
+          ))}
+        </div>
+      </div>
 
-        <button
-          onClick={handleSubmit}
-          className="mt-8 w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl text-lg font-semibold shadow-md transition"
-        >
-          Submit Test
-        </button>
+      {/* Controls */}
+      <div className="flex justify-end">
+        {currentIndex < questions.length - 1 ? (
+          <button
+            onClick={handleNext}
+            className="px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            Next →
+          </button>
+        ) : (
+          <button
+            onClick={handleSubmit}
+            className="px-6 py-3 rounded-lg bg-green-600 hover:bg-green-700 text-white"
+          >
+            Submit Test →
+          </button>
+        )}
       </div>
     </div>
   );
-}
+};
+
+export default TestPage;

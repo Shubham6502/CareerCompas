@@ -1,31 +1,101 @@
 import mongoose from "mongoose";
-const daySchema=new mongoose.Schema({
-    day:String,
-    task:[String],
-    done:{
-        type:Boolean,
-        default:false,
+
+/* ================= TASK SCHEMA ================= */
+const taskSchema = new mongoose.Schema(
+  {
+    type: {
+      type: String,
+      enum: ["DSA", "READ"],
+      required: true,
     },
-    })
-const weekSchema=new mongoose.Schema({
-    week:String,
-    days:[daySchema],
-})
-const monthSchema=new mongoose.Schema({
-    month:String,
-    focus:String,
-    desc:String,
-    weeks:[weekSchema],
-})
-const roadmapSchema=new mongoose.Schema({
-    domain:{
-        type:String,
-        required:true,
+
+    platform: {
+      type: String,
+      default: "LeetCode", // only for DSA
     },
-    duration:{
-        type:String,
-        default:"3 Months",
+
+    problemTitle: {
+      type: String, // only for DSA
     },
-    months:[monthSchema],
-})
-export default mongoose.model("Roadmap",roadmapSchema);
+
+    title: {
+      type: String, // mainly for READ tasks
+    },
+
+    difficulty: {
+      type: String,
+      enum: ["Easy", "Medium"],
+    },
+
+    url: {
+      type: String,
+      required: true,
+    },
+  },
+  { _id: false }
+);
+
+/* ================= DAY SCHEMA ================= */
+const daySchema = new mongoose.Schema(
+  {
+    day: {
+      type: Number,
+      required: true,
+      min: 1,
+      max: 90,
+    },
+
+    topic: {
+      type: String,
+      required: true,
+    },
+
+    difficulty: {
+      type: String,
+      enum: ["Easy", "Medium"],
+      required: true,
+    },
+
+    tasks: {
+      type: [taskSchema],
+      required: true,
+    },
+  },
+  { _id: false }
+);
+
+/* ================= ROADMAP SCHEMA ================= */
+const roadmapSchema = new mongoose.Schema(
+  {
+    domain: {
+      type: String,
+      required: true,
+      index: true,
+    },
+
+    durationDays: {
+      type: Number,
+      default: 90,
+    },
+
+    level: {
+      type: String,
+      default: "Beginner to Intermediate",
+    },
+
+    platform: {
+      type: String,
+      default: "LeetCode",
+    },
+
+    days: {
+      type: [daySchema],
+      required: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+export default mongoose.model("Roadmap", roadmapSchema);

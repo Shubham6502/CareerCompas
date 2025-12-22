@@ -1,54 +1,80 @@
-import { useState } from 'react'
-import Navbar from './components/Navbar'
-import Home from './Pages/Home'
-import Services from './components/Services'
-import Footer from './components/Footer'
-import { Routes,Route } from 'react-router-dom'
-import Login from './Pages/Login'
-import Register from './Pages/Register'
-import About from './Pages/About'
-import Contact from './Pages/Contact'
-import AiGuidance from './Pages/AiGuidance'
-import Roadmap from './Pages/Roadmap'
-import useSaveUser from './hooks/useSaveUser'
-import GenerateTest from "./Pages/GenerateTest"
-import Result from "./Pages/Result"
-import RoadmapView from "./Pages/RoadmapView"
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useUser } from "@clerk/clerk-react";
+
+import PublicNavbar from "./components/Navbar/PublicNavbar";
+import Home from "./Pages/Home";
+import Dashboard from "./Pages/Dashboard";
+import Assessment from "./Pages/Assessment";
+import AppLayout from "./layouts/AppLayout";
+import AssessmentTest from "./Pages/AssessmentTest";
+import ResultPage from "./Pages/ResultPage";
+import useSaveUser from "./hooks/useSaveUser";
 
 
 function App() {
-  const [count, setCount] = useState(0)
-  useSaveUser()
+  const { isSignedIn, isLoaded } = useUser();
+  useSaveUser();
+  // Wait until Clerk is loaded
+  if (!isLoaded) return null;
 
   return (
-    < div className='min-h-screen'>
-    
-     <Navbar></Navbar> 
-     <Routes>
-      <Route path='/' element={
-        <>
-       
-        <Home></Home>
-     {/* 
-     <Services></Services> */}
-     
-     </>
-      }/>
-      
-      <Route path='/login' element={<Login/>}/>
-      <Route path='/register' element={<Register/>}/>
-      <Route path='/about' element={<About/>}/>
-      <Route path='/contact' element={<Contact/>}/>
-      <Route path='/aiguidance' element={<AiGuidance/> }/>
-      <Route path='/roadmap' element={<Roadmap/>}/>
-     <Route path='/test' element={<GenerateTest/>}/>
-     <Route path='/result' element={<Result/>}/>
-     <Route path='/roadmapView' element={<RoadmapView/>}/>
-     </Routes>
-     <Footer></Footer>
-     
-    </div>
-  )
+    <>
+      {/* Public Navbar */}
+      {!isSignedIn && <PublicNavbar />}
+
+      <Routes>
+        {/* Public Home */}
+        {!isSignedIn && <Route path="/" element={<Home />} />}
+
+        {/* Redirect signed-in users from / to /dashboard */}
+        {isSignedIn && (
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        )}
+
+        {/* Dashboard */}
+        {isSignedIn && (
+          <Route
+            path="/dashboard"
+            element={
+              <AppLayout>
+                <Dashboard />
+              </AppLayout>
+            }
+          />
+        )}
+
+        {/* Assessment (first-time users) */}
+        {isSignedIn && (
+          <Route
+            path="/assessment"
+            element={
+              <AppLayout>
+                <Assessment />
+              </AppLayout>
+            }
+          />
+        )}
+        {isSignedIn && (
+          <Route
+            path="/assessment/test"
+            element={
+              <AppLayout>
+                <AssessmentTest />
+              </AppLayout>
+            }
+          />
+        )}
+        <Route
+          path="/assessment/result"
+          element={
+            <AppLayout>
+              <ResultPage />
+            </AppLayout>
+          }
+        />
+      </Routes>
+    </>
+  );
 }
 
-export default App
+export default App;

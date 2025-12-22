@@ -7,7 +7,7 @@ import userRoutes from "./routes/userRoutes.js";
 import userTest from "./routes/userTest.js"
 import TestRoute from "./routes/TestRoute.js"
 import roadmapRoutes from "./routes/RoadmapRoute.js";
-
+import progressRoutes from "./routes/ProgressRoutes.js";
 
 
 
@@ -30,6 +30,8 @@ app.use("/api/users", userRoutes);
 app.use("/api/userTest", userTest);
 app.use("/api/test",TestRoute);
 app.use("/api/roadmap",roadmapRoutes);
+app.use("/api/progress",progressRoutes);
+
 
 app.get("/", (req, res) => {
   res.send("CareerCompass Backend is Running ");

@@ -1,18 +1,42 @@
-import data from "./RoadmapData.js"
-import Roadmap from "../models/Roadmap.js"
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
 
-dotenv.config();
+import Roadmap from "../models/Roadmap.js";
+import roadmapData from "./RoadmapData.js";
 
-mongoose.connect(process.env.MONGO_URI)
-.then(()=> console.log("SuccessFully Inserted"))
-.catch((err)=>console.log(err))
+/* ---------- ENV SETUP (IMPORTANT) ---------- */
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const mapseed=async()=>{
-    await Roadmap.deleteMany({});
-    await Roadmap.create(data);
-    console.log("Data Inserted");
+dotenv.config({ path: path.resolve(__dirname, "../.env") });
+
+const MONGO_URI = process.env.MONGO_URI;
+
+/* ---------- SAFETY CHECK ---------- */
+if (!MONGO_URI) {
+  console.error
+  process.exit(1);
 }
 
-mapseed();
+/* ---------- SEED FUNCTION ---------- */
+const seedRoadmap = async () => {
+  try {
+    await mongoose.connect(MONGO_URI);
+    console.log(" MongoDB connected");
+
+    await Roadmap.deleteMany({ domain: roadmapData.domain });
+
+   
+    await Roadmap.create(roadmapData);
+    console.log(" Roadmap seeded successfully");
+
+    process.exit(0);
+  } catch (err) {
+    console.error(" Seeder failed:", err);
+    process.exit(1);
+  }
+};
+
+seedRoadmap();

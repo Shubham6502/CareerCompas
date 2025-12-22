@@ -1,148 +1,124 @@
-import React from "react";
-import heroImg from "../assets/Heroimg.svg";
-import { FaFacebook, FaAmazon, FaApple } from "react-icons/fa";
-import { SiNetflix, SiMeta} from "react-icons/si";
-import { FcGoogle } from "react-icons/fc";
-import { motion } from "framer-motion";
-import axios from "axios";
-import { useUser } from "@clerk/clerk-react";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-
+import { useClerk } from "@clerk/clerk-react";
+import bgPattern from "../assets/background.jpg";
 
 const Home = () => {
-   const { user } = useUser();
-   const navigate=useNavigate();
-  const [hasTakenTest, setHasTakenTest] = useState(false);
-    useEffect(() => {
-    if (user) {
-      axios //to get the user test status (true or false)
-        .get(`http://localhost:5000/api/userTest/status/${user.id}`)
-        .then((res) => setHasTakenTest(res.data.hasTakenTest))
-        .catch((err) => console.log(err));
-    }
-  }, [user]);
+  const { openSignIn } = useClerk();
 
-  console.log(hasTakenTest);
   return (
-    <section className="min-h-screen bg-gradient-to-br from-indigo-100 via-blue-50 to-cyan-100 flex flex-col items-center justify-center">
-      
-      {/* Hero Section */}
-      <div className="max-w-7xl w-full flex flex-col-reverse lg:flex-row items-center justify-between px-6 mt-10 py-20">
-        {/* Left Content */}
-        <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1 }}
-          className="text-center lg:text-left space-y-5"
-        >
-          <h1 className="text-5xl font-extrabold text-gray-800 leading-tight">
-            Welcome to{" "}
-            <span className="text-blue-600 drop-shadow-md">CareerCompass</span>
-          </h1>
-          <p className="text-gray-700 text-lg max-w-md mx-auto lg:mx-0">
-            Your AI-powered career partner that helps you find the right path,
-            improve your skills, and get placed in top companies like FANG.
-          </p>
-          <p className="text-gray-600">
-            Discover your strengths, track your growth, and achieve your goals —
-            all guided by smart AI insights.
-          </p>
-           {user && hasTakenTest === false && (
-        <button onClick={() => navigate("/test")} className="bg-blue-600 text-white px-4 py-2 rounded cursor-pointer">
-          Take Test
-        </button>
+      <div className="min-h-screen bg-[#0B0F1A]/99 grid-bg">
 
-      )}
-        </motion.div>
 
-        {/* Right Image */}
-        <motion.div
-          initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1 }}
-          className="flex justify-center lg:justify-end"
-        >
-          <img
-            src={heroImg}
-            alt="Career Compass"
-            className="w-[320px] md:w-[420px] lg:w-[500px] drop-shadow-2xl"
-          />
-        </motion.div>
+      {/* HERO SECTION */}
+      <section className="relative flex flex-col items-center text-center px-6 pt-32 pb-24">
         
-      </div>
+        <span className="mb-6 px-4 py-1 rounded-full text-sm bg-white/5 border border-white/10 text-gray-300">
+          Career Compass v1.0 is Live
+        </span>
 
-      {/* Company Logos */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5, duration: 1 }}
-        className="w-full backdrop-blur-md  py-8"
-      >
-        
-     
-      
+       <h1 className="text-center font-extrabold tracking-tight leading-[1.05]">
+  
+  <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white">
+    Engineer Your
+  </div>
 
-        <h2 className="text-center text-gray-800 text-xl font-semibold mb-6 ">
-          Empowering Career With Industry Leaders:
-        </h2>
-        <div className="flex flex-wrap justify-center gap-10 text-5xl px-10">
-          <FaAmazon className="text-yellow-500 hover:scale-110 transition" />
-          <SiNetflix className="text-red-600 hover:scale-110 transition" />
-          <FcGoogle className="hover:scale-110 transition" />
-          <FaApple className="text-gray-700 hover:scale-110 transition" />
-          <SiMeta className="text-blue-500 hover:scale-110 transition" />
-          {/* <SiMicrosoft className="text-purple-600 hover:scale-110 transition" /> */}
-          <FaFacebook className="text-blue-600 hover:scale-110 transition" />
+  
+  <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl
+                  bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500
+                  bg-clip-text text-transparent">
+    Career Success Roadmap.
+  </div>
+</h1>
+
+        <p className="mt-6 max-w-2xl text-gray-400 text-lg">
+          Career Compass is an AI-powered career guidance platform designed to
+          help students choose the right domain, follow a structured roadmap,
+          and prepare confidently for placements.
+        </p>
+
+        <div className="mt-10 flex gap-4">
+  
+
+  <div className="relative inline-block">
+    
+ 
+    <div
+      className="absolute inset-0 rounded-lg blur-xl opacity-60
+                 bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600
+                 pointer-events-none"
+    />
+
+   
+    <button
+      onClick={openSignIn}
+      className="relative z-10 px-6 py-3 rounded-lg
+                 bg-blue-600 hover:bg-blue-700
+                 text-white font-medium transition"
+    >
+      Get Started →
+    </button>
+  </div>
+
+  
+  <a
+    href="#modules"
+    className="px-6 py-3 rounded-lg border border-white/10
+               hover:bg-white/5 transition text-white"
+  >
+    Explore Modules
+  </a>
+
+</div>
+
+      </section>
+
+      {/* PREVIEW MOCK SECTION */}
+      <section className="flex justify-center px-6 pb-32">
+        <div className="w-full max-w-5xl rounded-2xl bg-gradient-to-br from-white/5 to-white/0 border border-white/10 p-6">
+          <div className="h-64 rounded-xl bg-[#0F172A] flex items-center justify-center text-gray-500">
+            Dashboard Preview (UI Mock)
+          </div>
         </div>
-      </motion.div>
+      </section>
 
-      {/* Info Cards Section */}
-      <div className="max-w-7xl w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 py-20 px-6">
-        {/* Card 1 */}
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="bg-white shadow-lg rounded-2xl p-6 text-center hover:shadow-2xl transition"
-        >
-          <h3 className="text-2xl font-semibold text-blue-600 mb-3">
-            Personalized Roadmaps
-          </h3>
-          <p className="text-gray-600">
-            Get a step-by-step AI-generated learning path to achieve your
-            dream job faster and smarter.
-          </p>
-        </motion.div>
+      {/* MODULES */}
+      <section id="modules" className="px-6 pb-32 max-w-6xl mx-auto text-white">
+        <h2 className="text-3xl font-semibold text-center mb-12">
+          Career Compass Modules
+        </h2>
 
-        {/* Card 2 */}
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="bg-white shadow-lg rounded-2xl p-6 text-center hover:shadow-2xl transition"
-        >
-          <h3 className="text-2xl font-semibold text-blue-600 mb-3">
-            Skill Analysis
-          </h3>
-          <p className="text-gray-600">
-            Our AI identifies your strengths and weaknesses to tailor
-            personalized upskilling suggestions.
-          </p>
-        </motion.div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <ModuleCard
+            title="AI Career Assessment"
+            desc="Analyze interests and skills to recommend the best career domain."
+          />
+          <ModuleCard
+            title="Personalized Roadmaps"
+            desc="Step-by-step learning paths tailored to your career goal."
+          />
+          <ModuleCard
+            title="Progress Tracking"
+            desc="Track your preparation journey and stay consistent."
+          />
+          <ModuleCard
+            title="Placement Preparation"
+            desc="Prepare for interviews, DSA, and technical rounds efficiently."
+          />
+        </div>
+      </section>
 
-        {/* Card 3 */}
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="bg-white shadow-lg rounded-2xl p-6 text-center hover:shadow-2xl transition"
-        >
-          <h3 className="text-2xl font-semibold text-blue-600 mb-3">
-            Real-time Progress Tracking
-          </h3>
-          <p className="text-gray-600">
-            Visualize your growth with AI-powered progress analytics and keep
-            improving every day.
-          </p>
-        </motion.div>
-      </div>
-    </section>
+      {/* FOOTER */}
+      <footer className="py-6 text-center text-sm text-gray-500 border-t border-white/10">
+        © {new Date().getFullYear()} Career Compass. All rights reserved.
+      </footer>
+    </div>
   );
 };
+
+const ModuleCard = ({ title, desc }) => (
+  <div className="rounded-xl bg-[#0F172A] border border-white/10 p-6 hover:border-blue-500/40 transition">
+    <h3 className="text-lg font-medium mb-2">{title}</h3>
+    <p className="text-sm text-gray-400">{desc}</p>
+  </div>
+);
 
 export default Home;
