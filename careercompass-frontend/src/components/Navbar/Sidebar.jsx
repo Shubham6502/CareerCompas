@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { UserButton, useUser } from "@clerk/clerk-react";
+import logo from "../../assets/logo1.png";
 import {
   LayoutDashboard,
   ClipboardList,
@@ -27,9 +28,8 @@ const Sidebar = () => {
         {/* Logo */}
         
         <div className=" px-6 py-5 flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600
-                          flex items-center justify-center font-bold text-black">
-            C
+          <div className="w-9 h-9  flex items-center justify-center">
+            <img src={logo} alt="" className=" rounded-full" />
           </div>
           <span className="text-lg font-semibold text-white">
             Career Compass
@@ -64,7 +64,7 @@ const SidebarLink = ({ to, icon, label }) => (
   <NavLink
     to={to}
     className={({ isActive }) =>
-      `flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm transition-all
+      `flex items-center gap-3 px-4 py-2.5 rounded-xl text-md  transition-all
        ${
          isActive
            ? "bg-blue-600/90 text-white shadow-[0_0_20px_rgba(59,130,246,0.5)]"

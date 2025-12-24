@@ -60,8 +60,21 @@ const progressSchema = new mongoose.Schema(
 
     lastActiveDate: {
       type: Date,
-      default: null,
+      default: Date.now,
     },
+    previousDay: {
+       type: Number, default: 0 
+      },
+    completedTasks: {
+      Day:{
+        type: Number,
+        default: 1,
+      },
+      tasks:{
+       type: [String],
+       default: [],
+      }
+   },
   },
   {
     timestamps: true, 

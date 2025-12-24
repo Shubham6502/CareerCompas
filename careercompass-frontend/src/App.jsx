@@ -9,6 +9,7 @@ import AppLayout from "./layouts/AppLayout";
 import AssessmentTest from "./Pages/AssessmentTest";
 import ResultPage from "./Pages/ResultPage";
 import useSaveUser from "./hooks/useSaveUser";
+import Roadmap from "./Pages/Roadmap";
 
 
 function App() {
@@ -23,15 +24,15 @@ function App() {
       {!isSignedIn && <PublicNavbar />}
 
       <Routes>
-        {/* Public Home */}
+       
         {!isSignedIn && <Route path="/" element={<Home />} />}
 
-        {/* Redirect signed-in users from / to /dashboard */}
+       
         {isSignedIn && (
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
         )}
 
-        {/* Dashboard */}
+       
         {isSignedIn && (
           <Route
             path="/dashboard"
@@ -43,7 +44,7 @@ function App() {
           />
         )}
 
-        {/* Assessment (first-time users) */}
+       
         {isSignedIn && (
           <Route
             path="/assessment"
@@ -72,7 +73,16 @@ function App() {
             </AppLayout>
           }
         />
+        <Route
+      path="/roadmap"
+      element={
+        <AppLayout>
+          <Roadmap />
+          </AppLayout>
+        }/>
       </Routes>
+      
+        
     </>
   );
 }

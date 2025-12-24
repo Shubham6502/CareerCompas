@@ -1,55 +1,116 @@
 import { useUser } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import AssessmentLoading from "../components/Loaders/AssessmentLoading";
+import axios from "axios";
 
 const Dashboard = () => {
   const { user } = useUser();
   const navigate = useNavigate();
+  const [progressData,setProgressData]=useState([]);
+  const [tasks, setTasks] = useState([]);
+  const { isLoaded } = useUser();
+  const [completedTaskIds, setCompletedTaskIds] = useState([]);
+   const [loading, setLoading] = useState(false);//assessment loading state
+    const [questions, setQuestions] = useState([]);//assessment questions state
 
- 
-  const domain = "Software Development";
-  const streak = 5;
-  const progress = 12;
+  useEffect(( )=>{
+    if (!isLoaded || !user) return;
+    const clerkId=user.id;
+  
+  axios.get(`http://localhost:5000/api/progress/getProgress/${clerkId}`,{
+    params:{clerkId:clerkId}
+  }).then((response)=>{
+    setProgressData(response.data);
+    setCompletedTaskIds(response.data.completedTasksids || []);
+  }).catch((error)=>{
+    console.log("Error fetching progress data:",error);
+  });
+ },[isLoaded,user]);
 
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      title: "Solve 3 DSA questions (Arrays)",
-      resource: "/resources/dsa-arrays",
-      completed: false,
-    },
-    {
-      id: 2,
-      title: "Read: Time Complexity Basics",
-      resource: "/resources/time-complexity",
-      completed: false,
-    },
-    {
-      id: 3,
-      title: "Revise yesterday’s topic",
-      resource: "/resources/revision",
-      completed: false,
-    },
-  ]);
+  const domain = progressData.domain;
+  const streak = progressData.streak ;
+  const maxS = progressData.maxStreak ;
+  const progress = progressData.progressPercent;
+  const day=progressData.currentDay || 1;
+console.log(domain,day);
 
-  const handleTaskClick = (taskId, resource) => {
-    // Mark task complete
-    setTasks((prev) =>
-      prev.map((t) =>
-        t.id === taskId ? { ...t, completed: true } : t
-      )
-    );
+  useEffect(()=>{
+    if(!domain || !day) return;
+    // setLoading(true);
+    axios.get(`http://localhost:5000/api/roadmap/getRoadmap/${domain}`,{params:{day:day}})
+    .then((response)=>{
+      setTasks(response.data.days[0].tasks);
+      
+    })
+    .catch((error)=>{
+      console.log("Error fetching tasks:",error);
+      // setLoading(false);
+    })
+  },[domain,day]);
 
-    // Redirect to resource
-    navigate(resource);
+   const handleTaskClick = async (task) => {
+  try {
+    // setLoading(true);
+    await axios.post("http://localhost:5000/api/progress/completeTask", {
+      clerkId: user.id,
+      taskId: task.id,
+    });
+
+      setCompletedTaskIds((prev) => [...prev, task.id]);
+
+    // open resource
+    window.open(task.url, "_blank");
+    } catch (err) {
+    console.error("Failed to complete task", err);
+    // setLoading(false);
+    }
   };
+  
+ 
+  //Assassessment redirection for first time users
+    const loadTest = async () => {
+    try {
+      setLoading(true);
+
+      const res = await fetch(
+        "http://localhost:5000/api/test/generate-test",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userName: user.fullName,
+          }),
+        }
+      );
+
+      const data = await res.json();
+
+      // Store questions temporarily
+      setQuestions(data.questions);
+
+      // Navigate AFTER questions are ready
+      navigate("/assessment/test", {
+        state: { questions: data.questions },
+      });
+    } catch (err) {
+      console.error("Failed to generate test", err);
+      alert("Failed to load assessment. Try again.");
+      setLoading(false);
+    }
+  };
+   if (loading) {
+      return <AssessmentLoading />;
+    }
 
   return (
     <div className="space-y-8 text-white">
 
       {/* HEADER */}
       <div>
-        <h1 className="text-3xl font-semibold text-blue-400">
+        <h1 className="text-3xl font-semibold text-blue-300">
           Hi {user?.firstName}
         </h1>
         <p className="text-gray-400 mt-1">
@@ -57,7 +118,8 @@ const Dashboard = () => {
         </p>
       </div>
 
-      {/* TOP STATS (SAME DESIGN) */}
+     
+       {domain && (<>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <StatCard
           title="Selected Domain"
@@ -68,18 +130,19 @@ const Dashboard = () => {
         <StatCard
           title="Current Streak"
           value={`${streak} Days`}
-          subtitle="Consistency matters"
+          subtitle={`Max Streak :${maxS}`}
           icon="🔥"
         />
         <StatCard
           title="Overall Progress"
-          value={`${progress}%`}
+          value={`${Math.round(progress)}%`}
           subtitle="Across roadmap"
           icon="📈"
         />
       </div>
 
       {/* MAIN CONTENT */}
+      
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
         {/* TODAY TASKS (SAME CARD DESIGN) */}
@@ -89,7 +152,7 @@ const Dashboard = () => {
               Today’s Tasks
             </h2>
             <span className="text-xs px-3 py-1 rounded-md bg-blue-500/10 text-blue-400">
-              Day {streak + 1}
+              Day {day}
             </span>
           </div>
 
@@ -99,7 +162,7 @@ const Dashboard = () => {
                 key={task.id}
                 task={task}
                 onClick={() =>
-                  handleTaskClick(task.id, task.resource)
+                  handleTaskClick(task)
                 }
               />
             ))}
@@ -135,6 +198,27 @@ const Dashboard = () => {
         </GlowCard>
 
       </div>
+     </> )}
+     {!domain && (<div className="space-y-8">
+      <h1 className="text-3xl font-semibold text-grey-400">
+        Career Assessment
+      </h1>
+
+      <p className="text-gray-400">
+        This short assessment helps identify the career domain that best matches your skills and interests.
+
+Please answer all questions honestly. There are no right or wrong answers.
+
+Your responses will be used to create a personalized learning roadmap and daily tasks to guide your career preparation.
+      </p>
+
+      {/* Start Button */}
+      <AssesButton 
+        text="Start Assessment →"
+        onClick={loadTest}
+      />
+    </div>) }
+
     </div>
   );
 };
@@ -182,7 +266,7 @@ const TaskItem = ({ task, onClick }) => (
   >
     <input
       type="checkbox"
-      checked={task.completed}
+      // checked={completedTaskIds.includes(task.id)}
       readOnly
       className="accent-blue-500"
     />
@@ -209,6 +293,23 @@ const GlowButton = ({ text, onClick }) => (
       onClick={onClick}
       className="relative z-10 w-full py-3 rounded-lg
                  bg-blue-600 hover:bg-blue-700 transition font-medium"
+    >
+      {text}
+    </button>
+  </div>
+);
+const AssesButton = ({ text, onClick }) => (
+  <div className="relative inline-block">
+    <div
+      className="absolute inset-0 rounded-lg blur-xl opacity-60
+                 bg-gradient-to-r from-blue-500 to-purple-500
+                 pointer-events-none"
+    />
+    <button
+      onClick={onClick}
+      className="relative z-10 px-6 py-3 rounded-lg
+                 bg-blue-600 hover:bg-blue-700 transition
+                 font-medium text-white"
     >
       {text}
     </button>

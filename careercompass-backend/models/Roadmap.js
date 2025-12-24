@@ -3,6 +3,10 @@ import mongoose from "mongoose";
 /* ================= TASK SCHEMA ================= */
 const taskSchema = new mongoose.Schema(
   {
+    id: {
+      type: String,
+      required: true,
+    },
     type: {
       type: String,
       enum: ["DSA", "READ"],
@@ -32,7 +36,7 @@ const taskSchema = new mongoose.Schema(
       required: true,
     },
   },
-  { _id: false }
+  
 );
 
 /* ================= DAY SCHEMA ================= */

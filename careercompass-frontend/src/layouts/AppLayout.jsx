@@ -3,7 +3,7 @@ import MobileNav from "../components/Navbar/Mobilenav";
 
 const AppLayout = ({ children }) => {
   return (
-    <div className="flex min-h-screen bg-[#0B0F1A] grid-bg">
+    <div className="flex min-h-screen bg-gradient-to-br from-black via-black to-purple-900 ">
       
       {/* Sidebar (Desktop) */}
       <Sidebar />

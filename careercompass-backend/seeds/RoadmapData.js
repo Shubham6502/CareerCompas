@@ -104,20 +104,23 @@ function generateDays() {
       difficulty: level,
       tasks: [
         {
+          id: `day${day}-task1`,
           type: "DSA",
           platform: "LeetCode",
-          problemTitle: q1[0],
+          title: q1[0],
           difficulty: level,
           url: q1[1],
         },
         {
+          id: `day${day}-task2`,
           type: "DSA",
           platform: "LeetCode",
-          problemTitle: q2[0],
+          title: q2[0],
           difficulty: level,
           url: q2[1],
         },
         {
+          id:`day${day}-task3`,
           type: "READ",
           title: `${topic} Fundamentals`,
           url: readingLinks[topic],
