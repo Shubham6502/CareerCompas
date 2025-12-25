@@ -11,8 +11,8 @@ const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
   const { isLoaded } = useUser();
   const [completedTaskIds, setCompletedTaskIds] = useState([]);
-   const [loading, setLoading] = useState(false);//assessment loading state
-    const [questions, setQuestions] = useState([]);//assessment questions state
+  const [loading, setLoading] = useState(false);//assessment loading state
+  const [questions, setQuestions] = useState([]);//assessment questions state
 
   useEffect(( )=>{
     if (!isLoaded || !user) return;
@@ -38,7 +38,7 @@ console.log(domain,day);
   useEffect(()=>{
     if(!domain || !day) return;
     // setLoading(true);
-    axios.get(`http://localhost:5000/api/roadmap/getRoadmap/${domain}`,{params:{day:day}})
+    axios.get(`http://localhost:5000/api/roadmap/${domain}`,{params:{day:day}})
     .then((response)=>{
       setTasks(response.data.days[0].tasks);
       
@@ -61,6 +61,8 @@ console.log(domain,day);
 
     // open resource
     window.open(task.url, "_blank");
+
+    
     } catch (err) {
     console.error("Failed to complete task", err);
     // setLoading(false);
@@ -161,6 +163,7 @@ console.log(domain,day);
               <TaskItem
                 key={task.id}
                 task={task}
+                taskurl={task.url}
                 onClick={() =>
                   handleTaskClick(task)
                 }
@@ -266,7 +269,7 @@ const TaskItem = ({ task, onClick }) => (
   >
     <input
       type="checkbox"
-      // checked={completedTaskIds.includes(task.id)}
+      // checked={completedTask.includes(task.id)}
       readOnly
       className="accent-blue-500"
     />
@@ -279,6 +282,15 @@ const TaskItem = ({ task, onClick }) => (
     >
       {task.title}
     </span>
+      <a
+      href={task.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={(e) => e.stopPropagation()}
+      className="ml-auto text-blue-400 hover:underline text-sm"
+    >
+      Revisit
+    </a>
   </div>
 );
 

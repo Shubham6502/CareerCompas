@@ -12,9 +12,26 @@ const AssessmentTest = () => {
   const questions = location.state.questions;
 
   const handleSubmit = async (answers) => {
-    // Example scoring / prediction logic
-    // (Replace with your real API)
-    const predictedDomain = "Software Development";
+    const scoreMap = {};
+
+  Object.values(answers).forEach((ans) => {
+    const domain = ans.domain;
+
+    if (domain) {
+      scoreMap[domain] = (scoreMap[domain] || 0) + 1;
+    }
+  });
+
+  let maxScore = 0;
+  let selectedDomain = null;
+
+  for (const domain in scoreMap) {
+    if (scoreMap[domain] > maxScore) {
+      maxScore = scoreMap[domain];
+      selectedDomain = domain;
+    }
+  }
+    const predictedDomain = selectedDomain || "Software Development";
 
     navigate("/assessment/result", {
       state: {

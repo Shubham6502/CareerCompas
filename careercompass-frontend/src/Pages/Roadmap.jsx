@@ -1,46 +1,126 @@
-import React from 'react'
-import { Toolbox } from 'lucide-react';
+import axios from "axios";
+import { Lock, CheckCircle } from "lucide-react";
+import { use, useEffect ,useState} from "react";
+import { useUser } from "@clerk/clerk-react";
 
-function Roadmap() {
+
+
+const Roadmap = () => {
+const [roadmap, setRoadmap] = useState([]);
+const { user } = useUser();
+const { isLoaded } = useUser();
+const clerkId=user.id;
+const[progress,setProgress]=useState({});
+useEffect(()=>{
+ 
+  if (!user || !isLoaded) return;
+  axios.get(`http://localhost:5000/api/progress/getProgress/${clerkId}`)
+  .then((response)=>{
+    setProgress(response.data);
+  });
+},[user,isLoaded]);
+console.log("Clerk ID in roadmap:",clerkId);
+console.log("Progress data in roadmap:",progress.domain);
+
+useEffect(() => {
+  if (!progress.domain) return;
+  axios.get(`http://localhost:5000/api/roadmap/${progress.domain}`)
+  .then((response)=>{
+    setRoadmap(response.data.days);
+  })
+},[progress.domain]); 
+console.log("Roadmap data:",roadmap);
   return (
-    <div className='bg-grey-300 border-black'>
-      <h1 className='text-white'>Roadmap Page</h1>
-       <p className="text-gray-400 mt-1">
-          Stay consistent. Small steps every day.
-        </p>
+    /* OUTER CARD (NO SCROLL HERE) */
+    <div
+      className="
+        w-[95%]
+        h-[90vh]
+        bg-white/5
+        backdrop-blur-lg
+        rounded-2xl
+        border border-white/10
+        shadow-xl
+        overflow-hidden
+      "
+    >
+      {/* SCROLLABLE CONTENT */}
+      <div
+        className="
+          relative
+          h-full
+          overflow-y-auto
+          px-6 py-10
+          scrollbar-thin
+          scrollbar-thumb-blue-600/40
+          scrollbar-track-transparent
+        "
+      >
+        {/* Vertical dotted line */}
+        <div className="absolute top-0 bottom-0 left-1/2 w-px border-l border-dashed border-blue-500/40" />
 
+        {Object.values(roadmap).map((daysItem,index) => {
+          const isLeft = index % 2 === 0;
+          const item="completed";
 
-        <div className='grid gap-6 grid-cols-1 md:grid-cols-3 lg:grid-cols-4 '>
-        <div className=''>
-         <Card title="Frontend Developer" description="Learn HTML, CSS, JavaScript, React, and more." Day="day 01" />
-        </div>
-        <div className=''>
-            <Card title="Backend Developer" description="Learn Node.js, Express, Databases, and more." Day="day 02" />
-        </div>
-        </div>
+          return (
+            <div
+              key={`${daysItem.day}-${index}`}
+              className={`relative flex w-full mb-14 ${
+                isLeft ? "justify-start" : "justify-end"
+              }`}
+            >
+              {/* Connector */}
+              <div
+                className={`absolute top-1/2 left-1/2 w-24 h-px border-t border-dashed border-blue-500/40 ${
+                  isLeft ? "-translate-x-full" : "translate-x-0"
+                }`}
+              />
 
-
-
-    </div>
-
-  )
-}
-const Card = ({ title, description ,Day}) => (
-  <div className="rounded-xl bg-[#0F172A] border border-white/10 p-5
-               hover:border-blue-500/30 transition text-white">
-                <div className='flex flex-col justify-center items-center'>
-                  <span className='left-0.5 top-0.5 text-xs px-3 py-1 rounded-md bg-blue-500/10 text-blue-400'>
-                    {Day}
-                  </span>
-                  {title }
-                  
-                  <div><Toolbox />
-                  </div>
-                  
-
+              {/* Node */}
+              <div className="absolute left-1/2 -translate-x-1/2 z-10">
+                <div
+                  className={`w-10 h-10 rounded-full flex items-center justify-center shadow-lg
+                    ${
+                      item === "completed"
+                        ? "bg-blue-600"
+                        : item === "active"
+                        ? "bg-blue-500 animate-pulse"
+                        : "bg-[#1E293B]"
+                    }`}
+                >
+                  {item === "completed" && (
+                    <CheckCircle size={18} className="text-white" />
+                  )}
+                  {item === "locked" && (
+                    <Lock size={16} className="text-blue-300" />
+                  )}
+                  {item === "active" && (
+                    <span className="w-3 h-3 bg-white rounded-full" />
+                  )}
                 </div>
+              </div>
 
-  </div>
-)
+              {/* Card */}
+              <div
+                className={`w-64 px-5 py-3 rounded-xl border text-sm transition
+                  ${
+                    item === "completed"
+                      ? "bg-blue-600/50 border-blue-500/30 text-blue-200"
+                      : item === "active"
+                      ? "bg-blue-600/10 border-blue-600/40 text-white"
+                      : "bg-[#020617] border-white/10 text-gray-400"
+                  }`}
+              >
+                <p className="text-xs opacity-70">Day {daysItem.day}</p>
+                <p className="font-medium">{daysItem.topic}</p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
 
 export default Roadmap;
