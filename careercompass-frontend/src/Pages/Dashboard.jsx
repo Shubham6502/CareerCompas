@@ -3,90 +3,98 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import AssessmentLoading from "../components/Loaders/AssessmentLoading";
 import axios from "axios";
+import { CheckCircle, Clock11 } from "lucide-react";
+
 
 const Dashboard = () => {
   const { user } = useUser();
   const navigate = useNavigate();
-  const [progressData,setProgressData]=useState([]);
+  const [progressData, setProgressData] = useState([]);
   const [tasks, setTasks] = useState([]);
   const { isLoaded } = useUser();
   const [completedTaskIds, setCompletedTaskIds] = useState([]);
-  const [loading, setLoading] = useState(false);//assessment loading state
-  const [questions, setQuestions] = useState([]);//assessment questions state
-
-  useEffect(( )=>{
-    if (!isLoaded || !user) return;
-    const clerkId=user.id;
+  const [loading, setLoading] = useState(false); //assessment loading state
+  const [questions, setQuestions] = useState([]); //assessment questions state
+  const [completedDays,setCompletedDays]=useState([]);
   
-  axios.get(`http://localhost:5000/api/progress/getProgress/${clerkId}`,{
-    params:{clerkId:clerkId}
-  }).then((response)=>{
-    setProgressData(response.data);
-    setCompletedTaskIds(response.data.completedTasksids || []);
-  }).catch((error)=>{
-    console.log("Error fetching progress data:",error);
-  });
- },[isLoaded,user]);
+
+  useEffect(() => {
+    if (!isLoaded || !user) return;
+    const clerkId = user.id;
+
+    axios
+      .get(`http://localhost:5000/api/progress/getProgress/${clerkId}`, {
+        params: { clerkId: clerkId },
+      })
+      .then((response) => {
+        setProgressData(response.data);
+        const taskIds = response.data.completedTasks.tasks || [];
+        setCompletedTaskIds(taskIds);
+        setCompletedDays(response.data.completedDays|| []);
+      })
+      .catch((error) => {
+        console.log("Error fetching progress data:", error);
+      });
+  }, [isLoaded, user]);
 
   const domain = progressData.domain;
-  const streak = progressData.streak ;
-  const maxS = progressData.maxStreak ;
+  const streak = progressData.streak;
+  const maxS = progressData.maxStreak;
   const progress = progressData.progressPercent;
-  const day=progressData.currentDay || 1;
-console.log(domain,day);
+  const day = progressData.currentDay;
 
-  useEffect(()=>{
-    if(!domain || !day) return;
-    // setLoading(true);
-    axios.get(`http://localhost:5000/api/roadmap/${domain}`,{params:{day:day}})
-    .then((response)=>{
-      setTasks(response.data.days[0].tasks);
-      
-    })
-    .catch((error)=>{
-      console.log("Error fetching tasks:",error);
-      // setLoading(false);
-    })
-  },[domain,day]);
+  useEffect(() => {
+    if (!domain || !day) return;
 
-   const handleTaskClick = async (task) => {
-  try {
-    // setLoading(true);
-    await axios.post("http://localhost:5000/api/progress/completeTask", {
-      clerkId: user.id,
-      taskId: task.id,
-    });
+    axios
+      .get(`http://localhost:5000/api/roadmap/getRoadmap/${domain}`, {
+        params: { day: day },
+      })
+      .then((response) => {
+        setTasks(response.data.days[0].tasks);
+      })
+      .catch((error) => {
+        console.log("Error fetching tasks:", error);
+        // setLoading(false);
+      });
+  }, [domain, day]);
 
-      setCompletedTaskIds((prev) => [...prev, task.id]);
+  const handleTaskClick = async (task) => {
+    try {
+      // setLoading(true);
+      await axios.post("http://localhost:5000/api/progress/completeTask", {
+        clerkId: user.id,
+        taskId: task.id,
+      });
 
-    // open resource
-    window.open(task.url, "_blank");
-
-    
+       setCompletedTaskIds(prev => {
+       
+          if (prev.includes(task.id)) return prev;
+          return [...prev, task.id];
+          });
+          
+      // open resource
+      window.open(task.url, "_blank");
     } catch (err) {
-    console.error("Failed to complete task", err);
-    // setLoading(false);
+      console.error("Failed to complete task", err);
+      // setLoading(false);
     }
   };
-  
- 
+
   //Assassessment redirection for first time users
-    const loadTest = async () => {
+  const loadTest = async () => {
     try {
       setLoading(true);
 
-      const res = await fetch(
-        "http://localhost:5000/api/test/generate-test",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            userName: user.fullName,
-          }),
-        }
-      );
+      const res = await fetch("http://localhost:5000/api/test/generate-test", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userName: user.fullName,
+        }),
+      });
 
       const data = await res.json();
 
@@ -103,13 +111,17 @@ console.log(domain,day);
       setLoading(false);
     }
   };
-   if (loading) {
-      return <AssessmentLoading />;
-    }
+  if (loading) {
+    return <AssessmentLoading />;
+  }
+
+const streakData=Array.from({ length: 90 }, (_, i) => ({
+  day: i + 1,
+  completed: completedDays?.includes(i + 1) || false,
+}));
 
   return (
     <div className="space-y-8 text-white">
-
       {/* HEADER */}
       <div>
         <h1 className="text-3xl font-semibold text-blue-300">
@@ -120,108 +132,118 @@ console.log(domain,day);
         </p>
       </div>
 
-     
-       {domain && (<>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <StatCard
-          title="Selected Domain"
-          value={domain}
-          subtitle="Locked for roadmap"
-          icon="🎯"
-        />
-        <StatCard
-          title="Current Streak"
-          value={`${streak} Days`}
-          subtitle={`Max Streak :${maxS}`}
-          icon="🔥"
-        />
-        <StatCard
-          title="Overall Progress"
-          value={`${Math.round(progress)}%`}
-          subtitle="Across roadmap"
-          icon="📈"
-        />
-      </div>
-
-      {/* MAIN CONTENT */}
-      
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-        {/* TODAY TASKS (SAME CARD DESIGN) */}
-        <GlowCard className="lg:col-span-2">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-medium">
-              Today’s Tasks
-            </h2>
-            <span className="text-xs px-3 py-1 rounded-md bg-blue-500/10 text-blue-400">
-              Day {day}
-            </span>
-          </div>
-
-          <div className="space-y-3">
-            {tasks.map((task) => (
-              <TaskItem
-                key={task.id}
-                task={task}
-                taskurl={task.url}
-                onClick={() =>
-                  handleTaskClick(task)
-                }
-              />
-            ))}
-          </div>
-        </GlowCard>
-
-        {/* 3-MONTH STREAK TRACKER (SAME RIGHT CARD) */}
-        <GlowCard>
-          <div className="flex flex-col h-full justify-between">
-            <div>
-              <div className="mb-4 flex justify-center">
-                <div
-                  className="w-12 h-12 rounded-full bg-blue-500/20
-                             flex items-center justify-center text-xl"
-                >
-                  🗓️
-                </div>
-              </div>
-
-              <h3 className="text-lg font-medium text-center">
-                3-Month Tracker
-              </h3>
-              <p className="text-sm text-gray-400 text-center mt-2">
-                Complete daily tasks to finish your roadmap
-              </p>
-            </div>
-
-            <GlowButton
-              text="View Roadmap →"
-              onClick={() => navigate("/roadmap")}
+      {domain && (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <StatCard
+              title="Selected Domain"
+              value={domain}
+              subtitle="Locked for roadmap"
+              icon="🎯"
+            />
+            <StatCard
+              title="Current Streak"
+              value={`${streak} Days`}
+              // subtitle={`Max Streak :${maxS}`}
+              icon="🔥"
+            />
+            <StatCard
+              title="Overall Progress"
+              value={`${Math.round(progress)}%`}
+              subtitle="Across roadmap"
+              icon="📈"
             />
           </div>
-        </GlowCard>
 
-      </div>
-     </> )}
-     {!domain && (<div className="space-y-8">
-      <h1 className="text-3xl font-semibold text-grey-400">
-        Career Assessment
-      </h1>
+          {/* MAIN CONTENT */}
 
-      <p className="text-gray-400">
-        This short assessment helps identify the career domain that best matches your skills and interests.
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* TODAY TASKS (SAME CARD DESIGN) */}
+            <GlowCard className="lg:col-span-2">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-medium">Today’s Tasks</h2>
+                <span className="text-xs px-3 py-1 rounded-md bg-blue-500/10 text-blue-400">
+                  Day {day}
+                </span>
+              </div>
 
-Please answer all questions honestly. There are no right or wrong answers.
+              <div className="space-y-3">
+                {tasks.map((task) => (
+                  <TaskItem
+                    key={task.id}
+                    task={task}
+                    completedTask={completedTaskIds} 
+                    taskurl={task.url}
+                    onClick={() => handleTaskClick(task)}
+                  />
+                ))}
+              </div>
+            </GlowCard>
 
-Your responses will be used to create a personalized learning roadmap and daily tasks to guide your career preparation.
-      </p>
+            {/* 3-MONTH STREAK TRACKER (SAME RIGHT CARD) */}
+          
+              <div className="
+  w-full max-w-2xl
+  rounded-2xl
+  bg-gradient-to-br from-[#0f172a] via-[#111827] to-[#1e1b4b]
+  p-6
+  shadow-xl
+">
+  <h2 className="text-xl font-semibold text-white">
+    3-Month Tracker
+  </h2>
+  <p className="text-sm text-gray-400 mb-6">
+    Complete daily tasks to maintain your streak
+  </p>
 
-      {/* Start Button */}
-      <AssesButton 
-        text="Start Assessment →"
-        onClick={loadTest}
+  {/* 90-Day Heatmap */}
+  
+  <div className="grid grid-cols-15 gap-2">
+    {streakData.map((day, idx) => (
+      <div
+        key={idx}
+        className={`
+          w-4 h-4 rounded-sm
+          ${day.completed
+            ? "bg-green-500"
+            : "bg-gray-700"}
+        `}
+        title={`Day ${day.day}`}
       />
-    </div>) }
+    ))}
+  </div>
 
+  {/* Stats */}
+  <div className="flex justify-between mt-6 text-sm text-gray-300">
+    <span>Total Active Days: {completedDays?.length || 0}</span>
+    <span>Max Streak: {maxS}</span>
+  </div>
+</div>
+
+
+                
+         
+          </div>
+        </>
+      )}
+      {!domain && (
+        <div className="space-y-8">
+          <h1 className="text-3xl font-semibold text-grey-400">
+            Career Assessment
+          </h1>
+
+          <p className="text-gray-400">
+            This short assessment helps identify the career domain that best
+            matches your skills and interests. Please answer all questions
+            honestly. There are no right or wrong answers. Your responses will
+            be used to create a personalized learning roadmap and daily tasks to
+            guide your career preparation.
+          </p>
+
+          {/* Start Button */}
+          <AssesButton text="Start Assessment →" onClick={loadTest} />
+        </div>
+      )}
     </div>
   );
 };
@@ -256,8 +278,9 @@ const GlowCard = ({ children, className = "" }) => (
   </div>
 );
 
-const TaskItem = ({ task, onClick }) => (
+const TaskItem = ({ task, onClick,completedTask }) => (
   <div
+  
     onClick={onClick}
     className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer
                 border transition
@@ -267,30 +290,57 @@ const TaskItem = ({ task, onClick }) => (
                     : "bg-[#0B0F1A] border-white/10 hover:bg-white/5"
                 }`}
   >
-    <input
-      type="checkbox"
-      // checked={completedTask.includes(task.id)}
-      readOnly
-      className="accent-blue-500"
-    />
+ <div className="flex items-center select-none">
+  <input
+    type="checkbox"
+    checked={completedTask.includes(task.id)}
+    readOnly
+    className="hidden"
+  />
+
+  <div
+    onClick={(e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      handleCompleteTask(task.id);
+    }}
+    className="cursor-pointer"
+  >
+    {completedTask.includes(task.id) ? (
+      <CheckCircle className="w-6 h-6 text-green-600" />
+    ) : (
+      <Clock11 className="w-6 h-6 text-blue-600" />
+    )}
+  </div>
+</div>
+
+
     <span
       className={`text-sm ${
-        task.completed
-          ? "line-through text-gray-400"
-          : "text-gray-300"
+        task.completed ? "line-through text-gray-400" : "text-gray-300"
       }`}
     >
       {task.title}
     </span>
-      <a
+
+    {completedTask.includes(task.id) && (
+    <a
       href={task.url}
       target="_blank"
       rel="noopener noreferrer"
       onClick={(e) => e.stopPropagation()}
-      className="ml-auto text-blue-400 hover:underline text-sm"
+      className=" ml-auto 
+    px-4 py-1.5
+    text-sm font-medium
+    text-blue-500
+    border border-blue-500/30
+    rounded-md
+    hover:bg-blue-500
+    hover:text-white
+    transition"
     >
       Revisit
-    </a>
+    </a>)}
   </div>
 );
 

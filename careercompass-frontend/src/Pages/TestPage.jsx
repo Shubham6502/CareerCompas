@@ -25,7 +25,7 @@ const TestPage = ({ questions = [], onSubmit }) => {
   };
 
   return (
-    <div className="space-y-8 max-w-3xl">
+    <div className="space-y-8 max-w-3xl lg:my-20 mx-auto">
 
       {/* Progress */}
       <p className="text-sm text-gray-400">

@@ -24,6 +24,7 @@ router.get("/:domain",async(req,res)=>{
 router.get("/getRoadmap/:domain",async(req,res)=>{
     const {domain}=req.params;
     const {day}=req.query;
+    
     try{
         const roadmap=await Roadmap.findOne(
             {domain},

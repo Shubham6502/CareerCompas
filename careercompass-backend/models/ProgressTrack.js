@@ -34,7 +34,7 @@ const progressSchema = new mongoose.Schema(
 
     streak: {
       type: Number,
-      default: 1,
+      default: 0,
       min: 0,
     },
 

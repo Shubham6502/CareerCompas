@@ -1,5 +1,6 @@
 import ProgressTrack from "../models/ProgressTrack.js";
-import { evaluateDailyProgress } from "../utils/streakUtils.js";
+import { evaluateDailyProgress } from "../utils/DaychangeUtils.js";
+import evaluateStreak from "../utils/streakUtils.js";
 import express from "express";
 const router = express.Router();
 
@@ -39,7 +40,7 @@ router.get("/getProgress/:clerkId", async (req, res) => {
     if (!progress) {
       return res.status(404).json({ message: "Progress not found" });
     }      
-     await evaluateDailyProgress(progress, 3); // 3 = tasks per day
+     await evaluateDailyProgress(progress); // 3 = tasks per day
       
     await progress.save();
     return res.status(200).json(progress);
@@ -57,28 +58,19 @@ router.post("/completeTask", async (req, res) => {
         .status(404)
         .json({ message: "Progress not found for this user." });
     }
+    
 
- 
- 
-    // if ( !progress.completedTasks || progress.completedTasks.Day !== progress.currentDay) {
-    //   progress.completedTasks = {
-    //     Day: progress.currentDay,
-    //     tasks: [],
-    //   };
-    // }
-   
-  
     if (progress.completedTasks.tasks.includes(taskId)) {
       return res.status(400).json({ message: "Task already completed." });
     }
-    
-    // Mark task as completed
     progress.completedTasks.tasks.push(taskId);
-    
-
+    console.log(progress.completedTasks.tasks.length);
+    await evaluateStreak(progress, 3); // 3 = tasks per day
+      console.log("Completed Tasks:", progress.completedTasks.tasks.length);
     if(progress.completedTasks.tasks.length == 3){
         progress.completedDays.push(progress.currentDay);
          progress.todayTasksCompleted = true;
+         console.log("Day completed:", progress.currentDay );
     }
     
     
