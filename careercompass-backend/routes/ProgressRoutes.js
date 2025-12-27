@@ -64,31 +64,44 @@ router.post("/completeTask", async (req, res) => {
       return res.status(400).json({ message: "Task already completed." });
     }
     progress.completedTasks.tasks.push(taskId);
-    console.log(progress.completedTasks.tasks.length);
+
+    const Currdate=new Date().toISOString().split("T")[0];
+    let activeDay = progress.ActiveDays.find(d => d.day === progress.currentDay);
+    if (!activeDay) {
+    progress.ActiveDays.push({
+    day: progress.currentDay,
+    date: Currdate,
+    tasks: [taskId]
+  });
+} else {
+  if (activeDay.tasks.includes(taskId)) {
+    return res.status(400).json({ message: "Task already completed." });
+  }
+  activeDay.tasks.push(taskId);
+}
+
+    
     await evaluateStreak(progress, 3); // 3 = tasks per day
-      console.log("Completed Tasks:", progress.completedTasks.tasks.length);
+      
     if(progress.completedTasks.tasks.length == 3){
         progress.completedDays.push(progress.currentDay);
          progress.todayTasksCompleted = true;
-         console.log("Day completed:", progress.currentDay );
+    
     }
     
     
     if(progress.completedTasks.tasks.length <= 3){
       progress.progressPercent = Math.min(100, progress.progressPercent + 2.7);
     }
-    // const yesterday = new Date();
-    //  yesterday.setDate(yesterday.getDate() - 1);
-    // progress.lastActiveDate = yesterday;
     
 
-    // progress.lastActiveDate = new Date();
+    
     await progress.save();
 
     return res.status(200).json({
       success: true,
       message: "Task completed successfully.",
-      completedTasks: progress.completedTasks.tasks.length,
+      progress:progress,
     });
   } catch (err) {
     return res.status(500).json({

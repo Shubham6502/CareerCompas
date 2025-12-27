@@ -1,5 +1,7 @@
 import { useClerk } from "@clerk/clerk-react";
 import bgPattern from "../assets/background.jpg";
+import mockUI from "../assets/ui.png"
+import {CircleFadingArrowUp} from "lucide-react"
 
 const Home = () => {
   const { openSignIn } = useClerk();
@@ -11,8 +13,9 @@ const Home = () => {
       {/* HERO SECTION */}
       <section className="relative flex flex-col items-center text-center px-6 pt-32 pb-24">
         
-        <span className="mb-6 px-4 py-1 rounded-full text-sm bg-white/5 border border-white/10 text-gray-300">
-          Career Compass v1.0 is Live
+        <span className="mb-6 px-4 py-1 rounded-full text-sm bg-white/5 border border-white/10 text-gray-300 inline-flex">
+       <span className="text-red-600 mr-1 animate-pulse"> <CircleFadingArrowUp size={20}  /></span>
+          Career Compass v1.0 Under Devlopment
         </span>
 
        <h1 className="text-center font-extrabold tracking-tight leading-[1.05]">
@@ -74,8 +77,8 @@ const Home = () => {
       {/* PREVIEW MOCK SECTION */}
       <section className="flex justify-center px-6 pb-32">
         <div className="w-full max-w-5xl rounded-2xl bg-gradient-to-br from-white/5 to-white/0 border border-white/10 p-6">
-          <div className="h-64 rounded-xl bg-[#0F172A] flex items-center justify-center text-gray-500">
-            Dashboard Preview (UI Mock)
+          <div className="h-94 rounded-xl bg-[#0F172A] flex items-center justify-center text-gray-500">
+          <img src={mockUI} alt=""className="h-94 w-full bg-cover object-cover" />
           </div>
         </div>
       </section>

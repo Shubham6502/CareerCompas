@@ -10,6 +10,7 @@ import AssessmentTest from "./Pages/AssessmentTest";
 import ResultPage from "./Pages/ResultPage";
 import useSaveUser from "./hooks/useSaveUser";
 import Roadmap from "./Pages/Roadmap";
+import RoadmapTasks from "./Pages/RoadmapTasks";
 
 
 function App() {
@@ -78,6 +79,13 @@ function App() {
       element={
         <AppLayout>
           <Roadmap />
+          </AppLayout>
+        }/>
+        <Route
+        path="/roadmap/tasks"
+        element={
+          <AppLayout>
+            <RoadmapTasks/>
           </AppLayout>
         }/>
       </Routes>

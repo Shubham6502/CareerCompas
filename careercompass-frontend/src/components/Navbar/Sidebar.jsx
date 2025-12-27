@@ -20,7 +20,12 @@ const Sidebar = () => {
              bg-violet-600 blur-3xl opacity-30
              pointer-events-none"
 />
-      <div className=" relative h-full w-64 rounded-2xl bg-[#0F172A]
+ <div
+  className="absolute left-50 bottom-0 w-100 h-160 rounded-full
+             bg-violet-600/50 blur-3xl opacity-30
+             pointer-events-none"
+/>
+      <div className=" relative h-full w-64 rounded-2xl bg-[#1b0349]
                       border border-white/10
                       shadow-[0_0_40px_rgba(59,130,246,0.08)]
                       flex flex-col">
@@ -37,7 +42,7 @@ const Sidebar = () => {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 px-3 space-y-1">
+        <nav className="flex-1 px-3 space-y-1 ">
           <SidebarLink to="/dashboard" icon={<LayoutDashboard size={18} />} label="Dashboard" />
           <SidebarLink to="/assessment" icon={<ClipboardList size={18} />} label="Assessment" />
           <SidebarLink to="/roadmap" icon={<Map size={18} />} label="Roadmap" />
@@ -64,11 +69,11 @@ const SidebarLink = ({ to, icon, label }) => (
   <NavLink
     to={to}
     className={({ isActive }) =>
-      `flex items-center gap-3 px-4 py-2.5 rounded-xl text-md  transition-all
+      `flex items-center gap-3 px-4 py-2.5 rounded-xl text-md  font-medium transition-all
        ${
          isActive
            ? "bg-blue-600/90 text-white shadow-[0_0_20px_rgba(59,130,246,0.5)]"
-           : "text-gray-400 hover:bg-white/5 hover:text-white"
+           : "text-white hover:bg-white/5 hover:text-white"
        }`
     }
   >

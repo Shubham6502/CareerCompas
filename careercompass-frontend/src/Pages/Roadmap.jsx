@@ -1,46 +1,53 @@
 import axios from "axios";
 import { Lock, CheckCircle } from "lucide-react";
-import { use, useEffect ,useState} from "react";
+import { use, useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
-
-
+import { useNavigate } from "react-router-dom";
 
 const Roadmap = () => {
-const [roadmap, setRoadmap] = useState([]);
-const { user } = useUser();
-const { isLoaded } = useUser();
-const clerkId=user.id;
-const[progress,setProgress]=useState({});
-useEffect(()=>{
- 
-  if (!user || !isLoaded) return;
-  axios.get(`http://localhost:5000/api/progress/getProgress/${clerkId}`)
-  .then((response)=>{
-    setProgress(response.data);
-  });
-},[user,isLoaded]);
-console.log("Clerk ID in roadmap:",clerkId);
-console.log("Progress data in roadmap:",progress.domain);
+  const [roadmap, setRoadmap] = useState([]);
+  const { user } = useUser();
+  const { isLoaded } = useUser();
+  const clerkId = user.id;
+  const navigate =useNavigate();
+  const [progress, setProgress] = useState({});
+  useEffect(() => {
+    if (!user || !isLoaded) return;
+    axios
+      .get(`http://localhost:5000/api/progress/getProgress/${clerkId}`)
+      .then((response) => {
+        setProgress(response.data);
+      });
+  }, [user, isLoaded]);
+  console.log("Clerk ID in roadmap:", clerkId);
+  console.log("Progress data in roadmap:", progress.domain);
 
-useEffect(() => {
-  if (!progress.domain) return;
-  axios.get(`http://localhost:5000/api/roadmap/${progress.domain}`)
-  .then((response)=>{
-    setRoadmap(response.data.days);
-  })
-},[progress.domain]); 
-console.log("Roadmap data:",roadmap);
+  useEffect(() => {
+    if (!progress.domain) return;
+    axios
+      .get(`http://localhost:5000/api/roadmap/${progress.domain}`)
+      .then((response) => {
+        setRoadmap(response.data.days);
+      });
+  }, [progress.domain]);
+
+  const handleClick=(daysItem)=>{
+   
+    navigate('/roadmap/tasks',{
+      state:{
+        day:daysItem
+      },
+    });
+  };
+
+  
   return (
     /* OUTER CARD (NO SCROLL HERE) */
     <div
       className="
         w-[95%]
         h-[90vh]
-        bg-white/5
-        backdrop-blur-lg
-        rounded-2xl
-        border border-white/10
-        shadow-xl
+       
         overflow-hidden
       "
     >
@@ -59,9 +66,19 @@ console.log("Roadmap data:",roadmap);
         {/* Vertical dotted line */}
         <div className="absolute top-0 bottom-0 left-1/2 w-px border-l border-dashed border-blue-500/40" />
 
-        {Object.values(roadmap).map((daysItem,index) => {
+        {Object.values(roadmap).map((daysItem, index) => {
           const isLeft = index % 2 === 0;
-          const item="completed";
+          let item = "completed";
+          if (
+            progress.completedDays.includes(daysItem.day) &&
+            progress.currentDay !== daysItem.day
+          ) {
+            item = "completed";
+          } else if (progress.currentDay === daysItem.day) {
+            item = "active";
+          } else {
+            item = "locked";
+          }
 
           return (
             <div
@@ -83,10 +100,10 @@ console.log("Roadmap data:",roadmap);
                   className={`w-10 h-10 rounded-full flex items-center justify-center shadow-lg
                     ${
                       item === "completed"
-                        ? "bg-blue-600"
+                        ? "bg-green-500"
                         : item === "active"
                         ? "bg-blue-500 animate-pulse"
-                        : "bg-[#1E293B]"
+                        : "bg-amber-600"
                     }`}
                 >
                   {item === "completed" && (
@@ -102,14 +119,14 @@ console.log("Roadmap data:",roadmap);
               </div>
 
               {/* Card */}
-              <div
+              <div onClick={()=>handleClick(daysItem)}
                 className={`w-64 px-5 py-3 rounded-xl border text-sm transition
                   ${
                     item === "completed"
-                      ? "bg-blue-600/50 border-blue-500/30 text-blue-200"
+                      ? "bg-green-600/50 border-green-600/30 text-white"
                       : item === "active"
-                      ? "bg-blue-600/10 border-blue-600/40 text-white"
-                      : "bg-[#020617] border-white/10 text-gray-400"
+                      ? "bg-blue-600/70 border-blue-500/30 text-white"
+                      : "bg-amber-200/20 border-amber-500 text-white"
                   }`}
               >
                 <p className="text-xs opacity-70">Day {daysItem.day}</p>

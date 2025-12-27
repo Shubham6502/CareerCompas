@@ -5,7 +5,6 @@ import AssessmentLoading from "../components/Loaders/AssessmentLoading";
 import axios from "axios";
 import { CheckCircle, Clock11 } from "lucide-react";
 
-
 const Dashboard = () => {
   const { user } = useUser();
   const navigate = useNavigate();
@@ -15,9 +14,9 @@ const Dashboard = () => {
   const [completedTaskIds, setCompletedTaskIds] = useState([]);
   const [loading, setLoading] = useState(false); //assessment loading state
   const [questions, setQuestions] = useState([]); //assessment questions state
-  const [completedDays,setCompletedDays]=useState([]);
-  
+  const [completedDays, setCompletedDays] = useState([]);
 
+  console.log(progressData);
   useEffect(() => {
     if (!isLoaded || !user) return;
     const clerkId = user.id;
@@ -30,7 +29,7 @@ const Dashboard = () => {
         setProgressData(response.data);
         const taskIds = response.data.completedTasks.tasks || [];
         setCompletedTaskIds(taskIds);
-        setCompletedDays(response.data.completedDays|| []);
+        setCompletedDays(response.data.completedDays || []);
       })
       .catch((error) => {
         console.log("Error fetching progress data:", error);
@@ -67,12 +66,11 @@ const Dashboard = () => {
         taskId: task.id,
       });
 
-       setCompletedTaskIds(prev => {
-       
-          if (prev.includes(task.id)) return prev;
-          return [...prev, task.id];
-          });
-          
+      setCompletedTaskIds((prev) => {
+        if (prev.includes(task.id)) return prev;
+        return [...prev, task.id];
+      });
+
       // open resource
       window.open(task.url, "_blank");
     } catch (err) {
@@ -115,10 +113,10 @@ const Dashboard = () => {
     return <AssessmentLoading />;
   }
 
-const streakData=Array.from({ length: 90 }, (_, i) => ({
-  day: i + 1,
-  completed: completedDays?.includes(i + 1) || false,
-}));
+  const streakData = Array.from({ length: 90 }, (_, i) => ({
+    day: i + 1,
+    completed: completedDays?.includes(i + 1) || false,
+  }));
 
   return (
     <div className="space-y-8 text-white">
@@ -172,7 +170,7 @@ const streakData=Array.from({ length: 90 }, (_, i) => ({
                   <TaskItem
                     key={task.id}
                     task={task}
-                    completedTask={completedTaskIds} 
+                    completedTask={completedTaskIds}
                     taskurl={task.url}
                     onClick={() => handleTaskClick(task)}
                   />
@@ -181,48 +179,59 @@ const streakData=Array.from({ length: 90 }, (_, i) => ({
             </GlowCard>
 
             {/* 3-MONTH STREAK TRACKER (SAME RIGHT CARD) */}
-          
-              <div className="
+
+            <div
+              className="
   w-full max-w-2xl
   rounded-2xl
-  bg-gradient-to-br from-[#0f172a] via-[#111827] to-[#1e1b4b]
+  bg-gradient-to-br from-[#1b0349] via-[#1c2a46] to-[#1e1b4b]
   p-6
   shadow-xl
-">
-  <h2 className="text-xl font-semibold text-white">
-    3-Month Tracker
-  </h2>
-  <p className="text-sm text-gray-400 mb-6">
-    Complete daily tasks to maintain your streak
-  </p>
+"
+            >
+              <h2 className="text-xl font-semibold text-white">
+                90 Days Tracker
+              </h2>
+              <p className="text-sm text-gray-400 mb-6">
+                Complete daily tasks to maintain your streak
+              </p>
 
-  {/* 90-Day Heatmap */}
-  
-  <div className="grid grid-cols-15 gap-2">
-    {streakData.map((day, idx) => (
-      <div
-        key={idx}
-        className={`
+              {/* 90-Day Heatmap */}
+
+              <div className="grid grid-cols-15 gap-2">
+                {streakData.map((day, idx) => {
+                  const activeDay = progressData?.ActiveDays?.find(
+                    (d) => Number(d.day) === Number(day.day)
+                  );
+
+                  const len = activeDay?activeDay.tasks.length: 0;
+
+                  return (
+                    <div
+                      key={idx}
+                      className={`
           w-4 h-4 rounded-sm
-          ${day.completed
-            ? "bg-green-500"
-            : "bg-gray-700"}
+          ${
+            len == 3
+              ? "bg-green-500"
+              : len == 2
+              ? "bg-green-700"
+              : len == 1
+              ? "bg-green-900"
+              : "bg-gray-700"
+          }
         `}
-        title={`Day ${day.day}`}
-      />
-    ))}
-  </div>
+                      title={`Day ${day.day}`}
+                    />
+                  );
+                })}
+              </div>
 
-  {/* Stats */}
-  <div className="flex justify-between mt-6 text-sm text-gray-300">
-    <span>Total Active Days: {completedDays?.length || 0}</span>
-    <span>Max Streak: {maxS}</span>
-  </div>
-</div>
-
-
-                
-         
+              <div className="flex justify-between mt-6 text-sm text-gray-300">
+                <span>Total Active Days: {completedDays?.length || 0}</span>
+                <span>Max Streak: {maxS}</span>
+              </div>
+            </div>
           </div>
         </>
       )}
@@ -252,7 +261,7 @@ const streakData=Array.from({ length: 90 }, (_, i) => ({
 
 const StatCard = ({ title, value, subtitle, icon }) => (
   <div
-    className="rounded-xl bg-[#0F172A] border border-white/10 p-5
+    className="rounded-xl bg-[#1b0349] border border-white/10 p-5
                hover:border-blue-500/30 transition"
   >
     <div className="flex justify-between items-center">
@@ -266,7 +275,7 @@ const StatCard = ({ title, value, subtitle, icon }) => (
 
 const GlowCard = ({ children, className = "" }) => (
   <div
-    className={`relative rounded-xl bg-[#0F172A]
+    className={`relative rounded-xl bg-[#1b0349]
                 border border-white/10 p-6 overflow-hidden ${className}`}
   >
     <div
@@ -278,9 +287,8 @@ const GlowCard = ({ children, className = "" }) => (
   </div>
 );
 
-const TaskItem = ({ task, onClick,completedTask }) => (
+const TaskItem = ({ task, onClick, completedTask }) => (
   <div
-  
     onClick={onClick}
     className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer
                 border transition
@@ -290,30 +298,29 @@ const TaskItem = ({ task, onClick,completedTask }) => (
                     : "bg-[#0B0F1A] border-white/10 hover:bg-white/5"
                 }`}
   >
- <div className="flex items-center select-none">
-  <input
-    type="checkbox"
-    checked={completedTask.includes(task.id)}
-    readOnly
-    className="hidden"
-  />
+    <div className="flex items-center select-none">
+      <input
+        type="checkbox"
+        checked={completedTask.includes(task.id)}
+        readOnly
+        className="hidden"
+      />
 
-  <div
-    onClick={(e) => {
-      e.stopPropagation();
-      e.preventDefault();
-      handleCompleteTask(task.id);
-    }}
-    className="cursor-pointer"
-  >
-    {completedTask.includes(task.id) ? (
-      <CheckCircle className="w-6 h-6 text-green-600" />
-    ) : (
-      <Clock11 className="w-6 h-6 text-blue-600" />
-    )}
-  </div>
-</div>
-
+      <div
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          handleCompleteTask(task.id);
+        }}
+        className="cursor-pointer"
+      >
+        {completedTask.includes(task.id) ? (
+          <CheckCircle className="w-6 h-6 text-green-600" />
+        ) : (
+          <Clock11 className="w-6 h-6 text-blue-600" />
+        )}
+      </div>
+    </div>
 
     <span
       className={`text-sm ${
@@ -324,12 +331,12 @@ const TaskItem = ({ task, onClick,completedTask }) => (
     </span>
 
     {completedTask.includes(task.id) && (
-    <a
-      href={task.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      onClick={(e) => e.stopPropagation()}
-      className=" ml-auto 
+      <a
+        href={task.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={(e) => e.stopPropagation()}
+        className=" ml-auto 
     px-4 py-1.5
     text-sm font-medium
     text-blue-500
@@ -338,9 +345,10 @@ const TaskItem = ({ task, onClick,completedTask }) => (
     hover:bg-blue-500
     hover:text-white
     transition"
-    >
-      Revisit
-    </a>)}
+      >
+        Revisit
+      </a>
+    )}
   </div>
 );
 

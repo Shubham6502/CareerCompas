@@ -40,7 +40,7 @@ const progressSchema = new mongoose.Schema(
 
     maxStreak: {
       type: Number,
-      default: 1,
+      default: 0,
       min: 0,
     },
 
@@ -75,6 +75,20 @@ const progressSchema = new mongoose.Schema(
        default: [],
       }
    },
+   ActiveDays:[{
+      day:{
+        type:Number,
+        require:true
+      },
+      date:{
+        type:String,
+        require:true
+      },
+       tasks:{
+       type: [String],
+       default: [],
+      }
+   }],
   },
   {
     timestamps: true, 
