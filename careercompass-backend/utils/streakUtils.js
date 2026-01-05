@@ -7,8 +7,7 @@ export async function evaluateStreak(progress, totalDailyTasks) {
 
   const completedCount = progress.completedTasks.tasks.length;
   const allCompleted = completedCount === totalDailyTasks;
-  console.log("All tasks completed today:", allCompleted);
-  console.log("Completed Days:",completedCount, "Total Tasks:", totalDailyTasks);
+
    if(!progress.completedDays.includes(progress.currentDay) && allCompleted){
     progress.streak += 1;
     progress.maxStreak = Math.max(progress.maxStreak, progress.streak);

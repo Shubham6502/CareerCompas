@@ -41,7 +41,7 @@ router.get("/getProgress/:clerkId", async (req, res) => {
       return res.status(404).json({ message: "Progress not found" });
     }      
      await evaluateDailyProgress(progress); // 3 = tasks per day
-      
+     
     await progress.save();
     return res.status(200).json(progress);
   } catch (err) {
@@ -91,7 +91,7 @@ router.post("/completeTask", async (req, res) => {
     
     
     if(progress.completedTasks.tasks.length <= 3){
-      progress.progressPercent = Math.min(100, progress.progressPercent + 2.7);
+      progress.progressPercent = Math.min(100, progress.progressPercent + 0.9);
     }
     
 

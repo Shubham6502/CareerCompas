@@ -11,6 +11,7 @@ import ResultPage from "./Pages/ResultPage";
 import useSaveUser from "./hooks/useSaveUser";
 import Roadmap from "./Pages/Roadmap";
 import RoadmapTasks from "./Pages/RoadmapTasks";
+import Resources from "./Pages/Resources";
 
 
 function App() {
@@ -88,7 +89,18 @@ function App() {
             <RoadmapTasks/>
           </AppLayout>
         }/>
+        <Route 
+        path='/resources'
+        element={
+          <AppLayout>
+            <Resources/>
+            </AppLayout>
+          
+        }
+        />
+
       </Routes>
+
       
         
     </>

@@ -15,17 +15,13 @@ const Sidebar = () => {
   return (
     <aside className=" relative hidden md:block h-screen p-4">
       {/* Sidebar Card */}
-      <div
-  className="absolute left-30 top-10 w-60 h-60 rounded-full
-             bg-violet-600 blur-3xl opacity-30
-             pointer-events-none"
-/>
- <div
+   
+ {/* <div
   className="absolute left-50 bottom-0 w-100 h-160 rounded-full
              bg-violet-600/50 blur-3xl opacity-30
              pointer-events-none"
-/>
-      <div className=" relative h-full w-64 rounded-2xl bg-[#1b0349]
+/> */}
+      <div className=" relative h-full w-64 rounded-2xl bg-[#050746c9]
                       border border-white/10
                       shadow-[0_0_40px_rgba(59,130,246,0.08)]
                       flex flex-col">

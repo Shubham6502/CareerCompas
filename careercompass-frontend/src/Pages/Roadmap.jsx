@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Lock, CheckCircle } from "lucide-react";
+import { Lock, CheckCircle, CircleDotDashed } from "lucide-react";
 import { use, useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
@@ -9,7 +9,7 @@ const Roadmap = () => {
   const { user } = useUser();
   const { isLoaded } = useUser();
   const clerkId = user.id;
-  const navigate =useNavigate();
+  const navigate = useNavigate();
   const [progress, setProgress] = useState({});
   useEffect(() => {
     if (!user || !isLoaded) return;
@@ -19,8 +19,6 @@ const Roadmap = () => {
         setProgress(response.data);
       });
   }, [user, isLoaded]);
-  console.log("Clerk ID in roadmap:", clerkId);
-  console.log("Progress data in roadmap:", progress.domain);
 
   useEffect(() => {
     if (!progress.domain) return;
@@ -31,16 +29,21 @@ const Roadmap = () => {
       });
   }, [progress.domain]);
 
-  const handleClick=(daysItem)=>{
-   
-    navigate('/roadmap/tasks',{
-      state:{
-        day:daysItem
-      },
-    });
+  const handleClick = (daysItem) => {
+    if (
+      daysItem.day < progress.currentDay ||
+      daysItem.day === progress.currentDay
+    ) {
+      navigate("/roadmap/tasks", {
+        state: {
+          day: daysItem,
+        },
+      });
+    } else {
+      alert("locked");
+    }
   };
 
-  
   return (
     /* OUTER CARD (NO SCROLL HERE) */
     <div
@@ -64,8 +67,8 @@ const Roadmap = () => {
         "
       >
         {/* Vertical dotted line */}
-        <div className="absolute top-0 bottom-0 left-1/2 w-px border-l border-dashed border-blue-500/40" />
-
+        {progress.domain &&(<div className="absolute top-0 bottom-0 left-1/2 w-px border-l border-dashed border-blue-500 " />)}
+        {!progress.domain && (<div className=" text-white items-center justify-center">Please Attempt Assessment</div>)}
         {Object.values(roadmap).map((daysItem, index) => {
           const isLeft = index % 2 === 0;
           let item = "completed";
@@ -76,6 +79,8 @@ const Roadmap = () => {
             item = "completed";
           } else if (progress.currentDay === daysItem.day) {
             item = "active";
+          } else if (progress.currentDay > daysItem.day) {
+            item = "incomplete";
           } else {
             item = "locked";
           }
@@ -103,6 +108,8 @@ const Roadmap = () => {
                         ? "bg-green-500"
                         : item === "active"
                         ? "bg-blue-500 animate-pulse"
+                        : item === "incomplete"
+                        ? "bg-green-900/50"
                         : "bg-amber-600"
                     }`}
                 >
@@ -112,6 +119,9 @@ const Roadmap = () => {
                   {item === "locked" && (
                     <Lock size={16} className="text-blue-300" />
                   )}
+                  {item === "incomplete" && (
+                    <CircleDotDashed size={16} className="text-white" />
+                  )}
                   {item === "active" && (
                     <span className="w-3 h-3 bg-white rounded-full" />
                   )}
@@ -119,13 +129,16 @@ const Roadmap = () => {
               </div>
 
               {/* Card */}
-              <div onClick={()=>handleClick(daysItem)}
+              <div
+                onClick={() => handleClick(daysItem)}
                 className={`w-64 px-5 py-3 rounded-xl border text-sm transition
                   ${
                     item === "completed"
-                      ? "bg-green-600/50 border-green-600/30 text-white"
+                      ? "bg-green-500 border-green-600/30 text-white"
                       : item === "active"
                       ? "bg-blue-600/70 border-blue-500/30 text-white"
+                      : item === "incomplete"
+                      ? "bg-green-900/50 text-white border-green-700/20"
                       : "bg-amber-200/20 border-amber-500 text-white"
                   }`}
               >

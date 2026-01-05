@@ -7,8 +7,7 @@ const today=  new Date().toLocaleDateString("en-CA", {timeZone: "Asia/Kolkata"})
   if (progress.lastActiveDate.toISOString().split("T")[0] === today) return;
 
 
-    const isConsecutiveDay =
-    progress.currentDay - progress.previousDay === 1;
+    const isConsecutiveDay =progress.currentDay - progress.previousDay === 1;
     const completedCount = progress.completedTasks.tasks.length;
     const allCompleted = completedCount === 3; // assuming 3 tasks per day
     if ( !isConsecutiveDay || !allCompleted) {
@@ -24,6 +23,12 @@ const today=  new Date().toLocaleDateString("en-CA", {timeZone: "Asia/Kolkata"})
     Day: progress.currentDay,
     tasks: [],
   };
+  const Currdate=new Date().toISOString().split("T")[0];
+  progress.ActiveDays.push({
+    day: progress.currentDay,
+    date: Currdate,
+    tasks: []
+  })
 
   
    

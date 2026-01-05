@@ -9,11 +9,7 @@ const AppLayout = ({ children }) => {
       <Sidebar />
 
       {/* Main Content */}
-  <div
-  className="absolute right-0 top-0 w-100 h-60 rounded-full
-             bg-violet-600 blur-3xl opacity-30
-             pointer-events-none"
-/>
+ 
       <main className="relative flex-1 px-10 py-6">
   
         {children}

@@ -8,6 +8,7 @@ import userTest from "./routes/userTest.js"
 import TestRoute from "./routes/TestRoute.js"
 import roadmapRoutes from "./routes/RoadmapRoute.js";
 import progressRoutes from "./routes/ProgressRoutes.js";
+import ResourceRoute from "./routes/ResourceRoute.js"
 
 
 
@@ -31,6 +32,7 @@ app.use("/api/userTest", userTest);
 app.use("/api/test",TestRoute);
 app.use("/api/roadmap",roadmapRoutes);
 app.use("/api/progress",progressRoutes);
+app.use("/api/Resource",ResourceRoute)
 
 
 app.get("/", (req, res) => {

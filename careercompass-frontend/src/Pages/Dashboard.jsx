@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import AssessmentLoading from "../components/Loaders/AssessmentLoading";
 import axios from "axios";
-import { CheckCircle, Clock11 } from "lucide-react";
+import { CheckCircle, Clock11,Target } from "lucide-react";
 
 const Dashboard = () => {
   const { user } = useUser();
@@ -34,7 +34,7 @@ const Dashboard = () => {
       .catch((error) => {
         console.log("Error fetching progress data:", error);
       });
-  }, [isLoaded, user]);
+  }, [isLoaded, user,progressData]);
 
   const domain = progressData.domain;
   const streak = progressData.streak;
@@ -137,7 +137,7 @@ const Dashboard = () => {
               title="Selected Domain"
               value={domain}
               subtitle="Locked for roadmap"
-              icon="🎯"
+              icon={<Target/>}
             />
             <StatCard
               title="Current Streak"
@@ -221,7 +221,7 @@ const Dashboard = () => {
               : "bg-gray-700"
           }
         `}
-                      title={`Day ${day.day}`}
+                      title={`Day ${day.day} -${len} tasks Completed`}
                     />
                   );
                 })}
