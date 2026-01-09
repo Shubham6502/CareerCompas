@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import AssessmentLoading from "../components/Loaders/AssessmentLoading";
 import axios from "axios";
-import { CheckCircle, Clock11,Target } from "lucide-react";
+import { CheckCircle, Clock11, Target } from "lucide-react";
 
 const Dashboard = () => {
   const { user } = useUser();
@@ -15,8 +15,9 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(false); //assessment loading state
   const [questions, setQuestions] = useState([]); //assessment questions state
   const [completedDays, setCompletedDays] = useState([]);
+  const [refreshProgress, setRefreshProgress] = useState(false);
+  const [assessment, setAssessment] = useState(false);
 
-  console.log(progressData);
   useEffect(() => {
     if (!isLoaded || !user) return;
     const clerkId = user.id;
@@ -30,11 +31,13 @@ const Dashboard = () => {
         const taskIds = response.data.completedTasks.tasks || [];
         setCompletedTaskIds(taskIds);
         setCompletedDays(response.data.completedDays || []);
+        setAssessment(Boolean(response.data?.todayTasksCompleted));
+       
       })
       .catch((error) => {
         console.log("Error fetching progress data:", error);
       });
-  }, [isLoaded, user,progressData]);
+  }, [isLoaded, user, refreshProgress,assessment]);
 
   const domain = progressData.domain;
   const streak = progressData.streak;
@@ -70,6 +73,7 @@ const Dashboard = () => {
         if (prev.includes(task.id)) return prev;
         return [...prev, task.id];
       });
+      setRefreshProgress((prev) => !prev);
 
       // open resource
       window.open(task.url, "_blank");
@@ -137,7 +141,7 @@ const Dashboard = () => {
               title="Selected Domain"
               value={domain}
               subtitle="Locked for roadmap"
-              icon={<Target/>}
+              icon={<Target />}
             />
             <StatCard
               title="Current Streak"
@@ -184,7 +188,7 @@ const Dashboard = () => {
               className="
   w-full max-w-2xl
   rounded-2xl
-  bg-gradient-to-br from-[#1b0349] via-[#1c2a46] to-[#1e1b4b]
+  bg-[#1a1f3a]
   p-6
   shadow-xl
 "
@@ -204,7 +208,7 @@ const Dashboard = () => {
                     (d) => Number(d.day) === Number(day.day)
                   );
 
-                  const len = activeDay?activeDay.tasks.length: 0;
+                  const len = activeDay ? activeDay.tasks.length : 0;
 
                   return (
                     <div
@@ -235,6 +239,15 @@ const Dashboard = () => {
           </div>
         </>
       )}
+
+      {assessment && (
+        <button
+          className=" bg-[#1a1f3a] border border-white/20 p-4 rounded-xl cursor-pointer"
+          onClick={() => [navigate("/dailyassessment")]}
+        >
+          Go To Assessment
+        </button>
+      )}
       {!domain && (
         <div className="space-y-8">
           <h1 className="text-3xl font-semibold text-grey-400">
@@ -261,7 +274,7 @@ const Dashboard = () => {
 
 const StatCard = ({ title, value, subtitle, icon }) => (
   <div
-    className="rounded-xl bg-[#1b0349] border border-white/10 p-5
+    className="rounded-xl bg-[#1a1f3a] border border-white/10 p-5
                hover:border-blue-500/30 transition"
   >
     <div className="flex justify-between items-center">
@@ -275,7 +288,7 @@ const StatCard = ({ title, value, subtitle, icon }) => (
 
 const GlowCard = ({ children, className = "" }) => (
   <div
-    className={`relative rounded-xl bg-[#1b0349]
+    className={`relative rounded-xl bg-[#1a1f3a]
                 border border-white/10 p-6 overflow-hidden ${className}`}
   >
     <div
@@ -295,7 +308,7 @@ const TaskItem = ({ task, onClick, completedTask }) => (
                 ${
                   task.completed
                     ? "bg-green-500/10 border-green-500/30"
-                    : "bg-[#0B0F1A] border-white/10 hover:bg-white/5"
+                    : "bg-[#0b1123] border-white/10 hover:bg-white/5"
                 }`}
   >
     <div className="flex items-center select-none">

@@ -35,16 +35,20 @@ const ResourcesSchema=new mongoose.Schema(
             require:true,
         },
         upvote:{
-            type:Number,
-            require:true,
+           
+            ids:[{
+                type:String
+                  }]
         },
         downvote:{
-            type:Number,
-            require:true,
+            ids:[{
+                type:String
+                 }]
         },
         views:{
             type:Number,
             require:true,
+            default:0
         }
     }
 );

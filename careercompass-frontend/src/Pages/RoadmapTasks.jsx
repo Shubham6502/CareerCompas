@@ -6,6 +6,9 @@ function RoadmapTasks() {
   const location = useLocation();
   const navigate = useNavigate();
   const dayData = location.state?.day;
+  const active=location.state?.active;
+
+  console.log(active);
 
   if (!dayData) {
     return (
@@ -23,7 +26,7 @@ function RoadmapTasks() {
           <h1 className="text-3xl font-bold tracking-tight">
             Day {dayData.day} Roadmap
           </h1>
-          <span className="px-4 py-1 rounded-full text-sm font-medium bg-green-400/10 border border-green-400/30 text-green-300">
+          <span  className={`px-4 py-1 rounded-full text-sm font-medium  bg-green-400/10 border border-green-400/30 text-green-300 ${active?"block":"hidden"}`}>
             Active Day
           </span>
         </div>

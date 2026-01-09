@@ -39,9 +39,9 @@ router.get("/getProgress/:clerkId", async (req, res) => {
     const progress = await ProgressTrack.findOne({ clerkId });
     if (!progress) {
       return res.status(404).json({ message: "Progress not found" });
-    }      
-     await evaluateDailyProgress(progress); // 3 = tasks per day
-     
+    }
+    await evaluateDailyProgress(progress); // 3 = tasks per day
+
     await progress.save();
     return res.status(200).json(progress);
   } catch (err) {
@@ -58,56 +58,77 @@ router.post("/completeTask", async (req, res) => {
         .status(404)
         .json({ message: "Progress not found for this user." });
     }
-    
 
     if (progress.completedTasks.tasks.includes(taskId)) {
       return res.status(400).json({ message: "Task already completed." });
     }
     progress.completedTasks.tasks.push(taskId);
 
-    const Currdate=new Date().toISOString().split("T")[0];
-    let activeDay = progress.ActiveDays.find(d => d.day === progress.currentDay);
+    const Currdate = new Date().toISOString().split("T")[0];
+    let activeDay = progress.ActiveDays.find(
+      (d) => d.day === progress.currentDay
+    );
     if (!activeDay) {
-    progress.ActiveDays.push({
-    day: progress.currentDay,
-    date: Currdate,
-    tasks: [taskId]
-  });
-} else {
-  if (activeDay.tasks.includes(taskId)) {
-    return res.status(400).json({ message: "Task already completed." });
-  }
-  activeDay.tasks.push(taskId);
-}
-
-    
-    await evaluateStreak(progress, 3); // 3 = tasks per day
-      
-    if(progress.completedTasks.tasks.length == 3){
-        progress.completedDays.push(progress.currentDay);
-         progress.todayTasksCompleted = true;
-    
+      progress.ActiveDays.push({
+        day: progress.currentDay,
+        date: Currdate,
+        tasks: [taskId],
+      });
+    } else {
+      if (activeDay.tasks.includes(taskId)) {
+        return res.status(400).json({ message: "Task already completed." });
+      }
+      activeDay.tasks.push(taskId);
     }
-    
-    
-    if(progress.completedTasks.tasks.length <= 3){
+
+    await evaluateStreak(progress, 3); // 3 = tasks per day
+
+    if (progress.completedTasks.tasks.length == 3) {
+      progress.completedDays.push(progress.currentDay);
+      progress.todayTasksCompleted = true;
+    }
+
+    if (progress.completedTasks.tasks.length <= 3) {
       progress.progressPercent = Math.min(100, progress.progressPercent + 0.9);
     }
-    
 
-    
     await progress.save();
 
     return res.status(200).json({
       success: true,
       message: "Task completed successfully.",
-      progress:progress,
+      progress: progress,
     });
   } catch (err) {
     return res.status(500).json({
       success: false,
       message: "Something went wrong while completing the task.",
     });
+  }
+});
+
+router.post("/assessment", async (req, res) => {
+  const { clerkId, day, score } = req.body;
+
+  try{const progress = await ProgressTrack.findOne({ clerkId });
+  if (!progress) {
+    return res.status(400).json({ message: "data Not Found" });
+  }
+ 
+  progress.completedTasks.Assessment= {
+    score:score,
+    taken: true,
+    lastAttemptAt: new Date(),
+  };
+  await progress.save();
+
+  res.status(200).json({
+    message: "Assessment progress updated",
+    assessment: progress.assessment,
+  });
+}
+catch (err) {
+    res.status(500).json({ message: "Server error" });
   }
 });
 

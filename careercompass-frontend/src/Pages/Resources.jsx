@@ -6,33 +6,36 @@ import {
   ThumbsUp,
   ThumbsDown,
   Eye,
+  ArrowUp,
+  CircleUserRound,
 } from "lucide-react";
 import ResourcesForm from "../utils/ResourecesForm";
-
+import { useUser } from "@clerk/clerk-react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
 function Resources() {
   const [activeFilter, setActiveFilter] = useState("All");
-  const [search, setSearch] = useState("");      // search text
-
+  const [search, setSearch] = useState(""); // search text
+  const { isLoaded, user } = useUser();
   const [open, setOpen] = useState(false);
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
- 
+  const [topContributor, setTopContributor] = useState(null);
+  const [clicked, setClicked] = useState(false);
+  const clerkId = user.id;
+
   useEffect(() => {
     axios
-      .get(
-        "http://localhost:5000/api/resource/getResources",{
-          params: {
-        page: currentPage,
-        limit: 4,
-        search,
-        subject: activeFilter,
-      },
-        }
-      )
+      .get("http://localhost:5000/api/resource/getResources", {
+        params: {
+          page: currentPage,
+          limit: 4,
+          search,
+          subject: activeFilter,
+        },
+      })
       .then((response) => {
         setData(response.data.data);
         setTotalPages(response.data.totalPages);
@@ -40,18 +43,43 @@ function Resources() {
       .catch((err) => {
         console.log("Something Wrong", err);
       });
-  }, [currentPage,search, activeFilter]);
+  }, [currentPage, search, activeFilter, clicked]);
 
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/api/resource/topContributors")
+      .then((res) => {
+        setTopContributor(res.data);
+        console.log(topContributor);
+      })
+      .catch((err) => {
+        console.log("Something Went Wrong");
+      });
+  }, [isLoaded, currentPage]);
+
+  const thumbClicked = (action, ResourceId) => {
+    setClicked(!clicked);
+    axios
+      .post("http://localhost:5000/api/resource/interact", {
+        clerkId,
+        ResourceId: ResourceId,
+        action,
+      })
+      .then((res) => {
+        console.log("Success");
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
 
   const filters = ["All", "Frontend", "Backend", "DSA"];
   return (
-    <div className="space-y-4">
-      <h1 className="text-blue-400 text-xl font-semibold">Resources</h1>
-
-      <div className="flex flex-wrap items-center gap-4">
+    <div className="space-y-4 w-full overflow-x-hidden ">
+      <div className="flex  flex-wrap items-center gap-4 ">
         {/* Search Box */}
         <div
-          className="flex items-center gap-3 px-5 py-3 rounded-2xl border border-white/20 
+          className="flex items-center gap-3 px-5 py-3 rounded-3xl border border-white/20 
                      bg-white/5 focus-within:border-blue-400 
                      focus-within:ring-2 focus-within:ring-blue-400/30
                      transition-all text-white"
@@ -68,7 +96,17 @@ function Resources() {
         </div>
 
         {/* Filter Buttons */}
-        <div className="flex gap-2">
+        <div
+          className="flex flex-wrap items-center
+    gap-2
+    md:rounded-full
+    px-3 sm:px-5
+    py-2
+    md:border border-white/10
+    hover:bg-white/5
+    max-w-full
+    overflow-x-auto sm:overflow-visible"
+        >
           {filters.map((filter) => (
             <ButtonSearch
               key={filter}
@@ -91,102 +129,168 @@ function Resources() {
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row w-full h-full gap-4 text-white  ">
+      <div className=" md:flex  gap-3 text-white">
         {/* Resources Section */}
-        <div className="flex-1  ">
-            <div className=" rounded-xl 
-             max-h-[70vh] min-h-[70vh] overflow-y-auto  
-             scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent">
-          {/* <div className="flex min-h-24 justify-center items-center gap-2 text-lg font-semibold mb-2 ">
-            <Notebook className="text-blue-400" />
-            Resources
-          </div> */}
+        <div className="flex-1 ">
+          <div
+            className="
+    relative
+    min-h-[60vh] sm:min-h-[73vh]
+    max-h-[60vh] sm:max-h-[73vh]
+    overflow-y-auto
+    rounded-2xl
+    border border-white/10
+    bg-slate-900/70 backdrop-blur-md
+    p-4 sm:p-5
+    scrollbar-thin
+    scrollbar-thumb-white/20
+    scrollbar-track-transparent
+        "
+          >
+            {/* Empty State */}
+            {!data.length && (
+              <div className="flex items-center justify-center h-full">
+                <p className="text-sm text-white/50">No resources found</p>
+              </div>
+            )}
 
-          {!data.length && (
-            <p className="text-white/60 text-center text-white">
-              No resources found
-            </p>
-          )}
-          {data.map((card, idx) => {
-            return (
-              <Link to={card.url} target="_blank" className="group block">
-                <div
-                  className="relative w-full rounded-xl border mb-2 border-white/10 bg-[#131557c9]
-               p-2 px-4 pt-7 sm:pt-10  hover:border-blue-400 hover:shadow-[0_8px_30px_rgba(59,130,246,0.25)]
-               active:scale-[0.98]"
+            {/* Cards */}
+            {data.map((card, idx) => (
+              <div
+                key={idx}
+                className="
+        group relative mb-3
+        rounded-2xl
+        border border-white/10
+        bg-gradient-to-br from-slate-900 to-slate-800
+        p-4 sm:p-5
+        transition-all duration-300
+        hover:border-blue-400/50
+        hover:shadow-[0_10px_40px_rgba(59,130,246,0.25)]
+        active:scale-[0.98]
+       "
+              >
+                {/* Badges */}
+                <div className=" md:absolute my-2 md:mt-0 top-3 right-3  w-full md:w-auto flex gap-2">
+                  <span
+                    className="
+            text-[11px] font-semibold
+            px-2.5 py-1
+            rounded-full
+            bg-blue-500/15
+            text-blue-400
+            border border-blue-500/30
+          "
+                  >
+                    {card.subject}
+                  </span>
+                  <span
+                    className="
+            text-[11px] font-medium
+            px-2.5 py-1
+            rounded-full
+            bg-purple-500/15
+            text-purple-400
+            border border-purple-500/30
+          "
+                  >
+                    {card.domain}
+                  </span>
+                </div>
+
+                {/* Content */}
+
+                <Link
+                  onClick={() => {
+                    thumbClicked("VIEW", card._id);
+                  }}
+                  to={card.url}
+                  target="_blank"
+                  className="block"
                 >
-                  {/* Subject & Domain (Top Right) */}
-                  <div className="absolute top-3 right-3 sm:top-4 sm:right-4 flex gap-2">
-                    <span
-                      className="text-xs font-semibold px-2.5 py-1 rounded-full
-                       bg-blue-500/10 text-blue-400 border border-blue-500/20"
-                    >
-                      {card.subject}
-                    </span>
-                    <span
-                      className="text-xs font-medium px-2.5 py-1 rounded-full
-                       bg-purple-500/10 text-purple-400 border border-purple-500/20"
-                    >
-                      {card.domain}
-                    </span>
-                  </div>
-
-                  {/* Title & Description (Always Next Line) */}
-                  <h3 className="text-base sm:text-lg font-semibold text-white leading-snug">
+                  <h3
+                    className="
+            text-base sm:text-lg
+            font-semibold
+            text-white
+            leading-snug
+            pr-24
+            group-hover:text-blue-400
+            transition-colors
+          "
+                  >
                     {card.title}
                   </h3>
 
-                  <p className="text-sm text-gray-400 mt-1 line-clamp-2">
+                  <p className="mt-1 text-sm text-gray-400 line-clamp-2">
                     {card.description}
                   </p>
+                </Link>
 
-                  {/* Footer */}
-                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    {/* Author */}
+                {/* Footer */}
+                <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  {/* Author */}
+                  <span className="text-xs text-gray-500">
+                    By <span className="text-gray-400">{card.userName}</span>
+                  </span>
+
+                  {/* Stats */}
+                  <div className="flex items-center gap-6 text-sm text-gray-400">
                     <span
-                      className="text-xs text-gray-500
-                   transition-colors
-                   group-hover:text-gray-400"
+                     onClick={() => {
+                          thumbClicked("UPVOTE", card._id);
+                        }}
+                      className={`flex items-center gap-1 cursor-pointer
+              transition-all  rounded-4xl p-2
+              hover:text-green-400 hover:scale-110 ${
+                card.upvote?.ids?.includes(clerkId)
+                  ? "bg-blue-500 text-white block"
+                  : "text-gray-400 block"
+              }`}
                     >
-                      By {card.userName}
+                      <ThumbsUp
+                        size={15}
+                       
+                      />
+                      {card.upvote?.ids.length}
                     </span>
 
-                    {/* Actions */}
-                    <div className="flex items-center gap-5 text-sm text-gray-400">
-                      <span
-                        className="flex items-center gap-1 cursor-pointer
-                     transition-transform transition-colors
-                     hover:text-green-400 hover:scale-110"
-                      >
-                        <ThumbsUp size={15} />
-                        {card.upvote}
-                      </span>
+                    <span
+                     onClick={() => {
+                          thumbClicked("DOWNVOTE", card._id);
+                        }}
+                      className={`flex items-center gap-1 cursor-pointer
+              transition-all  rounded-4xl p-2
+              hover:text-green-400 hover:scale-110 ${
+                card.downvote?.ids?.includes(clerkId)
+                  ? "bg-blue-500 text-white block"
+                  : "text-gray-400 block"
+              }`}
+                    >
+                      <ThumbsDown
+                        size={15}
+                       
+                      />
+                      {card.downvote?.ids.length}
+                    </span>
 
-                      <span
-                        className="flex items-center gap-1 cursor-pointer
-                     transition-transform transition-colors
-                     hover:text-red-400 hover:scale-110"
-                      >
-                        <ThumbsDown size={15} />
-                        {card.downvote}
-                      </span>
-
-                      <span
-                        className="flex items-center gap-1 cursor-pointer
-                     transition-transform transition-colors
-                     hover:text-blue-400 hover:scale-110"
-                      >
-                        <Eye size={15} />
-                        {card.views}
-                      </span>
-                    </div>
+                    <span
+                      className="
+              flex items-center gap-1
+              transition-all
+              hover:text-blue-400
+            "
+                    >
+                      <Eye size={15} />
+                      {card.views}
+                    </span>
                   </div>
                 </div>
-              </Link>
-            );
-          })}
+              </div>
+            ))}
           </div>
-           <div className="flex justify-center gap-2 text-white mt-6 ">
+
+          <div className="flex justify-center mt-4 gap-2 ">
             <button
               disabled={currentPage === 1}
               onClick={() => setCurrentPage((p) => p - 1)}
@@ -207,7 +311,6 @@ function Resources() {
               Next
             </button>
           </div>
-         
         </div>
 
         {/* Need Help Section */}
@@ -221,14 +324,30 @@ function Resources() {
               Can't find what you are looking for? Request a resource
             </div>
           </div>
-          <div className="w-full md:w-48  bg-black/20 border border-white/10 rounded-xl p-4">
-            <span className="font-medium">Top Contributor</span>
-            <span className="text-sm text-white/60 mt-1"></span>
-          </div>
+          {topContributor && (
+            <div className="w-full md:w-48  bg-black/20 border border-white/10 rounded-xl p-4">
+              <span className="font-medium flex items-center justify-center">
+                <ArrowUp size={25} color="red" />
+                Top Contributors
+              </span>
+              <span className="text-sm text-white/60 mt-1 break-words whitespace-normal">
+                {topContributor[0]?.userName}
+              </span>
+              <div className="text-xs text-white/60 mt-1 flex justify-around items-center">
+                <span className="flex items-center justify-center gap-1">
+                  <Notebook size={12} title="Resources Uploads" />
+                  {topContributor[0]?.totalResources}
+                </span>
+
+                <span className="flex items-center justify-center gap-1">
+                  <ThumbsUp size={12} />
+                  {topContributor[0]?.totalUpvotes}
+                </span>
+              </div>
+            </div>
+          )}
         </div>
-        
       </div>
-      
     </div>
   );
 }
@@ -240,7 +359,7 @@ const ButtonSearch = ({ title, isActive, onClick }) => {
       className={`px-5 py-3 rounded-xl text-sm font-medium transition-all
         ${
           isActive
-            ? "bg-blue-600 text-white shadow-[0_0_20px_rgba(59,130,246,0.5)]"
+            ? "bg-blue-500 text-white shadow-[0_0_25px_rgba(59,130,246,0.45)]"
             : "border border-white/20 text-white/80 hover:bg-white/5"
         }`}
     >

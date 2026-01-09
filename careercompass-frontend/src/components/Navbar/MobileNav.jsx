@@ -3,10 +3,11 @@ import { NavLink } from "react-router-dom";
 import {
   Menu,
   X,
-  LayoutDashboard,
+ LayoutDashboard,
   ClipboardList,
   Map,
-  User,
+  BookOpen,
+  BarChart3,
 } from "lucide-react";
 
 const MobileDrawer = () => {
@@ -49,10 +50,33 @@ const MobileDrawer = () => {
 
         {/* Links */}
         <nav className="flex flex-col p-3 gap-1">
-          <DrawerLink to="/dashboard" icon={<LayoutDashboard />} label="Dashboard" />
-          <DrawerLink to="/assessment" icon={<ClipboardList />} label="Assessment" />
-          <DrawerLink to="/roadmap" icon={<Map />} label="Roadmap" />
-          <DrawerLink to="/profile" icon={<User />} label="Profile" />
+         
+          <DrawerLink
+            to="/dashboard"
+            icon={<LayoutDashboard size={18} />}
+            label="Dashboard"
+          />
+          <DrawerLink
+            to="/dailyassessment"
+            icon={<ClipboardList size={18} />}
+            label="Assessment"
+          />
+          <DrawerLink
+           to="/roadmap" 
+           icon={<Map size={18} />}
+            label="Roadmap"
+             />
+
+          <DrawerLink
+            to="/resources"
+            icon={<BookOpen size={18} />}
+            label="Resources"
+          />
+          <DrawerLink
+            to="/progress"
+            icon={<BarChart3 size={18} />}
+            label="Progress"
+          />
         </nav>
       </aside>
     </>

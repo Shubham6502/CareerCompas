@@ -37,6 +37,7 @@ const Roadmap = () => {
       navigate("/roadmap/tasks", {
         state: {
           day: daysItem,
+          active: daysItem.day === progress.currentDay?true:false,
         },
       });
     } else {

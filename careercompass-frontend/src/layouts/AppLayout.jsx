@@ -3,7 +3,10 @@ import MobileNav from "../components/Navbar/Mobilenav";
 
 const AppLayout = ({ children }) => {
   return (
-    <div className="flex min-h-screen overflow-hidden bg-[#0B0F1A]/99 grid-bg">
+    <div className="flex min-h-screen overflow-hidden  min-h-screen
+  bg-[#070917]
+  bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.15),_transparent_45%)]
+  text-white">
       
       {/* Sidebar (Desktop) */}
       <Sidebar />

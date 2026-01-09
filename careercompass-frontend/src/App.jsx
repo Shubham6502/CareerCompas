@@ -12,6 +12,7 @@ import useSaveUser from "./hooks/useSaveUser";
 import Roadmap from "./Pages/Roadmap";
 import RoadmapTasks from "./Pages/RoadmapTasks";
 import Resources from "./Pages/Resources";
+import DailyAssessment from "./Pages/DailyAssessment";
 
 
 function App() {
@@ -96,6 +97,14 @@ function App() {
             <Resources/>
             </AppLayout>
           
+        }
+        />
+        <Route
+        path='/dailyassessment'
+        element={
+          <AppLayout>
+            <DailyAssessment/>
+          </AppLayout>
         }
         />
 

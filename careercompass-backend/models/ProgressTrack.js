@@ -1,21 +1,19 @@
 import mongoose from "mongoose";
 
+
 const progressSchema = new mongoose.Schema(
   {
-   
-      clerkId: {
+    clerkId: {
       type: String,
       required: true,
       index: true,
     },
 
-  
     domain: {
       type: String,
       required: true,
     },
 
-    
     currentDay: {
       type: Number,
       default: 1,
@@ -44,7 +42,6 @@ const progressSchema = new mongoose.Schema(
       min: 0,
     },
 
-  
     progressPercent: {
       type: Number,
       default: 0,
@@ -52,7 +49,6 @@ const progressSchema = new mongoose.Schema(
       max: 100,
     },
 
-  
     startDate: {
       type: Date,
       default: Date.now,
@@ -63,35 +59,51 @@ const progressSchema = new mongoose.Schema(
       default: Date.now,
     },
     previousDay: {
-       type: Number, default: 0 
-      },
+      type: Number,
+      default: 0,
+    },
     completedTasks: {
-      Day:{
+      Day: {
         type: Number,
         default: 1,
       },
-      tasks:{
-       type: [String],
-       default: [],
-      }
-   },
-   ActiveDays:[{
-      day:{
-        type:Number,
-        require:true
+      tasks: {
+        type: [String],
+        default: [],
       },
-      date:{
-        type:String,
-        require:true
+      Assessment: {
+        taken: {
+          type: Boolean,
+          default: false,
+        },
+        score: {
+          type: Number,
+          default: 0,
+        },
+        lastAttemptAt: {
+          type: Date,
+        },
       },
-       tasks:{
-       type: [String],
-       default: [],
-      }
-   }],
+    },
+    ActiveDays: [
+      {
+        day: {
+          type: Number,
+          require: true,
+        },
+        date: {
+          type: String,
+          require: true,
+        },
+        tasks: {
+          type: [String],
+          default: [],
+        },
+      },
+    ],
   },
   {
-    timestamps: true, 
+    timestamps: true,
   }
 );
 
