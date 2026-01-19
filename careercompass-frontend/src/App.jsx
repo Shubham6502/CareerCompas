@@ -13,11 +13,13 @@ import Roadmap from "./Pages/Roadmap";
 import RoadmapTasks from "./Pages/RoadmapTasks";
 import Resources from "./Pages/Resources";
 import DailyAssessment from "./Pages/DailyAssessment";
+import Profile from "./Pages/Profile";
 
 
 function App() {
   const { isSignedIn, isLoaded } = useUser();
   useSaveUser();
+ 
   // Wait until Clerk is loaded
   if (!isLoaded) return null;
 
@@ -107,6 +109,13 @@ function App() {
           </AppLayout>
         }
         />
+        <Route
+        path="/Profile"
+        element={
+          <AppLayout>
+            <Profile/>
+          </AppLayout>
+        }/>
 
       </Routes>
 

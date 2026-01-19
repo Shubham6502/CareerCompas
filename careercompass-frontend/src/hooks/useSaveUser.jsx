@@ -22,4 +22,21 @@ export default function useSaveUser() {
 
     saveUser();
   }, [isLoaded, user]);
+
+
+  useEffect(()=>{
+    if (!isLoaded || !user) return;
+    const saveProfile = async ()=>{
+      try{
+        await axios.post("http://localhost:5000/api/profile/save",{
+           user
+        })
+      }catch{
+        console.log("Something went wrong")
+      }
+    }
+    saveProfile();
+  },[isLoaded,user])
+
+
 }

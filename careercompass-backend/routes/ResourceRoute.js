@@ -69,20 +69,45 @@ router.get("/getResources", async (req, res) => {
 });
 
 router.get("/topContributors", async (req, res) => {
-  
   try {
     const topContributors = await Resource.aggregate([
       {
+        $addFields: {
+          upvoteCount: {
+            $cond: [{ $isArray: "$upvote.ids" }, { $size: "$upvote.ids" }, 0],
+          },
+          downvoteCount: {
+            $cond: [
+              { $isArray: "$downvote.ids" },
+              { $size: "$downvote.ids" },
+              0,
+            ],
+          },
+        },
+      },
+      {
+        // STEP 2: group by user
         $group: {
           _id: "$userId",
           userName: { $first: "$userName" },
           totalResources: { $sum: 1 },
-          totalUpvotes: { $sum: "$upvote" },
-          totalViews: { $sum: "$views" },
+          totalUpvotes: { $sum: "$upvoteCount" },
+          totalDownvotes: { $sum: "$downvoteCount" },
+          totalViews: { $sum: { $ifNull: ["$views", 0] } },
         },
       },
-      { $sort: { totalResources: -1 } },
-      { $limit: 5 },
+      {
+        // STEP 3: sort as per your rule
+        $sort: {
+          totalDownvotes: 1, // fewer downvotes first
+          totalResources: -1,
+          totalUpvotes: -1,
+          totalViews: -1,
+        },
+      },
+      {
+        $limit: 5,
+      },
     ]);
 
     res.status(200).json(topContributors);
@@ -90,53 +115,51 @@ router.get("/topContributors", async (req, res) => {
     res.status(500).json({ message: "Failed to fetch top contributors" });
   }
 });
-router.post("/interact",async(req,res)=>{
-  try{
-  const{clerkId,ResourceId,action}=req.body;
-  
-  const resource=await Resource.findById(ResourceId);
-  if(!resource){
-    return res.status(400).json({message:"Failed To Load"})
-  }
+router.post("/interact", async (req, res) => {
+  try {
+    const { clerkId, ResourceId, action } = req.body;
 
-    if(action==="UPVOTE"){
-      if(resource.upvote.ids.includes(clerkId)){
-        resource.upvote=resource.upvote.ids.filter(id=>id!==clerkId);
-      }else if(resource.downvote.ids.includes(clerkId)){
-        resource.downvote=resource.downvote.ids.filter(id=>id!==clerkId);
+    const resource = await Resource.findById(ResourceId);
+    if (!resource) {
+      return res.status(400).json({ message: "Failed To Load" });
+    }
+
+    if (action === "UPVOTE") {
+      if (resource.upvote.ids.includes(clerkId)) {
+        resource.upvote = resource.upvote.ids.filter((id) => id !== clerkId);
+      } else if (resource.downvote.ids.includes(clerkId)) {
+        resource.downvote = resource.downvote.ids.filter(
+          (id) => id !== clerkId
+        );
         resource.upvote.ids.push(clerkId);
-      }else{
+      } else {
         resource.upvote.ids.push(clerkId);
       }
     }
 
-    if(action==="DOWNVOTE"){
-      if(resource.downvote.ids.includes(clerkId)){
-        resource.downvote=resource.upvote.ids.filter(id=>id!==clerkId);
-      }else if(resource.upvote.ids.includes(clerkId)){
-        resource.upvote=resource.upvote.ids.filter(id=>id!==clerkId);
+    if (action === "DOWNVOTE") {
+      if (resource.downvote.ids.includes(clerkId)) {
+        resource.downvote = resource.upvote.ids.filter((id) => id !== clerkId);
+      } else if (resource.upvote.ids.includes(clerkId)) {
+        resource.upvote = resource.upvote.ids.filter((id) => id !== clerkId);
         resource.downvote.ids.push(clerkId);
-      }else{
+      } else {
         resource.downvote.ids.push(clerkId);
       }
-
     }
 
-    if(action==="VIEW"){
-      resource.views+=1;
+    if (action === "VIEW") {
+      resource.views += 1;
     }
     resource.save();
-     return res.status(200).json({
+    return res.status(200).json({
       message: "Interaction recorded successfully",
       // upvote: resource.upvote.ids.count,
       // views: resource.views
     });
-
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Server error" });
   }
-  
-  
 });
 export default router;

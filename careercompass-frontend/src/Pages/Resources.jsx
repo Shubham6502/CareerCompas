@@ -50,12 +50,12 @@ function Resources() {
       .get("http://localhost:5000/api/resource/topContributors")
       .then((res) => {
         setTopContributor(res.data);
-        console.log(topContributor);
+        console.log(res.data);
       })
       .catch((err) => {
         console.log("Something Went Wrong");
       });
-  }, [isLoaded, currentPage]);
+  }, [isLoaded, currentPage,clicked]);
 
   const thumbClicked = (action, ResourceId) => {
     setClicked(!clicked);

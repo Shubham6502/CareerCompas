@@ -6,6 +6,7 @@ import {
   ClipboardList,
   Map,
   BookOpen,
+  User,
   BarChart3,
 } from "lucide-react";
 
@@ -57,9 +58,9 @@ const Sidebar = () => {
             label="Resources"
           />
           <SidebarLink
-            to="/progress"
-            icon={<BarChart3 size={18} />}
-            label="Progress"
+            to="/profile"
+            icon={<User size={18} />}
+            label="Profile"
           />
         </nav>
 
