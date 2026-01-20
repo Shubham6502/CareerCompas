@@ -1,12 +1,12 @@
 import { useState } from "react";
 
-const AddEducationModal = ({ userProfile, onClose, onSave }) => {
+const EditEducationModal = ({ education, onClose, onSave }) => {
   const [formData, setFormData] = useState({
-    college: "",
-    field: "",
-    score: "",
-    start: "",
-    end: "",
+    college: education.college || "",
+    field: education.field || "",
+    score: education.score || "",
+    start: education.start || "",
+    end: education.end || "",
   });
 
   const handleChange = (e) => {
@@ -24,10 +24,11 @@ const AddEducationModal = ({ userProfile, onClose, onSave }) => {
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
       <div className="bg-gray-900 rounded-xl p-6 w-full max-w-md space-y-4">
-        <h3 className="text-lg font-semibold text-white">Add Education</h3>
+        <h3 className="text-lg font-semibold text-white">Edit Education</h3>
         <label className="text-sm text-gray-400">College Name</label>
         <input
           name="college"
+          value={formData.college}
           onChange={handleChange}
           placeholder="College Name"
           className="w-full bg-gray-800 text-white rounded-lg px-4 py-2 outline-none"
@@ -35,6 +36,7 @@ const AddEducationModal = ({ userProfile, onClose, onSave }) => {
         <label className="text-sm text-gray-400">Department</label>
         <input
           name="field"
+          value={formData.field}
           onChange={handleChange}
           placeholder="Department"
           className="w-full bg-gray-800 text-white rounded-lg px-4 py-2 outline-none"
@@ -42,6 +44,7 @@ const AddEducationModal = ({ userProfile, onClose, onSave }) => {
         <label className="text-sm text-gray-400">Starting Date</label>
         <input
           type="date"
+          value={formData.start}
           name="start"
           onChange={handleChange}
           placeholder="start"
@@ -50,6 +53,7 @@ const AddEducationModal = ({ userProfile, onClose, onSave }) => {
         <label className="text-sm text-gray-400">Ending Date</label>
         <input
           type="date"
+          value={formData.end}
           name="end"
           onChange={handleChange}
           placeholder="end"
@@ -59,6 +63,7 @@ const AddEducationModal = ({ userProfile, onClose, onSave }) => {
         <label className="text-sm text-gray-400">Percentage</label>
         <input
           name="score"
+          value={formData.score}
           type="number"
           onChange={handleChange}
           placeholder="Score"
@@ -84,4 +89,4 @@ const AddEducationModal = ({ userProfile, onClose, onSave }) => {
   );
 };
 
-export default AddEducationModal;
+export default EditEducationModal;

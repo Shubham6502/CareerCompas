@@ -54,6 +54,20 @@ bio:{
 joineddate:{
     type:Date
 },
+links:{
+   linkedin:{
+    type:String,
+    default:""
+   },
+   github:{
+    type:String,
+    default:""
+   },
+   portfolio:{
+    type:String,
+    default:""
+   },
+},
 
 })
 export default mongoose.model("Profile",ProfileSchema);

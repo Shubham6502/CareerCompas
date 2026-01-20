@@ -67,6 +67,53 @@ router.put("/add-education/:clerkId", async (req, res) => {
     res.status(500).json({ message: "Failed to add education" });
   }
 });
+router.put("/add-links/:clerkId", async (req, res) => {
+  try {
+    const updatedLinks = await Profile.findOneAndUpdate(
+      { userId: req.params.clerkId },
+      {
+        $set: {
+          "links.linkedin": req.body.linkedin,
+          "links.github": req.body.github,
+          "links.portfolio": req.body.portfolio,
+        },
+      },
+      { new: true,
+        upsert: true,
+       }
+    );
+
+    if (!updatedLinks) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
+
+    res.status(200).json({updatedLinks});
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.put("/edit-education/:clerkId/:index",async(req,res)=>{
+  try{
+  const { clerkId,index} =req.params;
+  
+    const updatedEducation = await Profile.findOneAndUpdate(
+      {userId:clerkId},
+       {
+        $set: {
+          [`education.${index}`]: req.body,
+        },
+      },
+      { new: true }
+ )
+  res.status(200).json({updatedEducation});
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+  
+})
 
 
 export default router;

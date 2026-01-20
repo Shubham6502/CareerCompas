@@ -1,13 +1,11 @@
 import { useState } from "react";
 
-const AddEducationModal = ({ userProfile, onClose, onSave }) => {
-  const [formData, setFormData] = useState({
-    college: "",
-    field: "",
-    score: "",
-    start: "",
-    end: "",
-  });
+const AddLinksModal = ({ userProfile, onClose, onSave }) => {
+const [formData, setFormData] = useState({
+    linkedin:userProfile.links.linkedin||"",
+    github:userProfile.links.github||"",
+    portfolio:userProfile.links.portfolio||"",
+});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -16,54 +14,44 @@ const AddEducationModal = ({ userProfile, onClose, onSave }) => {
       [name]: value,
     }));
   };
-
+  
   const handleSubmit = () => {
+    console.log(formData);
     onSave(formData);
   };
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
       <div className="bg-gray-900 rounded-xl p-6 w-full max-w-md space-y-4">
-        <h3 className="text-lg font-semibold text-white">Add Education</h3>
-        <label className="text-sm text-gray-400">College Name</label>
+        <h3 className="text-lg font-semibold text-white">Add Links</h3>
+
+
+        <label className="text-sm text-gray-400">LinkedIn</label>
         <input
-          name="college"
+          name="linkedin"
+          value={formData.linkedin}
           onChange={handleChange}
-          placeholder="College Name"
+          placeholder="LinkedIn"
           className="w-full bg-gray-800 text-white rounded-lg px-4 py-2 outline-none"
         />
-        <label className="text-sm text-gray-400">Department</label>
+        <label className="text-sm text-gray-400">GitHub</label>
         <input
-          name="field"
+          name="github"
+          value={formData.github}
           onChange={handleChange}
-          placeholder="Department"
+          placeholder="GitHub"
           className="w-full bg-gray-800 text-white rounded-lg px-4 py-2 outline-none"
         />
-        <label className="text-sm text-gray-400">Starting Date</label>
+        <label className="text-sm text-gray-400">PortFolio</label>
         <input
-          type="date"
-          name="start"
+          name="portfolio"
+          value={formData.portfolio}
           onChange={handleChange}
-          placeholder="start"
-          className="w-full bg-gray-800 text-white rounded-lg px-4 py-2 outline-none"
-        />
-        <label className="text-sm text-gray-400">Ending Date</label>
-        <input
-          type="date"
-          name="end"
-          onChange={handleChange}
-          placeholder="end"
+          placeholder="Portfolio"
           className="w-full bg-gray-800 text-white rounded-lg px-4 py-2 outline-none"
         />
 
-        <label className="text-sm text-gray-400">Percentage</label>
-        <input
-          name="score"
-          type="number"
-          onChange={handleChange}
-          placeholder="Score"
-          className="w-full bg-gray-800 text-white rounded-lg px-4 py-2 outline-none"
-        />
+      
 
         <div className="flex justify-end gap-3 pt-4">
           <button
@@ -84,4 +72,4 @@ const AddEducationModal = ({ userProfile, onClose, onSave }) => {
   );
 };
 
-export default AddEducationModal;
+export default AddLinksModal;
