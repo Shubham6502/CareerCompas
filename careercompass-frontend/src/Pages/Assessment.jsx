@@ -2,13 +2,17 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "@clerk/clerk-react";
 import AssessmentLoading from "../components/Loaders/AssessmentLoading";
-
+import { Navigate } from "react-router-dom";
 const Assessment = () => {
   const navigate = useNavigate();
   const { user } = useUser();
 
   const [loading, setLoading] = useState(false);
   const [questions, setQuestions] = useState([]);
+
+  if(!user){
+      return <Navigate to="/" replace />;
+    }
 
   const loadTest = async () => {
     try {
@@ -54,7 +58,7 @@ const Assessment = () => {
         Career Assessment
       </h1>
 
-      <p className="text-gray-400">
+      <p className="subText-color">
         This assessment will help us recommend the best career domain for you.
       </p>
 

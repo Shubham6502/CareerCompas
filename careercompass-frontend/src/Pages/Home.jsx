@@ -1,11 +1,12 @@
-import { useClerk } from "@clerk/clerk-react";
-import bgPattern from "../assets/background.jpg";
+import { useClerk ,useUser} from "@clerk/clerk-react";
 import mockUI from "../assets/ui.png"
 import {CircleFadingArrowUp} from "lucide-react"
 
+
 const Home = () => {
   const { openSignIn } = useClerk();
-
+  const { user } = useUser();
+  
   return (
       <div className="min-h-screen bg-[#0B0F1A]/99 grid-bg">
 

@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { UserButton, useUser } from "@clerk/clerk-react";
+import { UserButton, useUser, SignOutButton } from "@clerk/clerk-react";
 import logo from "../../assets/logo1.png";
 import {
   LayoutDashboard,
@@ -7,6 +7,7 @@ import {
   Map,
   BookOpen,
   User,
+  LogOut,
   BarChart3,
 } from "lucide-react";
 
@@ -23,7 +24,7 @@ const Sidebar = () => {
              pointer-events-none"
 /> */}
       <div
-        className=" relative h-full w-64 rounded-2xl bg-[#1a1f3a]
+        className=" relative h-full w-64 rounded-2xl card-color
                       border border-white/10
                       shadow-[0_0_40px_rgba(59,130,246,0.08)]
                       flex flex-col"
@@ -34,7 +35,7 @@ const Sidebar = () => {
           <div className="w-9 h-9  flex items-center justify-center">
             <img src={logo} alt="" className=" rounded-full" />
           </div>
-          <span className="text-lg font-semibold text-white">
+          <span className="text-lg font-semibold text-color">
             Career Compass
           </span>
         </div>
@@ -66,11 +67,12 @@ const Sidebar = () => {
 
         {/* User */}
         <div className="px-4 py-4 border-t border-white/10 flex items-center gap-3">
-          <UserButton />
-          <div className="leading-tight">
-            <p className="text-sm text-white font-medium">{user?.firstName}</p>
-            <p className="text-xs text-gray-400">View profile</p>
-          </div>
+          <SignOutButton>
+            <button className="px-4 py-2 border text-color rounded-md">
+              <LogOut size={16} className="inline-block mr-2" />Logout
+            </button>
+          </SignOutButton>
+          
         </div>
       </div>
     </aside>
@@ -85,7 +87,7 @@ const SidebarLink = ({ to, icon, label }) => (
        ${
          isActive
            ? "bg-blue-500/15 text-blue-400 ring-1 ring-blue-500/30"
-           : "text-white hover:bg-white/5 hover:text-white"
+           : "text-color hover:bg-white/5 hover:text-color"
        }`
     }
   >

@@ -1,14 +1,17 @@
 import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate,Navigate } from "react-router-dom";
 import { ExternalLink, ArrowLeft, CheckCircle } from "lucide-react";
+import { useUser } from "@clerk/clerk-react";
 
 function RoadmapTasks() {
   const location = useLocation();
   const navigate = useNavigate();
   const dayData = location.state?.day;
   const active=location.state?.active;
-
-  console.log(active);
+  const { user } = useUser();
+   if(!user){
+      return <Navigate to="/" replace />;
+  }
 
   if (!dayData) {
     return (

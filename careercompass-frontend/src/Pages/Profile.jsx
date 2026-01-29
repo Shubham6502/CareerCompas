@@ -1,6 +1,13 @@
 import { useUser } from "@clerk/clerk-react";
 import axios from "axios";
-import { UserRound, Pencil, Linkedin, Github, Link } from "lucide-react";
+import {
+  UserRound,
+  Pencil,
+  Linkedin,
+  Github,
+  Link,
+  Trash2,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import ProfileSkeleton from "../hooks/ProfileSkeleton";
 import EditProfileModal from "../Modal/EditProfileModal";
@@ -8,20 +15,24 @@ import EditPersonalModal from "../Modal/EditPersonalModal";
 import AddEducationModal from "../Modal/AddEducationModal";
 import AddLinksModal from "../Modal/AddLinksModal";
 import EditEducationModal from "../Modal/EditEducationModal";
+import EditProfilePictureModal from "../Modal/EditProfilePictureModal";
+import { Navigate, useNavigate } from "react-router-dom";
 
 function Profile() {
   const [userProfile, setUserProfile] = useState();
   const [isEditing, setIsEditing] = useState(false);
+  const [isLink, setIsLink] = useState(false);
   const [isPersonal, setIsPersonal] = useState(false);
   const [isAddEducation, setAddEducation] = useState(false);
   const [editEducationIndex, setEditEducationIndex] = useState(null);
-
-  const user1 = {
-    name: "Shubham Patil",
-    totalResources: 12,
-  };
-
+  const [totalResources, setTotalResources] = useState(0);
+  const [isImageEdit, setIsImageEdit] = useState(false);
+  const[isLoad,setLoad]=useState(false);
+  const navigate = useNavigate();
   const { user, isLoaded } = useUser();
+  if (!user) {
+    return <Navigate to="/" replace />;
+  }
   const clerkId = user?.id;
 
   useEffect(() => {
@@ -40,7 +51,7 @@ function Profile() {
       }
     };
     fetchProfile();
-  }, [clerkId, isLoaded]);
+  }, [clerkId, isLoaded,isLoad]);
 
   const handleSaveProfile = async (updatedData) => {
     try {
@@ -84,33 +95,94 @@ function Profile() {
       `http://localhost:5000/api/profile/add-links/${clerkId}`,
       links,
     );
-    console.log(res.data.updatedLinks)
+    console.log(res.data.updatedLinks);
     setUserProfile(res.data.updatedLinks);
     setIsEditing(false);
   };
-  const editEducation=async(index,formData)=>{
-    console.log(formData,index)
-    try{
-      const res=await axios.put(`http://localhost:5000/api/profile/edit-education/${clerkId}/${index}`,
-      formData);
-      console.log(res.data)
+  const editEducation = async (index, formData) => {
+    console.log(formData, index);
+    try {
+      const res = await axios.put(
+        `http://localhost:5000/api/profile/edit-education/${clerkId}/${index}`,
+        formData,
+      );
+      console.log(res.data);
       setUserProfile(res.data.updatedEducation);
       setEditEducationIndex(null);
-
-    }catch(err){
+    } catch (err) {
       console.log(err);
     }
-
-  }
+  };
   const truncateText = (text, limit = 20) => {
     if (!text) return "";
     return text.length > limit ? text.slice(0, limit) + "..." : text;
   };
 
+  useEffect(() => {
+    if (!isLoaded || !clerkId) return;
+
+    const fetchResourcesCount = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/resource/user/resourcescount/${clerkId}`,
+        );
+
+        setTotalResources(response.data.count);
+
+        // setTotalResources(totalResources); // store in state
+      } catch (error) {
+        console.error("Error fetching resources:", error);
+      }
+    };
+
+    fetchResourcesCount();
+  }, [isLoaded, clerkId]);
+
+  const handleDelete = async () => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete your account? This action cannot be undone.",
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      await Promise.all([
+        axios.delete(`http://localhost:5000/api/profile/delete/${clerkId}`),
+        axios.delete(`http://localhost:5000/api/progress/delete/${clerkId}`),
+        axios.delete(`http://localhost:5000/api/users/delete/${clerkId}`),
+      ]);
+
+      await user.delete(); // Clerk deletion
+      window.location.replace("/");
+    } catch (err) {
+      console.error("Failed to delete account:", err);
+      alert("Something went wrong while deleting your account.");
+    }
+  };
+
+  const handelProfilePicture = async (data) => {
+    try {
+     
+      const response = await axios.put(
+        `http://localhost:5000/api/profile/update-profile-picture/${clerkId}`,
+        data,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+      setUserProfile(response.data.updatedProfile);
+      setLoad(!isLoad);
+    } catch (err) {
+      console.error("Failed to update profile picture", err);
+    }
+  
+    setIsImageEdit(false);
+  };
   if (!isLoaded || !userProfile) {
     return <ProfileSkeleton />;
   }
-
   return (
     <div
       className="
@@ -134,29 +206,74 @@ function Profile() {
         <div className="max-w-5xl mx-auto px-4 py-6 space-y-6">
           {/* Profile Header */}
 
-          <div className="relative flex flex-col sm:flex-row items-center gap-6 bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-6 border border-gray-800">
+          <div className="relative flex flex-col sm:flex-row items-center gap-6 card-color rounded-2xl p-6 border border-gray-800">
             {/* Edit Icon */}
             <button
               onClick={() => setIsEditing(true)}
-              className="absolute top-4 right-4 p-2 rounded-full bg-gray-800 hover:bg-gray-700 transition"
+              className="absolute top-4 right-4 p-2 rounded-full bg-gray-700 hover:bg-gray-700 transition"
               aria-label="Edit Profile"
             >
               <Pencil size={16} className="text-gray-400" />
             </button>
+            <button
+              onClick={handleDelete}
+              className="absolute group inline-block bottom-4 right-4 p-2 rounded-full bg-gray-700 hover:bg-gray-700 transition "
+              aria-label="Edit Profile"
+            >
+              <Trash2 size={16} className="text-red-400" />
+              <span
+                className="absolute left-1/2 -translate-x-1/2 top-7 
+                   whitespace-nowrap rounded-md bg-black px-2 py-1 
+                   text-xs text-white opacity-0 
+                   group-hover:opacity-100 transition"
+              >
+                Delete Account
+              </span>
+            </button>
 
             {/* Profile Image */}
-            {userProfile.profilepicture ? (
-              <img
-                src={userProfile.profilepicture}
-                alt="Profile"
-                className="w-28 h-28 rounded-full object-cover border-2 border-gray-700"
-              />
-            ) : (
-              <div className="w-28 h-28 rounded-full flex items-center justify-center bg-gray-800 border-2 border-gray-700">
-                <UserRound size={48} className="text-gray-400" />
+            <div className="relative w-28 h-28 group">
+              {userProfile.profilepicture ? (
+                <img
+                  src={userProfile.profilepicture}
+                  alt="Profile"
+                  className="w-28 h-28 rounded-full object-cover border-2 border-gray-700"
+                />
+              ) : (
+                <div className="w-28 h-28 rounded-full flex items-center justify-center bg-gray-800 border-2 border-gray-700">
+                  <UserRound size={48} className="text-gray-400" />
+                </div>
+              )}
+              <div
+                className="
+      absolute inset-0
+      flex items-center justify-center
+      rounded-full
+      bg-black/50
+      opacity-0
+      group-hover:opacity-100
+      transition-opacity
+    "
+              >
+                <Pencil
+                  size={20}
+                  onClick={() => {
+                    setIsImageEdit(true);
+                  }}
+                  className="text-white"
+                />
               </div>
+            </div>
+            {isImageEdit && (
+              <EditProfilePictureModal
+                onSave={(data) => {
+                  handelProfilePicture(data);
+                }}
+                onClose={() => {
+                  setIsImageEdit(false);
+                }}
+              />
             )}
-
             {/* Profile Info */}
             <div className="text-center sm:text-left">
               <h2 className="text-2xl font-semibold text-white">
@@ -230,11 +347,19 @@ function Profile() {
             </div>
 
             {/* Stats */}
-            <div className="bg-gray-900 rounded-xl p-6 flex flex-col justify-center items-center">
+            <div className="bg-gray-900 rounded-xl p-6 flex flex-col justify-center gap-3 items-center">
               <p className="text-gray-400">Total Uploaded Resources</p>
               <p className="text-4xl font-bold text-white mt-2">
-                {user1.totalResources}
+                {totalResources}
               </p>
+              <button
+                onClick={() => {
+                  navigate("/userresources");
+                }}
+                className="bg-gray-800 rounded px-3 py-2 cursor-pointer hover:bg-gray-700"
+              >
+                View Resources
+              </button>
             </div>
             <div className="md:col-span-2 bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-6 border  border-gray-800">
               {/* Header */}
@@ -251,7 +376,7 @@ function Profile() {
               </div>
 
               {/* Education Item */}
-              {userProfile.education.map((edu,idx) => {
+              {userProfile.education.map((edu, idx) => {
                 return (
                   <div className="flex items-center justify-between mt-2 bg-gray-950 rounded-xl p-4 hover:bg-gray-900 transition">
                     {/* Left Section */}
@@ -281,7 +406,7 @@ function Profile() {
                         userProfile={userProfile}
                         education={edu}
                         onClose={() => setEditEducationIndex(null)}
-                       onSave={(formData) => editEducation(idx, formData)}
+                        onSave={(formData) => editEducation(idx, formData)}
                       />
                     )}
                   </div>
@@ -301,7 +426,7 @@ function Profile() {
               <div className="flex items-center justify-between">
                 <h3 className="text-base font-medium text-white">Links</h3>
                 <button
-                  onClick={() => setIsEditing(true)}
+                  onClick={() => setIsLink(true)}
                   className="p-2 rounded-full bg-gray-800 hover:bg-gray-700 transition"
                 >
                   <Pencil size={14} className="text-gray-400" />
@@ -358,10 +483,10 @@ function Profile() {
                   </a>
                 </div>
               )}
-              {isEditing && (
+              {isLink && (
                 <AddLinksModal
                   userProfile={userProfile}
-                  onClose={() => setIsEditing(false)}
+                  onClose={() => setIsLink(false)}
                   onSave={addLinks}
                 />
               )}

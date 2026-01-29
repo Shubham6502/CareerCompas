@@ -7,11 +7,13 @@ const ResultPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useUser();
-
+ if(!user){
+      return <Navigate to="/" replace />;
+  }
   if (!location.state?.domain) {
     return <Navigate to="/dashboard" replace />;
   }
-
+ 
   const clerkId = user?.id;
   const [domain, setDomain] = useState("");
 

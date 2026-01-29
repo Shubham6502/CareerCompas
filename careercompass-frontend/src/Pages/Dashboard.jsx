@@ -4,9 +4,15 @@ import { useEffect, useState } from "react";
 import AssessmentLoading from "../components/Loaders/AssessmentLoading";
 import axios from "axios";
 import { CheckCircle, Clock11, Target } from "lucide-react";
+import { Navigate } from "react-router-dom";
 
 const Dashboard = () => {
   const { user } = useUser();
+
+ if (!user) {
+  console.log("NO USER FOUND");
+    return <Navigate to="/" replace />;
+  }
   const navigate = useNavigate();
   const [progressData, setProgressData] = useState([]);
   const [tasks, setTasks] = useState([]);
@@ -17,6 +23,8 @@ const Dashboard = () => {
   const [completedDays, setCompletedDays] = useState([]);
   const [refreshProgress, setRefreshProgress] = useState(false);
   const [assessment, setAssessment] = useState(false);
+
+ 
 
   useEffect(() => {
     if (!isLoaded || !user) return;
@@ -161,10 +169,10 @@ const Dashboard = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* TODAY TASKS (SAME CARD DESIGN) */}
-            <GlowCard className="lg:col-span-2">
-              <div className="flex items-center justify-between mb-4">
+            <GlowCard className="lg:col-span-2 shadow-xl ">
+              <div className="flex items-center justify-between mb-4 ">
                 <h2 className="text-lg font-medium">Today’s Tasks</h2>
-                <span className="text-xs px-3 py-1 rounded-md bg-blue-500/10 text-blue-400">
+                <span className="text-xs px-3 py-1 rounded-md card-color text-blue-400">
                   Day {day}
                 </span>
               </div>
@@ -188,15 +196,15 @@ const Dashboard = () => {
               className="
   w-full max-w-2xl
   rounded-2xl
-  bg-[#1a1f3a]
+  card-color
   p-6
   shadow-xl
 "
             >
-              <h2 className="text-xl font-semibold text-white">
+              <h2 className="text-xl font-semibold ">
                 90 Days Tracker
               </h2>
-              <p className="text-sm text-gray-400 mb-6">
+              <p className="text-sm subText-color mb-6">
                 Complete daily tasks to maintain your streak
               </p>
 
@@ -231,7 +239,7 @@ const Dashboard = () => {
                 })}
               </div>
 
-              <div className="flex justify-between mt-6 text-sm text-gray-300">
+              <div className="flex justify-between mt-6 text-sm subText-color">
                 <span>Total Active Days: {completedDays?.length || 0}</span>
                 <span>Max Streak: {maxS}</span>
               </div>
@@ -242,7 +250,7 @@ const Dashboard = () => {
 
       {assessment && (
         <button
-          className=" bg-[#1a1f3a] border border-white/20 p-4 rounded-xl cursor-pointer"
+          className="card-color border card-border p-4 text-color rounded-xl cursor-pointer"
           onClick={() => [navigate("/dailyassessment")]}
         >
           Go To Assessment
@@ -254,7 +262,7 @@ const Dashboard = () => {
             Career Assessment
           </h1>
 
-          <p className="text-gray-400">
+          <p className="text-color">
             This short assessment helps identify the career domain that best
             matches your skills and interests. Please answer all questions
             honestly. There are no right or wrong answers. Your responses will
@@ -274,11 +282,11 @@ const Dashboard = () => {
 
 const StatCard = ({ title, value, subtitle, icon }) => (
   <div
-    className="rounded-xl bg-[#1a1f3a] border border-white/10 p-5
-               hover:border-blue-500/30 transition"
+    className="rounded-xl card-color border border-white/10 p-5
+               hover:border-blue-500/30 transition shadow-xl"
   >
     <div className="flex justify-between items-center">
-      <p className="text-sm text-gray-400">{title}</p>
+      <p className="text-sm">{title}</p>
       <span>{icon}</span>
     </div>
     <p className="text-2xl font-semibold mt-2">{value}</p>
@@ -288,8 +296,8 @@ const StatCard = ({ title, value, subtitle, icon }) => (
 
 const GlowCard = ({ children, className = "" }) => (
   <div
-    className={`relative rounded-xl bg-[#1a1f3a]
-                border border-white/10 p-6 overflow-hidden ${className}`}
+    className={`relative rounded-xl card-color
+                 p-6 overflow-hidden ${className}`}
   >
     <div
       className="absolute -inset-1 bg-gradient-to-br
@@ -308,7 +316,7 @@ const TaskItem = ({ task, onClick, completedTask }) => (
                 ${
                   task.completed
                     ? "bg-green-500/10 border-green-500/30"
-                    : "bg-[#0b1123] border-white/10 hover:bg-white/5"
+                    : "card-color border card-border hover:bg-white/5"
                 }`}
   >
     <div className="flex items-center select-none">
@@ -336,9 +344,7 @@ const TaskItem = ({ task, onClick, completedTask }) => (
     </div>
 
     <span
-      className={`text-sm ${
-        task.completed ? "line-through text-gray-400" : "text-gray-300"
-      }`}
+      className="text-sm"
     >
       {task.title}
     </span>
@@ -353,10 +359,10 @@ const TaskItem = ({ task, onClick, completedTask }) => (
     px-4 py-1.5
     text-sm font-medium
     text-blue-500
-    border border-blue-500/30
+    border card-border
     rounded-md
     hover:bg-blue-500
-    hover:text-white
+    hover:text-color
     transition"
       >
         Revisit
@@ -392,7 +398,7 @@ const AssesButton = ({ text, onClick }) => (
       onClick={onClick}
       className="relative z-10 px-6 py-3 rounded-lg
                  bg-blue-600 hover:bg-blue-700 transition
-                 font-medium text-white"
+                 font-medium "
     >
       {text}
     </button>

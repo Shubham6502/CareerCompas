@@ -2,13 +2,15 @@ import TestPage from "./TestPage";
 import { useState } from "react";
 import { useUser } from "@clerk/clerk-react";
 import predictDomain from "../utils/predictDomain";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Navigate } from "react-router-dom";
 
 export default function GenerateTest() {
   const [questions, setQuestions] = useState([]);
   const { user } = useUser();
   const navigate = useNavigate();
-
+  if(!user){
+    return <Navigate to="/" replace />;
+  }
   const loadTest = async () => {
 
     const res = await fetch("http://localhost:5000/api/test/generate-test", {

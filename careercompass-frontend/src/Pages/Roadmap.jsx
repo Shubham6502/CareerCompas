@@ -11,6 +11,10 @@ const Roadmap = () => {
   const clerkId = user.id;
   const navigate = useNavigate();
   const [progress, setProgress] = useState({});
+
+   if(!user){
+      return <Navigate to="/" replace />;
+  }
   useEffect(() => {
     if (!user || !isLoaded) return;
     axios
@@ -69,7 +73,7 @@ const Roadmap = () => {
       >
         {/* Vertical dotted line */}
         {progress.domain &&(<div className="absolute top-0 bottom-0 left-1/2 w-px border-l border-dashed border-blue-500 " />)}
-        {!progress.domain && (<div className=" text-white items-center justify-center">Please Attempt Assessment</div>)}
+        {!progress.domain && (<div className=" text-color items-center justify-center">Please Attempt Assessment</div>)}
         {Object.values(roadmap).map((daysItem, index) => {
           const isLeft = index % 2 === 0;
           let item = "completed";
@@ -115,16 +119,16 @@ const Roadmap = () => {
                     }`}
                 >
                   {item === "completed" && (
-                    <CheckCircle size={18} className="text-white" />
+                    <CheckCircle size={18} className="text-color" />
                   )}
                   {item === "locked" && (
                     <Lock size={16} className="text-blue-300" />
                   )}
                   {item === "incomplete" && (
-                    <CircleDotDashed size={16} className="text-white" />
+                    <CircleDotDashed size={16} className="text-color" />
                   )}
                   {item === "active" && (
-                    <span className="w-3 h-3 bg-white rounded-full" />
+                    <span className="w-3 h-3 bg-color rounded-full" />
                   )}
                 </div>
               </div>
@@ -135,12 +139,12 @@ const Roadmap = () => {
                 className={`w-64 px-5 py-3 rounded-xl border text-sm transition
                   ${
                     item === "completed"
-                      ? "bg-green-500 border-green-600/30 text-white"
+                      ? "bg-green-500 border-green-600/30 text-color"
                       : item === "active"
-                      ? "bg-blue-600/70 border-blue-500/30 text-white"
+                      ? "bg-blue-600/70 border-blue-500/30 text-color"
                       : item === "incomplete"
-                      ? "bg-green-900/50 text-white border-green-700/20"
-                      : "bg-amber-200/20 border-amber-500 text-white"
+                      ? "bg-green-900/50 text-color border-green-700/20"
+                      : "bg-amber-200/20 border-amber-500 text-color"
                   }`}
               >
                 <p className="text-xs opacity-70">Day {daysItem.day}</p>

@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
+import { Navigate } from "react-router-dom";
 
 function DailyAssessment() {
   const [questions, setQuestions] = useState([]);
@@ -17,7 +18,9 @@ function DailyAssessment() {
  const [completedTasks, setCompletedTasks] = useState(false);
 
   
-  
+  if(!user){
+    return <Navigate to="/" replace />;
+  }
 
   const handleOptionClick = (option) => {
     setSelected(option);
@@ -100,25 +103,25 @@ function DailyAssessment() {
   
 
   if(completed){
-    return(<div className="text-white text-center mt-10">You Passed This Assessment</div>);
+    return(<div className="text-color text-center mt-10">You Passed This Assessment</div>);
   }
   if(!canRetake()){
-    return(<div className="text-white text-center mt-10">You Failed.. <span>You can Retake this Assessment After 2 Hours </span></div>);
+    return(<div className="text-color text-center mt-10">You Failed.. <span>You can Retake this Assessment After 2 Hours </span></div>);
   }
 
     if(!completedTasks){
-        return(<div className="text-white text-center mt-10">Before Taking Test You Need To Complete Todays Tasks</div>);
+        return(<div className="text-color text-center mt-10">Before Taking Test You Need To Complete Todays Tasks</div>);
     }
  
   if (!questions.length) {
     return (
-      <div className="text-white text-center mt-10">Loading assessment...</div>
+      <div className="text-color text-center mt-10">Loading assessment...</div>
     );
   }
 
 if (isSubmitted) {
   return (
-    <div className="flex flex-col items-center justify-center mt-20 text-white">
+    <div className="flex flex-col items-center justify-center mt-20 text-color">
       <h2 className="text-3xl font-semibold mb-4">Assessment Completed 🎉</h2>
       <p className="text-xl">
         Your Score: <span className="text-blue-400">{score}</span>
@@ -135,12 +138,12 @@ if (isSubmitted) {
 
   return (
     <div className="space-y-8 max-w-3xl lg:my-20 mx-auto">
-      <p className="text-gray-400 mb-3">
+      <p className="subText-color mb-3">
         Question {currentIndex + 1} of {questions.length}
       </p>
 
       <div className="rounded-xl bg-[#0F172A] border border-white/10 p-6">
-        <h2 className="text-lg font-medium text-white mb-5">
+        <h2 className="text-lg font-medium text-color mb-5">
           {currentQuestion.question}
         </h2>
 
@@ -152,8 +155,8 @@ if (isSubmitted) {
               className={`w-full text-left px-4 py-3 rounded-xl border transition
                 ${
                   selected === option
-                    ? "bg-blue-600/90 border-blue-500 text-white"
-                    : "bg-[#0F172A] border-white/10 text-gray-300 hover:bg-white/5"
+                    ? "bg-blue-600/90 border-blue-500 text-color"
+                    : "bg-[#0F172A] border-white/10 subText-color hover:bg-white/5"
                 }`}
             >
               {option}
@@ -165,14 +168,14 @@ if (isSubmitted) {
         {currentIndex < questions.length - 1 ? (
           <button
             onClick={()=>handleNext(currentQuestion.answer)}
-            className="px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white"
+            className="px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-color"
           >
             Next →
           </button>
         ) : (
           <button
             onClick={handleSubmit}
-            className="px-6 py-3 rounded-lg bg-green-600 hover:bg-green-700 text-white"
+            className="px-6 py-3 rounded-lg bg-green-600 hover:bg-green-700 text-color"
           >
             Submit Test →
           </button>

@@ -14,42 +14,41 @@ import RoadmapTasks from "./Pages/RoadmapTasks";
 import Resources from "./Pages/Resources";
 import DailyAssessment from "./Pages/DailyAssessment";
 import Profile from "./Pages/Profile";
-
-
+import ProtectedRoute from "./components/ProtectedRoute";
+import UserResources from "./Pages/UserResources";
 function App() {
   const { isSignedIn, isLoaded } = useUser();
   useSaveUser();
- 
-  // Wait until Clerk is loaded
   if (!isLoaded) return null;
 
   return (
     <>
       {/* Public Navbar */}
       {!isSignedIn && <PublicNavbar />}
-
+      {!isSignedIn && <Home/>}
       <Routes>
-       
-        {!isSignedIn && <Route path="/" element={<Home />} />}
+        <Route
+          path="/"
+          element={isSignedIn ? <Navigate to="/dashboard" replace /> : <Home />}
+        />
 
-       
-        {isSignedIn && (
+        {/* {isSignedIn && (
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
-        )}
+        )} */}
 
-       
         {isSignedIn && (
           <Route
             path="/dashboard"
             element={
-              <AppLayout>
-                <Dashboard />
-              </AppLayout>
+              <ProtectedRoute>
+                <AppLayout>
+                  <Dashboard />
+                </AppLayout>
+              </ProtectedRoute>
             }
           />
         )}
 
-       
         {isSignedIn && (
           <Route
             path="/assessment"
@@ -79,48 +78,54 @@ function App() {
           }
         />
         <Route
-      path="/roadmap"
-      element={
-        <AppLayout>
-          <Roadmap />
-          </AppLayout>
-        }/>
-        <Route
-        path="/roadmap/tasks"
-        element={
-          <AppLayout>
-            <RoadmapTasks/>
-          </AppLayout>
-        }/>
-        <Route 
-        path='/resources'
-        element={
-          <AppLayout>
-            <Resources/>
+          path="/roadmap"
+          element={
+            <AppLayout>
+              <Roadmap />
             </AppLayout>
-          
-        }
+          }
         />
         <Route
-        path='/dailyassessment'
-        element={
-          <AppLayout>
-            <DailyAssessment/>
-          </AppLayout>
-        }
+          path="/roadmap/tasks"
+          element={
+            <AppLayout>
+              <RoadmapTasks />
+            </AppLayout>
+          }
         />
         <Route
-        path="/Profile"
-        element={
-          <AppLayout>
-            <Profile/>
-          </AppLayout>
-        }/>
-
+          path="/resources"
+          element={
+            <AppLayout>
+              <Resources />
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/dailyassessment"
+          element={
+            <AppLayout>
+              <DailyAssessment />
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/Profile"
+          element={
+            <AppLayout>
+              <Profile />
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/userresources"
+          element={
+            <AppLayout>
+              <UserResources />
+            </AppLayout>
+          }
+          />
       </Routes>
-
-      
-        
     </>
   );
 }

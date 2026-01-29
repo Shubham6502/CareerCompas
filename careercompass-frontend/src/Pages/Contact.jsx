@@ -16,7 +16,7 @@ const Contact = () => {
         </div>
 
         {/* Right Side - Contact Form */}
-        <div className="bg-white rounded-2xl sm:shadow-2xl  px-9 py-5 border border-gray-100">
+        <div className="text-color rounded-2xl sm:shadow-2xl  px-9 py-5 border border-gray-100">
           <h2 className="text-3xl font-bold text-gray-800 mb-2 text-center">
             Any <span className="text-blue-600">Query?</span>
           </h2>
@@ -69,7 +69,7 @@ const Contact = () => {
             <div className="text-center">
               <button
                 type="submit"
-                className="bg-blue-600 text-white px-8 py-2 rounded-lg font-semibold shadow-md hover:bg-blue-700 transition duration-200"
+                className="bg-blue-600 text-color px-8 py-2 rounded-lg font-semibold shadow-md hover:bg-blue-700 transition duration-200"
               >
                 Submit Query
               </button>

@@ -13,6 +13,7 @@ import ResourcesForm from "../utils/ResourecesForm";
 import { useUser } from "@clerk/clerk-react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { Navigate } from "react-router-dom";
 
 function Resources() {
   const [activeFilter, setActiveFilter] = useState("All");
@@ -24,6 +25,10 @@ function Resources() {
   const [totalPages, setTotalPages] = useState(1);
   const [topContributor, setTopContributor] = useState(null);
   const [clicked, setClicked] = useState(false);
+
+   if (!user) {
+    return <Navigate to="/" replace />;
+  }
   const clerkId = user.id;
 
   useEffect(() => {
@@ -79,32 +84,32 @@ function Resources() {
       <div className="flex  flex-wrap items-center gap-4 ">
         {/* Search Box */}
         <div
-          className="flex items-center gap-3 px-5 py-3 rounded-3xl border border-white/20 
-                     bg-white/5 focus-within:border-blue-400 
+          className="flex items-center gap-3 px-5 py-3 rounded-3xl border text-color border-white/20 
+                     card-color focus-within:border-blue-400 
                      focus-within:ring-2 focus-within:ring-blue-400/30
-                     transition-all text-white"
+                     transition-all text-color"
         >
-          <Search size={18} className="text-white/60" />
+          <Search size={18} className="text-color" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search resources..."
             className="bg-transparent outline-none text-sm 
-                       placeholder:text-white/50"
+                       placeholder:text-color"
           />
         </div>
 
         {/* Filter Buttons */}
         <div
           className="flex flex-wrap items-center
-    gap-2
+    gap-2 card-color
     md:rounded-full
     px-3 sm:px-5
     py-2
-    md:border border-white/10
-    hover:bg-white/5
-    max-w-full
+    md:border border-white/10 
+    hover:bg-color
+    max-w-full 
     overflow-x-auto sm:overflow-visible"
         >
           {filters.map((filter) => (
@@ -117,7 +122,7 @@ function Resources() {
           ))}
         </div>
 
-        <div className="flex text-white bg-blue-600 px-4 py-3 rounded-xl shadow-[0_0_20px_rgba(59,130,246,0.5)] md:ml-auto">
+        <div className="flex text-color bg-blue-600 px-4 py-3 rounded-xl shadow-[0_0_20px_rgba(59,130,246,0.5)] md:ml-auto">
           <button
             className="flex items-center gap-2 cursor-pointer"
             onClick={() => setOpen(true)}
@@ -129,7 +134,7 @@ function Resources() {
         </div>
       </div>
 
-      <div className=" md:flex  gap-3 text-white">
+      <div className=" md:flex  gap-3 text-color">
         {/* Resources Section */}
         <div className="flex-1 ">
           <div
@@ -139,8 +144,8 @@ function Resources() {
     max-h-[60vh] sm:max-h-[73vh]
     overflow-y-auto
     rounded-2xl
-    border border-white/10
-    bg-slate-900/70 backdrop-blur-md
+    border card-border
+    card-color
     p-4 sm:p-5
     scrollbar-thin
     scrollbar-thumb-white/20
@@ -161,8 +166,8 @@ function Resources() {
                 className="
         group relative mb-3
         rounded-2xl
-        border border-white/10
-        bg-gradient-to-br from-slate-900 to-slate-800
+        border card-border
+        card-color
         p-4 sm:p-5
         transition-all duration-300
         hover:border-blue-400/50
@@ -212,7 +217,7 @@ function Resources() {
                     className="
             text-base sm:text-lg
             font-semibold
-            text-white
+            text-color
             leading-snug
             pr-24
             group-hover:text-blue-400
@@ -222,7 +227,7 @@ function Resources() {
                     {card.title}
                   </h3>
 
-                  <p className="mt-1 text-sm text-gray-400 line-clamp-2">
+                  <p className="mt-1 text-sm subText-color line-clamp-2">
                     {card.description}
                   </p>
                 </Link>
@@ -230,12 +235,12 @@ function Resources() {
                 {/* Footer */}
                 <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   {/* Author */}
-                  <span className="text-xs text-gray-500">
-                    By <span className="text-gray-400">{card.userName}</span>
+                  <span className="text-xs subText-color">
+                    By <span className="subText-color">{card.userName}</span>
                   </span>
 
                   {/* Stats */}
-                  <div className="flex items-center gap-6 text-sm text-gray-400">
+                  <div className="flex items-center gap-6 text-sm subText-color">
                     <span
                      onClick={() => {
                           thumbClicked("UPVOTE", card._id);
@@ -244,8 +249,8 @@ function Resources() {
               transition-all  rounded-4xl p-2
               hover:text-green-400 hover:scale-110 ${
                 card.upvote?.ids?.includes(clerkId)
-                  ? "bg-blue-500 text-white block"
-                  : "text-gray-400 block"
+                  ? "bg-blue-500 text-color block"
+                  : "subText-color block"
               }`}
                     >
                       <ThumbsUp
@@ -263,8 +268,8 @@ function Resources() {
               transition-all  rounded-4xl p-2
               hover:text-green-400 hover:scale-110 ${
                 card.downvote?.ids?.includes(clerkId)
-                  ? "bg-blue-500 text-white block"
-                  : "text-gray-400 block"
+                  ? "bg-blue-500 text-color block"
+                  : "subText-color block"
               }`}
                     >
                       <ThumbsDown
@@ -299,7 +304,7 @@ function Resources() {
               Prev
             </button>
 
-            <span className="px-4 py-1 text-white">
+            <span className="px-4 py-1 text-color">
               Page {currentPage} of {totalPages}
             </span>
 
@@ -359,8 +364,8 @@ const ButtonSearch = ({ title, isActive, onClick }) => {
       className={`px-5 py-3 rounded-xl text-sm font-medium transition-all
         ${
           isActive
-            ? "bg-blue-500 text-white shadow-[0_0_25px_rgba(59,130,246,0.45)]"
-            : "border border-white/20 text-white/80 hover:bg-white/5"
+            ? "bg-blue-500 text-color shadow-[0_0_25px_rgba(59,130,246,0.45)]"
+            : "border border-white/20 text-color hover:bg-white/5"
         }`}
     >
       {title}

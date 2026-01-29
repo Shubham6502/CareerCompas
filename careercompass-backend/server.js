@@ -15,9 +15,13 @@ import ProfileRoute from "./routes/ProfileRoutes.js"
 
 
 const app = express();
-
-// Middlewares
-app.use(cors());                // Allow frontend to connect
+app.use(
+  cors({
+    origin: "http://localhost:5173", //  exact frontend origin
+    credentials: true,              // allow cookies
+  })
+);
+               // Allow frontend to connect
 app.use(express.json());        // Allow JSON request body
 
 // Connect to MongoDB

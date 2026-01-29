@@ -3,12 +3,16 @@ import { motion } from "framer-motion";
 import { CheckCircle } from "lucide-react";
 import axios from "axios";
 import { useEffect } from "react";
+import { useUser } from "@clerk/clerk-react";
+import { Navigate } from "react-router-dom";
 
 const ThreeMonthPrep = () => {
   const  [roadmapData,setRoadmapData]=useState(null);
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [selectedWeek, setSelectedWeek] = useState(null);
-
+ if(!user){
+      return <Navigate to="/" replace />;
+  }
   useEffect(()=>{
     axios
     .get("http://localhost:5000/api/roadmap/Software-Engineer")

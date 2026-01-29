@@ -1,9 +1,14 @@
 import { useLocation, Navigate, useNavigate } from "react-router-dom";
+import { useUser } from "@clerk/clerk-react";
 import TestPage from "./TestPage";
 
 const AssessmentTest = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { user } = useUser();
+  if(!user){
+      return <Navigate to="/" replace />;
+    }
 
   if (!location.state?.questions) {
     return <Navigate to="/assessment" replace />;

@@ -1,12 +1,13 @@
 import User from "../models/User";
 import express from "express";
 
+
 const router=express.Router();
 router.post("/user/save-login",async(req,res)=>{
     const {clerkId,domain}=req.body;
     
     
-    if(!user || !domain){
+    if(!clerkId || !domain){
         return res.status(400).json({message:"Something went wrong"});
     }
     try{

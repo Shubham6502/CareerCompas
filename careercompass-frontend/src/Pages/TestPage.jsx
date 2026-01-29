@@ -1,12 +1,17 @@
 import { useState } from "react";
+import { useUser } from "@clerk/clerk-react";
+import { Navigate } from "react-router-dom";
 
 const TestPage = ({ questions = [], onSubmit }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState({});
-
+  const { user } = useUser();
   const currentQuestion = questions[currentIndex];
   const selected = answers[currentIndex];
 
+   if(!user){
+      return <Navigate to="/" replace />;
+  }
   const handleOptionClick = (option) => {
     setAnswers({
       ...answers,

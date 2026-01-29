@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { SignOutButton } from "@clerk/clerk-react";
 import {
   Menu,
   X,
@@ -8,6 +9,7 @@ import {
   Map,
   BookOpen,
   BarChart3,
+  User
 } from "lucide-react";
 
 const MobileDrawer = () => {
@@ -73,12 +75,22 @@ const MobileDrawer = () => {
             label="Resources"
           />
           <DrawerLink
-            to="/progress"
-            icon={<BarChart3 size={18} />}
-            label="Progress"
+            to="/profile"
+            icon={<User size={18} />}
+            label="Profile"
           />
+           
         </nav>
+         <div className="px-4 py-4 border-t border-white/10 flex items-center gap-3">
+          <SignOutButton>
+            <button className="px-4 py-2 border text-white rounded-md">
+              Logout
+            </button>
+          </SignOutButton>
+          
+        </div>
       </aside>
+      
     </>
   );
 };

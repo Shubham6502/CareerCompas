@@ -3,7 +3,7 @@ import User from "../models/User.js";
 
 const router = express.Router();
 
-// GET /api/user/status/:clerkId
+
 router.get("/status/:clerkId", async (req, res) => {
   try {
     const { clerkId } = req.params;
