@@ -16,9 +16,12 @@ import axios from "axios";
 import { Navigate } from "react-router-dom";
 
 function Resources() {
+   const { isLoaded, user } = useUser();
+   if (!user) {
+    return <Navigate to="/" replace />;
+  }
   const [activeFilter, setActiveFilter] = useState("All");
   const [search, setSearch] = useState(""); // search text
-  const { isLoaded, user } = useUser();
   const [open, setOpen] = useState(false);
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -26,10 +29,9 @@ function Resources() {
   const [topContributor, setTopContributor] = useState(null);
   const [clicked, setClicked] = useState(false);
 
-   if (!user) {
-    return <Navigate to="/" replace />;
-  }
+  
   const clerkId = user.id;
+
 
   useEffect(() => {
     axios
@@ -323,22 +325,22 @@ function Resources() {
           className="flex flex-col gap-3 justify-center
                   text-center"
         >
-          <div className="w-full md:w-48  bg-black/20 border border-white/10 rounded-xl p-4">
+          <div className="w-full md:w-48  card-color border card-border rounded-xl p-4">
             <span className="font-medium">Need Help?</span>
-            <div className="text-sm text-white/60 mt-1">
+            <div className="text-sm subText-color mt-1">
               Can't find what you are looking for? Request a resource
             </div>
           </div>
           {topContributor && (
-            <div className="w-full md:w-48  bg-black/20 border border-white/10 rounded-xl p-4">
+            <div className="w-full md:w-48  card-color border card-border rounded-xl p-4">
               <span className="font-medium flex items-center justify-center">
                 <ArrowUp size={25} color="red" />
                 Top Contributors
               </span>
-              <span className="text-sm text-white/60 mt-1 break-words whitespace-normal">
+              <span className="text-sm subText-color mt-1 break-words whitespace-normal">
                 {topContributor[0]?.userName}
               </span>
-              <div className="text-xs text-white/60 mt-1 flex justify-around items-center">
+              <div className="text-xs subText-color mt-1 flex justify-around items-center">
                 <span className="flex items-center justify-center gap-1">
                   <Notebook size={12} title="Resources Uploads" />
                   {topContributor[0]?.totalResources}

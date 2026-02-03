@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const EditProfilePictureModal = ({ userProfile, onClose, onSave }) => {
+const EditProfilePictureModal = ({ userProfile, onClose, onSave ,isSaving}) => {
   const [file, setFile] = useState(null);
 
   const handleChange = (e) => {
@@ -47,6 +47,7 @@ const EditProfilePictureModal = ({ userProfile, onClose, onSave }) => {
       transition
     "
           >
+            {isSaving && <span className="loader"></span>}
             <span className="font-medium">Upload Profile Image</span>
           </label>
 
@@ -69,9 +70,11 @@ const EditProfilePictureModal = ({ userProfile, onClose, onSave }) => {
           <button
             type="button"
             onClick={handleSubmit}
+            disabled={isSaving}
             className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-500"
           >
-            Save
+             
+             {isSaving ? "Saving..." : "Save"}
           </button>
         </div>
       </div>

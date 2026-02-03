@@ -9,28 +9,61 @@
 }
 
 .card-color{
+ background-color: #FFFFFF;
+  color:black;
+}
+.dark .card-color{
   background: linear-gradient(to bottom right, #111827, #1f2937);
-  /* background-color: rgb(230, 233, 235);
-  color:black; */
+  color:white;
 }
 .text-color{
- color:white;
- /* color:black */
+ color: #0F172A;
+}
+.dark .text-color{
+  color: #F1F5F9;
 }
 .subText-color{
-  color:grey;
+  color: #475569;
 }
-.bg-color{
-background-color: #070917;
-/* background-color: white; */
+.dark .subText-color{
+  color: #94A3B8;
+}
+.subcard-color{
+  background-color: #F1F5F9;
+}
+.dark .subcard-color{
+  background-color: #1E293B;
 }
 .card-border{
-  
 border:1px solid  rgba(37, 36, 36, 0.4);
-
-  /* border: 1px solid rgba(255, 255, 255, 0.1); */
+}
+.dark .card-border{
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.bg-color {
+  background-color: #F8FAFC; /* default = light */
 }
 
+.dark .bg-color {
+  background-color: #070917; /* when dark is set */
+}
+
+
+
+.loader {
+  width: 16px;
+  height: 16px;
+  border: 3px solid #ffffff;
+  border-top: 3px solid transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 /* Chrome / Edge / Safari */
 ::-webkit-scrollbar {
@@ -42,4 +75,46 @@ border:1px solid  rgba(37, 36, 36, 0.4);
 }
 ::-webkit-scrollbar-track {
   background: transparent;
+}
+/* Dark Theme button*/
+.theme-switch {
+  width: 52px;
+  height: 26px;
+  background-color: #E5E7EB;
+  border-radius: 999px;
+  padding: 3px;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background-color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.35s ease, background-color 0.25s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Positions */
+.thumb.light {
+  transform: translateX(0);
+  color: #F59E0B; /* Sun */
+}
+
+.thumb.dark {
+  transform: translateX(26px);
+  color: #6366F1; /* Moon */
+}
+
+/* Dark mode track */
+
+.dark .theme-switch {
+  background-color: #3e4a5b;
 }

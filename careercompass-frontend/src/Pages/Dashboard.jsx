@@ -24,7 +24,8 @@ const Dashboard = () => {
   const [refreshProgress, setRefreshProgress] = useState(false);
   const [assessment, setAssessment] = useState(false);
 
- 
+ const theme= localStorage.getItem("theme");
+ console.log(theme);
 
   useEffect(() => {
     if (!isLoaded || !user) return;
@@ -177,7 +178,7 @@ const Dashboard = () => {
                 </span>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-3 ">
                 {tasks.map((task) => (
                   <TaskItem
                     key={task.id}
@@ -312,7 +313,7 @@ const TaskItem = ({ task, onClick, completedTask }) => (
   <div
     onClick={onClick}
     className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer
-                border transition
+                border transition 
                 ${
                   task.completed
                     ? "bg-green-500/10 border-green-500/30"
@@ -375,7 +376,7 @@ const GlowButton = ({ text, onClick }) => (
   <div className="relative mt-6">
     <div
       className="absolute inset-0 rounded-lg blur-xl opacity-60
-                 bg-gradient-to-r from-blue-500 to-purple-500
+                 card-color
                  pointer-events-none"
     />
     <button

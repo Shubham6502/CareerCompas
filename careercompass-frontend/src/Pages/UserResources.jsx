@@ -79,19 +79,19 @@ const deleteResource = (id) => {
       <div className="flex  flex-wrap items-center gap-4 ">
         {/* Search Box */}
         <div
-          className="flex items-center gap-3 px-5 py-3 rounded-3xl border border-white/20 
-                     bg-white/5 focus-within:border-blue-400 
+          className="flex items-center gap-3 px-5 py-3 rounded-3xl border card-border 
+                     card-color focus-within:border-blue-400 
                      focus-within:ring-2 focus-within:ring-blue-400/30
-                     transition-all text-white"
+                     transition-all text-color"
         >
-          <Search size={18} className="text-white/60" />
+          <Search size={18} className="subText-color" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search resources..."
             className="bg-transparent outline-none text-sm 
-                       placeholder:text-white/50"
+                       placeholder:subText-color"
           />
         </div>
 
@@ -102,7 +102,7 @@ const deleteResource = (id) => {
     md:rounded-full
     px-3 sm:px-5
     py-2
-    md:border border-white/10
+    md:border card-border
     hover:bg-white/5
     max-w-full
     overflow-x-auto sm:overflow-visible"
@@ -117,7 +117,7 @@ const deleteResource = (id) => {
           ))}
         </div>
 
-        <div className="flex text-white bg-blue-600 px-4 py-3 rounded-xl shadow-[0_0_20px_rgba(59,130,246,0.5)] md:ml-auto">
+        <div className="flex text-color bg-blue-600 px-4 py-3 rounded-xl shadow-[0_0_20px_rgba(59,130,246,0.5)] md:ml-auto">
           <button
             className="flex items-center gap-2 cursor-pointer"
             onClick={() => setOpen(true)}
@@ -129,7 +129,7 @@ const deleteResource = (id) => {
         </div>
       </div>
 
-      <div className=" md:flex  gap-3 text-white">
+      <div className=" md:flex  gap-3 text-color">
         {/* Resources Section */}
         <div className="flex-1 ">
           <div
@@ -139,8 +139,8 @@ const deleteResource = (id) => {
     max-h-[60vh] sm:max-h-[73vh]
     overflow-y-auto
     rounded-2xl
-    border border-white/10
-    bg-slate-900/70 backdrop-blur-md
+    border card-border
+    card-color backdrop-blur-md
     p-4 sm:p-5
     scrollbar-thin
     scrollbar-thumb-white/20
@@ -150,7 +150,7 @@ const deleteResource = (id) => {
             {/* Empty State */}
             {!data.length && (
               <div className="flex items-center justify-center h-full">
-                <p className="text-sm text-white/50">No resources found</p>
+                <p className="text-sm subText-color">No resources found</p>
               </div>
             )}
 
@@ -162,7 +162,7 @@ const deleteResource = (id) => {
       group relative mb-3
       rounded-2xl
       border border-white/10
-      bg-gradient-to-br from-slate-900 to-slate-800
+      card-color
       p-4 sm:p-5
       transition-all duration-300
       hover:border-blue-400/50
@@ -187,11 +187,11 @@ const deleteResource = (id) => {
       onClick={(e) => resourceId && e.preventDefault()}
       className="block"
     >
-      <h3 className="text-base sm:text-lg font-semibold text-white pr-24 group-hover:text-blue-400 transition-colors">
+      <h3 className="text-base sm:text-lg font-semibold text-color pr-24 group-hover:text-blue-400 transition-colors">
         {card.title}
       </h3>
 
-      <p className="mt-1 text-sm text-gray-400 line-clamp-2">
+      <p className="mt-1 text-sm subText-color line-clamp-2">
         {card.description}
       </p>
     </Link>
@@ -226,7 +226,7 @@ const deleteResource = (id) => {
       </div>
 
       {/* Stats */}
-      <div className="flex items-center gap-6 text-sm text-gray-400">
+      <div className="flex items-center gap-6 text-sm subText-color">
         <span className="flex items-center gap-1">
           <ThumbsUp size={15} />
           {card.upvote?.ids.length}
@@ -268,7 +268,7 @@ const deleteResource = (id) => {
               Prev
             </button>
 
-            <span className="px-4 py-1 text-white">
+            <span className="px-4 py-1 text-color">
               Page {currentPage} of {totalPages}
             </span>
 
@@ -287,19 +287,19 @@ const deleteResource = (id) => {
           className="flex flex-col gap-3 justify-center
                   text-center"
         >
-          <div className="w-full md:w-48  bg-black/20 border border-white/10 rounded-xl p-4">
+          <div className="w-full md:w-48  card-color border card-border rounded-xl p-4">
             <span className="font-medium">Need Help?</span>
-            <div className="text-sm text-white/60 mt-1">
+            <div className="text-sm subText-color mt-1">
               Can't find what you are looking for? Request a resource
             </div>
           </div>
           {topContributor && (
-            <div className="w-full md:w-48  bg-black/20 border border-white/10 rounded-xl p-4">
+            <div className="w-full md:w-48  card-color border card-border rounded-xl p-4">
               <span className="font-medium flex items-center justify-center">
                 <ArrowUp size={25} color="red" />
                 Top Contributors
               </span>
-              <span className="text-sm text-white/60 mt-1 break-words whitespace-normal">
+              <span className="text-sm subText-color mt-1 break-words whitespace-normal">
                 {topContributor[0]?.userName}
               </span>
               <div className="text-xs text-white/60 mt-1 flex justify-around items-center">
@@ -328,8 +328,8 @@ const ButtonSearch = ({ title, isActive, onClick }) => {
       className={`px-5 py-3 rounded-xl text-sm font-medium transition-all
         ${
           isActive
-            ? "bg-blue-500 text-white shadow-[0_0_25px_rgba(59,130,246,0.45)]"
-            : "border border-white/20 text-white/80 hover:bg-white/5"
+            ? "bg-blue-500 text-color shadow-[0_0_25px_rgba(59,130,246,0.45)]"
+            : "border border-white/20 text-color hover:bg-white/5"
         }`}
     >
       {title}

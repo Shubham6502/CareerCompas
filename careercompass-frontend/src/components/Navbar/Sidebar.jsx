@@ -1,6 +1,9 @@
 import { NavLink } from "react-router-dom";
 import { UserButton, useUser, SignOutButton } from "@clerk/clerk-react";
+import { useState, useEffect } from "react";
 import logo from "../../assets/logo1.png";
+import { useTheme } from "../../themeContext.jsx";
+
 import {
   LayoutDashboard,
   ClipboardList,
@@ -8,12 +11,14 @@ import {
   BookOpen,
   User,
   LogOut,
-  BarChart3,
+  Moon,
+  Sun,
 } from "lucide-react";
 
 const Sidebar = () => {
-  const { user } = useUser();
-
+ const { isDarkMode, setIsDarkMode }= useTheme();
+  console.log(isDarkMode)
+  console.log(localStorage.getItem("theme"));
   return (
     <aside className=" relative hidden md:block h-screen p-4">
       {/* Sidebar Card */}
@@ -69,10 +74,20 @@ const Sidebar = () => {
         <div className="px-4 py-4 border-t border-white/10 flex items-center gap-3">
           <SignOutButton>
             <button className="px-4 py-2 border text-color rounded-md">
-              <LogOut size={16} className="inline-block mr-2" />Logout
+              <LogOut size={16} className="inline-block mr-2" />
+              Logout
             </button>
           </SignOutButton>
-          
+
+          <button
+            onClick={() => setIsDarkMode(!isDarkMode)}
+            className="theme-switch"
+            aria-label="Toggle theme"
+          >
+            <div className={`thumb ${isDarkMode ? "dark" : "light"}`}>
+              {isDarkMode ? <Moon size={14} /> : <Sun size={14} />}
+            </div>
+          </button>
         </div>
       </div>
     </aside>

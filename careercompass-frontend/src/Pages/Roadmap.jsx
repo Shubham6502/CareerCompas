@@ -2,19 +2,21 @@ import axios from "axios";
 import { Lock, CheckCircle, CircleDotDashed } from "lucide-react";
 import { use, useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Navigate } from "react-router-dom";
 
 const Roadmap = () => {
-  const [roadmap, setRoadmap] = useState([]);
   const { user } = useUser();
+  if(!user){
+      return <Navigate to="/" replace />;
+  }
+
+  const [roadmap, setRoadmap] = useState([]);
   const { isLoaded } = useUser();
-  const clerkId = user.id;
+  const clerkId = user?.id;
   const navigate = useNavigate();
   const [progress, setProgress] = useState({});
 
-   if(!user){
-      return <Navigate to="/" replace />;
-  }
+  
   useEffect(() => {
     if (!user || !isLoaded) return;
     axios
