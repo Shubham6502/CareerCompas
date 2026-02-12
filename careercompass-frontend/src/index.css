@@ -1,12 +1,21 @@
 @import "tailwindcss";
 /* @tailwind utilities; */
+
 .grid-bg {
   background-image:
-    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+    linear-gradient(rgba(8, 1, 1, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(5, 0, 0, 0.06) 1px, transparent 1px);
   background-size: 40px 40px;
-  
 }
+
+/* FIXED DARK MODE */
+.dark .grid-bg {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
 
 .card-color{
  background-color: #FFFFFF;
@@ -47,6 +56,30 @@ border:1px solid  rgba(37, 36, 36, 0.4);
 .dark .bg-color {
   background-color: #070917; /* when dark is set */
 }
+
+/* .nav {
+  background: linear-gradient(
+    270deg,
+    rgba(255, 255, 255, 0.2),
+    rgba(240, 240, 240, 0.6),
+    rgba(255, 255, 255, 0.2)
+  );
+
+  background-size: 400% 400%;
+  animation: waterFlow 10s ease infinite;
+}
+
+@keyframes waterFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+} */
 
 
 

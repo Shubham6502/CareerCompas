@@ -86,7 +86,7 @@ function Resources() {
       <div className="flex  flex-wrap items-center gap-4 ">
         {/* Search Box */}
         <div
-          className="flex items-center gap-3 px-5 py-3 rounded-3xl border text-color border-white/20 
+          className="flex items-center gap-3 px-5 py-3 rounded-3xl border text-color card-border 
                      card-color focus-within:border-blue-400 
                      focus-within:ring-2 focus-within:ring-blue-400/30
                      transition-all text-color"
@@ -109,7 +109,7 @@ function Resources() {
     md:rounded-full
     px-3 sm:px-5
     py-2
-    md:border border-white/10 
+    md:border card-border 
     hover:bg-color
     max-w-full 
     overflow-x-auto sm:overflow-visible"
@@ -146,7 +146,7 @@ function Resources() {
     max-h-[60vh] sm:max-h-[73vh]
     overflow-y-auto
     rounded-2xl
-    border card-border
+  shadow-xl
     card-color
     p-4 sm:p-5
     scrollbar-thin

@@ -1,21 +1,33 @@
 import { useClerk } from "@clerk/clerk-react";
-
+import { useTheme } from "../../themeContext";
+import { Moon, Sun } from "lucide-react";
 const PublicNavbar = () => {
   const { openSignIn, openSignUp } = useClerk();
+  const{ isDarkMode, setIsDarkMode } = useTheme();
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 px-6 md:px-10 py-4 flex items-center justify-between">
+    <nav className="fixed top-0 left-0 right-0 z-50 px-6 md:px-10  py-4 flex items-center justify-between">
       
       {/* Logo */}
-      <div className="text-xl font-semibold text-white tracking-wide">
+      <div className="text-xl font-semibold text-color tracking-wide">
         Career Compass
       </div>
 
       {/* Auth Buttons */}
       <div className="flex items-center gap-4">
+         <button
+            onClick={() => setIsDarkMode(!isDarkMode)}
+            className="theme-switch"
+            aria-label="Toggle theme"
+          >
+            <div className={`thumb ${isDarkMode ? "dark" : "light"}`}>
+              {isDarkMode ? <Moon size={14} /> : <Sun size={14} />}
+            </div>
+          </button>
+
         <button
           onClick={openSignIn}
-          className="text-sm text-gray-300 hover:text-white transition "
+          className="text-sm subText-color hover:text-color transition "
         >
           Login
         </button>

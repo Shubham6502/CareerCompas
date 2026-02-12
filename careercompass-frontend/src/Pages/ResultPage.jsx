@@ -17,7 +17,8 @@ const ResultPage = () => {
   const clerkId = user?.id;
   const [domain, setDomain] = useState("");
 
-  const predictedDomain = location.state.domain;
+  // const predictedDomain = location.state.domain;
+  const predictedDomain ="Software Development";
 
   useEffect(() => {
     setDomain(predictedDomain);
@@ -57,7 +58,7 @@ const ResultPage = () => {
     <div className="max-w-xl space-y-6 flex flex-col px-6 py-8 mx-auto">
 
       <div className="rounded-lg bg-blue-500/10 border border-blue-500/20 p-4 text-blue-300 text-sm">
-        You can change the suggested domain once before saving.
+        You can change the suggested domain once before saving.(currently only Software Development is enabled)
       </div>
 
       <h1 className="text-2xl font-semibold text-white text-center">

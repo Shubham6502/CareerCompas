@@ -22,33 +22,33 @@ const [formData, setFormData] = useState({
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-      <div className="bg-gray-900 rounded-xl p-6 w-full max-w-md space-y-4">
-        <h3 className="text-lg font-semibold text-white">Add Links</h3>
+      <div className="card-color rounded-xl p-6 w-full max-w-md space-y-4">
+        <h3 className="text-lg font-semibold text-color">Add Links</h3>
 
 
-        <label className="text-sm text-gray-400">LinkedIn</label>
+        <label className="text-sm subText-color">LinkedIn</label>
         <input
           name="linkedin"
           value={formData.linkedin}
           onChange={handleChange}
           placeholder="LinkedIn"
-          className="w-full bg-gray-800 text-white rounded-lg px-4 py-2 outline-none"
+          className="w-full subcard-color rounded-lg px-4 py-2 outline-none"
         />
-        <label className="text-sm text-gray-400">GitHub</label>
+        <label className="text-sm subText-color">GitHub</label>
         <input
           name="github"
           value={formData.github}
           onChange={handleChange}
           placeholder="GitHub"
-          className="w-full bg-gray-800 text-white rounded-lg px-4 py-2 outline-none"
+          className="w-full subcard-color rounded-lg px-4 py-2 outline-none"
         />
-        <label className="text-sm text-gray-400">PortFolio</label>
+        <label className="text-sm subText-color">PortFolio</label>
         <input
           name="portfolio"
           value={formData.portfolio}
           onChange={handleChange}
           placeholder="Portfolio"
-          className="w-full bg-gray-800 text-white rounded-lg px-4 py-2 outline-none"
+          className="w-full subcard-color rounded-lg px-4 py-2 outline-none"
         />
 
       
@@ -56,7 +56,7 @@ const [formData, setFormData] = useState({
         <div className="flex justify-end gap-3 pt-4">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-gray-400 hover:text-white"
+            className="px-4 py-2 text-color hover:text-white"
           >
             Cancel
           </button>

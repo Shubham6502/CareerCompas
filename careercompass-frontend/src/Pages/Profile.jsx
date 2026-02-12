@@ -18,6 +18,7 @@ import EditEducationModal from "../Modal/EditEducationModal";
 import EditProfilePictureModal from "../Modal/EditProfilePictureModal";
 import { Navigate, useNavigate } from "react-router-dom";
 
+
 function Profile() {
   const { user, isLoaded } = useUser();
   if (!user) {
@@ -56,6 +57,7 @@ function Profile() {
   }, [clerkId, isLoaded,isLoad]);
 
   const handleSaveProfile = async (updatedData) => {
+    setIsSaving(true);
     try {
       const res = await axios.put(
         `http://localhost:5000/api/profile/update/${clerkId}`,
@@ -68,6 +70,9 @@ function Profile() {
       console.log("Edited");
     } catch (error) {
       console.error("Failed to update profile", error);
+    }
+    finally{
+      setIsSaving(false);
     }
   };
 
@@ -211,7 +216,7 @@ function Profile() {
         <div className="max-w-5xl mx-auto px-4 py-6 space-y-6">
           {/* Profile Header */}
 
-          <div className="relative flex flex-col sm:flex-row items-center gap-6 card-color rounded-2xl p-6 ">
+          <div className="relative flex flex-col sm:flex-row items-center gap-6 card-color shadow-xl rounded-2xl p-6 ">
             {/* Edit Icon */}
             <button
               onClick={() => setIsEditing(true)}
@@ -242,7 +247,7 @@ function Profile() {
                 <img
                   src={userProfile.profilepicture}
                   alt="Profile"
-                  className="w-28 h-28 rounded-full object-cover border-2 border-gray-700"
+                  className="w-28 h-28 rounded-full object-cover "
                 />
               ) : (
                 <div className="w-28 h-28 rounded-full flex items-center justify-center bg-gray-800 border card-border">
@@ -304,6 +309,7 @@ function Profile() {
                 userProfile={userProfile}
                 onClose={() => setIsEditing(false)}
                 onSave={handleSaveProfile}
+                isSaving={isSaving}
                 
               />
             )}
@@ -312,7 +318,7 @@ function Profile() {
           {/* Info + Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Personal Info */}
-            <div className="md:col-span-2 card-color rounded-xl p-6">
+            <div className="md:col-span-2 card-color shadow-xl rounded-xl p-6">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-semibold text-color">
                   Personal Information
@@ -355,7 +361,7 @@ function Profile() {
             </div>
 
             {/* Stats */}
-            <div className="card-color rounded-xl p-6 flex flex-col justify-center gap-3 items-center">
+            <div className="card-color shadow-xl rounded-xl p-6 flex flex-col justify-center gap-3 items-center">
               <p className="subText-color">Total Uploaded Resources</p>
               <p className="text-4xl font-bold text-color mt-2">
                 {totalResources}
@@ -364,12 +370,12 @@ function Profile() {
                 onClick={() => {
                   navigate("/userresources");
                 }}
-                className="subcard-color rounded px-3 py-2 cursor-pointer hover:bg-gray-700"
+                className="subcard-color  rounded px-3 py-2 cursor-pointer hover:bg-gray-700"
               >
                 View Resources
               </button>
             </div>
-            <div className="md:col-span-2 card-color rounded-2xl p-6 border  card-border">
+            <div className="md:col-span-2 card-color shadow-xl rounded-2xl p-6 ">
               {/* Header */}
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-semibold text-color">
@@ -429,7 +435,7 @@ function Profile() {
                 />
               )}
             </div>
-            <div className="card-color border card-border rounded-2xl p-5 flex flex-col gap-4 hover:border-gray-700 transition">
+            <div className="card-color shadow-xl rounded-2xl p-5 flex flex-col gap-4 hover:border-gray-700 transition">
               {/* Header */}
               <div className="flex items-center justify-between">
                 <h3 className="text-base font-medium text-color">Links</h3>
@@ -468,7 +474,7 @@ function Profile() {
                     href={userProfile.links.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-white hover:text-blue-300 underline-offset-4 hover:underline transition"
+                    className="text-sm text-color hover:text-blue-300 underline-offset-4 hover:underline transition"
                   >
                     {truncateText(userProfile.links.github)}
                   </a>

@@ -48,7 +48,7 @@ export default function GenerateTest() {
         {questions.length === 0 ? (
           <div className="flex flex-col mt-20 justify-around p-10">
             <div className="max-w-2xl mx-auto text-center px-6 py-10">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+              <h2 className="text-2xl font-semibold mb-4 text-color">
                 Career Prediction Test
               </h2>
 

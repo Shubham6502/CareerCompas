@@ -15,14 +15,14 @@ function RoadmapTasks() {
 
   if (!dayData) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-white">
+      <div className="min-h-screen flex items-center justify-center text-color">
         No data available
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0B0F1A] to-[#1b0349] px-6 py-10 text-white">
+    <div className="  px-6 py-10 text-color">
       {/* Header */}
       <div className="max-w-4xl mx-auto mb-8">
         <div className="flex items-center justify-between">
@@ -33,7 +33,7 @@ function RoadmapTasks() {
             Active Day
           </span>
         </div>
-        <p className="text-white/60 mt-2">
+        <p className="subText-color mt-2">
           Complete the following tasks to progress in your roadmap.
         </p>
       </div>
@@ -48,14 +48,14 @@ function RoadmapTasks() {
             rel="noreferrer"
             className="group block"
           >
-            <div className="flex items-center justify-between p-5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all duration-200">
+            <div className="flex items-center justify-between p-5 rounded-xl  shadow-xl card-color hover:bg-white/10 transition-all duration-200">
               <div className="flex items-start gap-4">
                 <CheckCircle className="text-blue-400 mt-1" size={20} />
                 <div>
                   <h3 className="font-semibold text-lg group-hover:text-blue-300">
                     {task.title}
                   </h3>
-                  <p className="text-sm text-white/50">
+                  <p className="text-sm subText-color">
                     Click to open learning resource
                   </p>
                 </div>

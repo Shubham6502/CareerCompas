@@ -25,7 +25,7 @@ function App() {
     <>
       {/* Public Navbar */}
       {!isSignedIn && <PublicNavbar />}
-      {!isSignedIn && <Home/>}
+      {/* {!isSignedIn && <Home/>} */}
       <Routes>
         <Route
           path="/"

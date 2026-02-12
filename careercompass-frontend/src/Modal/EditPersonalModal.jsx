@@ -18,36 +18,39 @@ const EditPersonalModal = ({ userProfile, onClose, onSave }) => {
   const handleSubmit = () => {
     onSave(formData);
   };
+  const today = new Date().toISOString().split("T")[0];
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-      <div className="bg-gray-900 rounded-xl p-6 w-full max-w-md space-y-4">
-        <h3 className="text-lg font-semibold text-white">Edit Profile</h3>
+      <div className="card-color rounded-xl p-6 w-full max-w-md space-y-4">
+        <h3 className="text-lg font-semibold text-color">Edit Profile</h3>
 
         <input
+          type="email" 
           name="email"
           value={formData.email}
           onChange={handleChange}
-          placeholder="Email"
-          className="w-full bg-gray-800 text-white rounded-lg px-4 py-2 outline-none"
+          placeholder="Email@gmail.com"
+          className="w-full subcard-color text-color rounded-lg px-4 py-2 outline-none"
         />
         <input
           type="date"
           name="birthdate"
           value={formData.birthdate}
+          max={today}
           onChange={handleChange}
           placeholder="birthdate"
-          className="w-full bg-gray-800 text-white rounded-lg px-4 py-2 outline-none"
+          className="w-full subcard-color text-color rounded-lg px-4 py-2 outline-none"
         />
 
         <div className="space-y-1">
-          <label className="text-sm text-gray-400">Gender</label>
+          <label className="text-sm subText-color">Gender</label>
 
           <select
             name="gender"
             value={formData.gender || ""}
             onChange={handleChange}
-            className="w-full bg-gray-800 text-white rounded-lg px-4 py-2 outline-none border border-gray-700 focus:border-emerald-500"
+            className="w-full subcard-color text-color rounded-lg px-4 py-2 outline-none border border-gray-700 focus:border-emerald-500"
           >
             <option value="" disabled>
               Select gender
@@ -63,13 +66,13 @@ const EditPersonalModal = ({ userProfile, onClose, onSave }) => {
           value={formData.city}
           onChange={handleChange}
           placeholder="City"
-          className="w-full bg-gray-800 text-white rounded-lg px-4 py-2 outline-none"
+          className="w-full subcard-color text-color rounded-lg px-4 py-2 outline-none"
         />
 
         <div className="flex justify-end gap-3 pt-4">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-gray-400 hover:text-white"
+            className="px-4 py-2 text-color hover:text-white"
           >
             Cancel
           </button>

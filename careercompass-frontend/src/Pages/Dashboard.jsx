@@ -9,8 +9,8 @@ import { Navigate } from "react-router-dom";
 const Dashboard = () => {
   const { user } = useUser();
 
- if (!user) {
-  console.log("NO USER FOUND");
+  if (!user) {
+    console.log("NO USER FOUND");
     return <Navigate to="/" replace />;
   }
   const navigate = useNavigate();
@@ -23,9 +23,8 @@ const Dashboard = () => {
   const [completedDays, setCompletedDays] = useState([]);
   const [refreshProgress, setRefreshProgress] = useState(false);
   const [assessment, setAssessment] = useState(false);
-
- const theme= localStorage.getItem("theme");
- console.log(theme);
+  const [error, setError] = useState("");
+  const theme = localStorage.getItem("theme");
 
   useEffect(() => {
     if (!isLoaded || !user) return;
@@ -41,12 +40,15 @@ const Dashboard = () => {
         setCompletedTaskIds(taskIds);
         setCompletedDays(response.data.completedDays || []);
         setAssessment(Boolean(response.data?.todayTasksCompleted));
-       
       })
       .catch((error) => {
-        console.log("Error fetching progress data:", error);
+         if (error.response && error.response.status === 429) {
+          setError(error.response.data.message);
+        } else {
+          console.log("Something went wrong");
+        }
       });
-  }, [isLoaded, user, refreshProgress,assessment]);
+  }, [isLoaded, user, refreshProgress, assessment]);
 
   const domain = progressData.domain;
   const streak = progressData.streak;
@@ -65,7 +67,12 @@ const Dashboard = () => {
         setTasks(response.data.days[0].tasks);
       })
       .catch((error) => {
-        console.log("Error fetching tasks:", error);
+        // console.log("Error fetching tasks:", error);
+        if (error.response && error.response.status === 429) {
+          setError(error.response.data.message);
+        } else {
+         console.log("Something went wrong");
+        }
         // setLoading(false);
       });
   }, [domain, day]);
@@ -87,7 +94,12 @@ const Dashboard = () => {
       // open resource
       window.open(task.url, "_blank");
     } catch (err) {
-      console.error("Failed to complete task", err);
+      // console.error("Failed to complete task", err);
+       if (error.response && error.response.status === 429) {
+          setError(error.response.data.message);
+        } else {
+          console.log("Something went wrong");
+        }
       // setLoading(false);
     }
   };
@@ -117,8 +129,11 @@ const Dashboard = () => {
         state: { questions: data.questions },
       });
     } catch (err) {
-      console.error("Failed to generate test", err);
-      alert("Failed to load assessment. Try again.");
+       if (error.response && error.response.status === 429) {
+          setError(error.response.data.message);
+        } else {
+          console.log("Something went wrong");
+        }
       setLoading(false);
     }
   };
@@ -135,12 +150,14 @@ const Dashboard = () => {
     <div className="space-y-8 text-white">
       {/* HEADER */}
       <div>
+         {error && <p style={{ color: "red" }}>{error}</p>}
         <h1 className="text-3xl font-semibold text-blue-300">
           Hi {user?.firstName}
         </h1>
         <p className="text-gray-400 mt-1">
           Stay consistent. Small steps every day.
         </p>
+       
       </div>
 
       {domain && (
@@ -202,9 +219,7 @@ const Dashboard = () => {
   shadow-xl
 "
             >
-              <h2 className="text-xl font-semibold ">
-                90 Days Tracker
-              </h2>
+              <h2 className="text-xl font-semibold ">90 Days Tracker</h2>
               <p className="text-sm subText-color mb-6">
                 Complete daily tasks to maintain your streak
               </p>
@@ -214,7 +229,7 @@ const Dashboard = () => {
               <div className="grid grid-cols-15 gap-2">
                 {streakData.map((day, idx) => {
                   const activeDay = progressData?.ActiveDays?.find(
-                    (d) => Number(d.day) === Number(day.day)
+                    (d) => Number(d.day) === Number(day.day),
                   );
 
                   const len = activeDay ? activeDay.tasks.length : 0;
@@ -228,10 +243,10 @@ const Dashboard = () => {
             len == 3
               ? "bg-green-500"
               : len == 2
-              ? "bg-green-700"
-              : len == 1
-              ? "bg-green-900"
-              : "bg-gray-700"
+                ? "bg-green-700"
+                : len == 1
+                  ? "bg-green-900"
+                  : "bg-gray-700"
           }
         `}
                       title={`Day ${day.day} -${len} tasks Completed`}
@@ -344,11 +359,7 @@ const TaskItem = ({ task, onClick, completedTask }) => (
       </div>
     </div>
 
-    <span
-      className="text-sm"
-    >
-      {task.title}
-    </span>
+    <span className="text-sm">{task.title}</span>
 
     {completedTask.includes(task.id) && (
       <a

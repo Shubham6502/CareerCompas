@@ -17,8 +17,7 @@ import {
 
 const Sidebar = () => {
  const { isDarkMode, setIsDarkMode }= useTheme();
-  console.log(isDarkMode)
-  console.log(localStorage.getItem("theme"));
+
   return (
     <aside className=" relative hidden md:block h-screen p-4">
       {/* Sidebar Card */}

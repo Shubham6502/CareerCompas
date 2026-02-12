@@ -11,6 +11,7 @@ import progressRoutes from "./routes/ProgressRoutes.js";
 import ResourceRoute from "./routes/ResourceRoute.js"
 import DailyAssessment from "./routes/DailyAssessmentRoute.js";
 import ProfileRoute from "./routes/ProfileRoutes.js"
+import rateLimit from "express-rate-limit";
 
 
 
@@ -22,8 +23,17 @@ app.use(
   })
 );
                // Allow frontend to connect
-app.use(express.json());        // Allow JSON request body
-
+app.use(express.json());     // Allow JSON request body
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max:100, // limit each IP to 100 requests per window
+  handler: (req, res) => {
+    res.status(429).json({
+      success: false,
+      message: "Too many requests. Please try again later."
+    })
+  }
+});
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
 
@@ -32,6 +42,7 @@ mongoose.connect(process.env.MONGO_URI)
   
 
 
+app.use(limiter); // Apply rate limiting middleware
 // Routes
 app.use("/api/users", userRoutes);
 app.use("/api/userTest", userTest);

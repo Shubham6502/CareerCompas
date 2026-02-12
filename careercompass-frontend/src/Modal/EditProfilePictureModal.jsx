@@ -17,8 +17,8 @@ const EditProfilePictureModal = ({ userProfile, onClose, onSave ,isSaving}) => {
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-      <div className="bg-gray-900 rounded-xl p-6 w-full max-w-md space-y-4">
-        <h3 className="text-lg font-semibold text-white">
+      <div className="card-color rounded-xl p-6 w-full max-w-md space-y-4">
+        <h3 className="text-lg font-semibold text-color">
           Update Profile Image
         </h3>
         
@@ -40,8 +40,8 @@ const EditProfilePictureModal = ({ userProfile, onClose, onSave ,isSaving}) => {
       flex items-center justify-center gap-2
       w-full cursor-pointer
       rounded-lg border border-dashed border-gray-600
-      bg-gray-800 px-4 py-6
-      text-sm text-gray-300
+      subcard-color px-4 py-6
+      text-sm text-color
       hover:border-emerald-500
       hover:text-emerald-400
       transition
@@ -52,7 +52,7 @@ const EditProfilePictureModal = ({ userProfile, onClose, onSave ,isSaving}) => {
           </label>
 
           {/* Optional helper text */}
-          <p className="text-xs text-gray-400">JPG, PNG up to 5MB</p>
+          <p className="text-xs subText-color">JPG, PNG up to 5MB</p>
         </div>
         {file && (
           <p className="text-sm text-emerald-400">Selected: {file.name}</p>
@@ -62,7 +62,7 @@ const EditProfilePictureModal = ({ userProfile, onClose, onSave ,isSaving}) => {
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-gray-400 hover:text-white"
+            className="px-4 py-2 subText-color hover:text-white"
           >
             Cancel
           </button>
@@ -71,7 +71,7 @@ const EditProfilePictureModal = ({ userProfile, onClose, onSave ,isSaving}) => {
             type="button"
             onClick={handleSubmit}
             disabled={isSaving}
-            className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-500"
+            className="px-4 py-2 bg-emerald-600 text-color rounded-lg hover:bg-emerald-500"
           >
              
              {isSaving ? "Saving..." : "Save"}

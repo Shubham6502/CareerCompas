@@ -142,7 +142,7 @@ if (isSubmitted) {
         Question {currentIndex + 1} of {questions.length}
       </p>
 
-      <div className="rounded-xl bg-[#0F172A] border border-white/10 p-6">
+      <div className="rounded-xl card-color shadow-xl p-6">
         <h2 className="text-lg font-medium text-color mb-5">
           {currentQuestion.question}
         </h2>
@@ -156,7 +156,7 @@ if (isSubmitted) {
                 ${
                   selected === option
                     ? "bg-blue-600/90 border-blue-500 text-color"
-                    : "bg-[#0F172A] border-white/10 subText-color hover:bg-white/5"
+                    : "subcard-color border-white/10 subText-color hover:bg-white/5"
                 }`}
             >
               {option}

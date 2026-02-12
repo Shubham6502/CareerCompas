@@ -1,5 +1,5 @@
 import { useClerk ,useUser} from "@clerk/clerk-react";
-import mockUI from "../assets/ui.png"
+import mockUI from "../assets/roadmap1.png"
 import {CircleFadingArrowUp} from "lucide-react"
 
 
@@ -8,20 +8,20 @@ const Home = () => {
   const { user } = useUser();
   
   return (
-      <div className="min-h-screen bg-[#0B0F1A]/99 grid-bg">
+      <div className="min-h-screen card-color grid-bg">
 
 
       {/* HERO SECTION */}
       <section className="relative flex flex-col items-center text-center px-6 pt-32 pb-24">
         
-        <span className="mb-6 px-4 py-1 rounded-full text-sm bg-white/5 border border-white/10 text-gray-300 inline-flex">
+        <span className="mb-6 px-4 py-1 rounded-full text-sm subcard-color border card-border text-color inline-flex">
        <span className="text-red-600 mr-1 animate-pulse"> <CircleFadingArrowUp size={20}  /></span>
           Career Compass v1.0 Under Devlopment
         </span>
 
        <h1 className="text-center font-extrabold tracking-tight leading-[1.05]">
   
-  <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white">
+  <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-color">
     Engineer Your
   </div>
 
@@ -66,7 +66,7 @@ const Home = () => {
   <a
     href="#modules"
     className="px-6 py-3 rounded-lg border border-white/10
-               hover:bg-white/5 transition text-white"
+               hover:bg-white/5 transition text-color"
   >
     Explore Modules
   </a>
@@ -77,9 +77,9 @@ const Home = () => {
 
       {/* PREVIEW MOCK SECTION */}
       <section className="flex justify-center px-6 pb-32">
-        <div className="w-full max-w-5xl rounded-2xl bg-gradient-to-br from-white/5 to-white/0 border border-white/10 p-6">
-          <div className="h-94 rounded-xl bg-[#0F172A] flex items-center justify-center text-gray-500">
-          <img src={mockUI} alt=""className="h-94 w-full bg-cover object-cover" />
+        <div className="w-full max-w-2xl rounded-2xl  p-6">
+          <div className="h-98 rounded-xl flex items-center justify-center text-gray-500">
+          <img src={mockUI} alt=""className="h-98 w-full bg-cover object-cover " />
           </div>
         </div>
       </section>
@@ -119,10 +119,22 @@ const Home = () => {
 };
 
 const ModuleCard = ({ title, desc }) => (
-  <div className="rounded-xl bg-[#0F172A] border border-white/10 p-6 hover:border-blue-500/40 transition">
-    <h3 className="text-lg font-medium mb-2">{title}</h3>
-    <p className="text-sm text-gray-400">{desc}</p>
+  <div className="relative rounded-xl card-color border border-white/10 p-6 
+                  hover:border-blue-500/50 transition-all duration-300
+                  shadow-lg hover:shadow-blue-500/20
+                  before:absolute before:inset-0 before:bg-gradient-to-br 
+                  before:from-blue-500/10 before:to-purple-500/10 
+                  before:opacity-0 hover:before:opacity-100 before:transition 
+                  before:duration-300 before:rounded-xl overflow-hidden">
+
+    <div className="relative z-10">
+      <h3 className="text-lg font-semibold text-color mb-2">{title}</h3>
+      <p className="text-sm subText-color leading-relaxed">{desc}</p>
+
+      <div className="mt-4 w-10 h-1 bg-blue-500/60 rounded-full"></div>
+    </div>
   </div>
 );
+
 
 export default Home;
