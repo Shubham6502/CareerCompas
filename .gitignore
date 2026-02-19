@@ -2,3 +2,4 @@
 .env
 careercompass-frontend/.env
 careercompass-backend/.env
+*node_modules
