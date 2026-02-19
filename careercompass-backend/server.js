@@ -18,7 +18,7 @@ import rateLimit from "express-rate-limit";
 const app = express();
 app.use(
   cors({
-    origin: "http://localhost:5173", //  exact frontend origin
+    origin: "https://career-compas-tnoo.vercel.app/", //  exact frontend origin
     credentials: true,              // allow cookies
   })
 );
