@@ -1,5 +1,5 @@
 import { useClerk } from "@clerk/clerk-react";
-import { useTheme } from "../../ThemeContext.jsx";
+import { useTheme } from "../../themeContext";
 import { Moon, Sun } from "lucide-react";
 const PublicNavbar = () => {
   const { openSignIn, openSignUp } = useClerk();
