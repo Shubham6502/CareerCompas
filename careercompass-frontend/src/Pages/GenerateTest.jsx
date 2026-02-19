@@ -13,7 +13,7 @@ export default function GenerateTest() {
   }
   const loadTest = async () => {
 
-    const res = await fetch("http://localhost:5000/api/test/generate-test", {
+    const res = await fetch("https://careercompas.onrender.com/api/test/generate-test", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

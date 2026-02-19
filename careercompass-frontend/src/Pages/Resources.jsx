@@ -35,7 +35,7 @@ function Resources() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/resource/getResources", {
+      .get("https://careercompas.onrender.com/api/resource/getResources", {
         params: {
           page: currentPage,
           limit: 4,
@@ -54,7 +54,7 @@ function Resources() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/resource/topContributors")
+      .get("https://careercompas.onrender.com/api/resource/topContributors")
       .then((res) => {
         setTopContributor(res.data);
         console.log(res.data);
@@ -67,7 +67,7 @@ function Resources() {
   const thumbClicked = (action, ResourceId) => {
     setClicked(!clicked);
     axios
-      .post("http://localhost:5000/api/resource/interact", {
+      .post("https://careercompas.onrender.com/api/resource/interact", {
         clerkId,
         ResourceId: ResourceId,
         action,

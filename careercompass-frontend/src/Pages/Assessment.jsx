@@ -19,7 +19,7 @@ const Assessment = () => {
       setLoading(true);
 
       const res = await fetch(
-        "http://localhost:5000/api/test/generate-test",
+        "https://careercompas.onrender.com/api/test/generate-test",
         {
           method: "POST",
           headers: {

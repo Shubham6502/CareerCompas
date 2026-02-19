@@ -15,7 +15,7 @@ const ThreeMonthPrep = () => {
   }
   useEffect(()=>{
     axios
-    .get("http://localhost:5000/api/roadmap/Software-Engineer")
+    .get("https://careercompas.onrender.com/api/roadmap/Software-Engineer")
     .then((res)=>{ setRoadmapData(res.data)})
     .catch((err)=>{console.log(err)})
   },[])

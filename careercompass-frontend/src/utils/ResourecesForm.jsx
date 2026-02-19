@@ -20,7 +20,7 @@ function UploadResourceForm({ open, onClose }) {
     const payload = { title,domain, subject, link,description };
     console.log("Uploaded Resource:", payload);
 
-     const res= await axios.post("http://localhost:5000/api/resource/add",{
+     const res= await axios.post("https://careercompas.onrender.com/api/resource/add",{
       data:payload,
       clerkId:user.id,
       userName:user.firstName,

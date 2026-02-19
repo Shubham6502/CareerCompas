@@ -43,7 +43,7 @@ const ResultPage = () => {
       //   domain,
       // });
 
-      await axios.post("http://localhost:5000/api/progress/initProgress", {
+      await axios.post("https://careercompas.onrender.com/api/progress/initProgress", {
         clerkId,
         domain,
       });

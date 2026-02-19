@@ -36,7 +36,7 @@ function UserResources() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/resource/getUserResources", {
+      .get("https://careercompas.onrender.com/api/resource/getUserResources", {
         params: {
           clerkId: clerkId,
           page: currentPage,
@@ -55,7 +55,7 @@ function UserResources() {
   }, [currentPage, search, activeFilter, clerkId,update]);
 
   const handelResourceSave = (formData) => {
-    axios.put("http://localhost:5000/api/resource/updateResource", formData).then((response) => {
+    axios.put("https://careercompas.onrender.com/api/resource/updateResource", formData).then((response) => {
     setUpdate(!update);
     setResourceId(null);
    
@@ -64,7 +64,7 @@ function UserResources() {
   });
 }
 const deleteResource = (id) => {
-  axios.delete("http://localhost:5000/api/resource/deleteResource", { data: { id } })
+  axios.delete("https://careercompas.onrender.com/api/resource/deleteResource", { data: { id } })
     .then((response) => {   
         setUpdate(!update);
     })

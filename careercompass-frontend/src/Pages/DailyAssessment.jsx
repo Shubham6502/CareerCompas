@@ -43,7 +43,7 @@ function DailyAssessment() {
     const handleSubmit = () => {
     if (!selected) return alert("Please select an option");
 
-      axios.post("http://localhost:5000/api/progress/assessment",{
+      axios.post("https://careercompas.onrender.com/api/progress/assessment",{
         clerkId:user.id,
         day:day,
         score:score
@@ -57,7 +57,7 @@ function DailyAssessment() {
     
   }
   useEffect(()=>{
-    axios.get(`http://localhost:5000/api/progress/getProgress/${user.id}`,{
+    axios.get(`https://careercompas.onrender.com/api/progress/getProgress/${user.id}`,{
         params:{clerkId:user.id}
     })
     .then((response)=>{
@@ -87,7 +87,7 @@ function DailyAssessment() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/DailyAssessment/get", {
+      .get("https://careercompas.onrender.com/api/DailyAssessment/get", {
         params: { day },
       })
       .then((response) => {

@@ -31,7 +31,7 @@ const Dashboard = () => {
     const clerkId = user.id;
 
     axios
-      .get(`http://localhost:5000/api/progress/getProgress/${clerkId}`, {
+      .get(`https://careercompas.onrender.com/api/progress/getProgress/${clerkId}`, {
         params: { clerkId: clerkId },
       })
       .then((response) => {
@@ -60,7 +60,7 @@ const Dashboard = () => {
     if (!domain || !day) return;
 
     axios
-      .get(`http://localhost:5000/api/roadmap/getRoadmap/${domain}`, {
+      .get(`https://careercompas.onrender.com/api/roadmap/getRoadmap/${domain}`, {
         params: { day: day },
       })
       .then((response) => {
@@ -80,7 +80,7 @@ const Dashboard = () => {
   const handleTaskClick = async (task) => {
     try {
       // setLoading(true);
-      await axios.post("http://localhost:5000/api/progress/completeTask", {
+      await axios.post("https://careercompas.onrender.com/api/progress/completeTask", {
         clerkId: user.id,
         taskId: task.id,
       });
@@ -109,7 +109,7 @@ const Dashboard = () => {
     try {
       setLoading(true);
 
-      const res = await fetch("http://localhost:5000/api/test/generate-test", {
+      const res = await fetch("https://careercompas.onrender.com/api/test/generate-test", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

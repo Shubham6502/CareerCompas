@@ -20,7 +20,7 @@ const Roadmap = () => {
   useEffect(() => {
     if (!user || !isLoaded) return;
     axios
-      .get(`http://localhost:5000/api/progress/getProgress/${clerkId}`)
+      .get(`https://careercompas.onrender.com/api/progress/getProgress/${clerkId}`)
       .then((response) => {
         setProgress(response.data);
       });
@@ -29,7 +29,7 @@ const Roadmap = () => {
   useEffect(() => {
     if (!progress.domain) return;
     axios
-      .get(`http://localhost:5000/api/roadmap/${progress.domain}`)
+      .get(`https://careercompas.onrender.com/api/roadmap/${progress.domain}`)
       .then((response) => {
         setRoadmap(response.data.days);
       });

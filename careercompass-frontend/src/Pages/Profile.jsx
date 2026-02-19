@@ -45,7 +45,7 @@ function Profile() {
     const fetchProfile = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/profile/getprofile/${clerkId}`,
+          `https://careercompas.onrender.com/api/profile/getprofile/${clerkId}`,
         );
 
         setUserProfile(res.data.userProfile);
@@ -60,7 +60,7 @@ function Profile() {
     setIsSaving(true);
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/profile/update/${clerkId}`,
+        `https://careercompas.onrender.com/api/profile/update/${clerkId}`,
         updatedData,
       );
 
@@ -86,7 +86,7 @@ function Profile() {
       };
       
       const res = await axios.put(
-        `http://localhost:5000/api/profile/add-education/${clerkId}`,
+        `https://careercompas.onrender.com/api/profile/add-education/${clerkId}`,
         formattedEducation,
       );
 
@@ -99,7 +99,7 @@ function Profile() {
 
   const addLinks = async (links) => {
     const res = await axios.put(
-      `http://localhost:5000/api/profile/add-links/${clerkId}`,
+      `https://careercompas.onrender.com/api/profile/add-links/${clerkId}`,
       links,
     );
     console.log(res.data.updatedLinks);
@@ -110,7 +110,7 @@ function Profile() {
     console.log(formData, index);
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/profile/edit-education/${clerkId}/${index}`,
+        `https://careercompas.onrender.com/api/profile/edit-education/${clerkId}/${index}`,
         formData,
       );
       console.log(res.data);
@@ -131,7 +131,7 @@ function Profile() {
     const fetchResourcesCount = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/resource/user/resourcescount/${clerkId}`,
+          `https://careercompas.onrender.com/api/resource/user/resourcescount/${clerkId}`,
         );
 
         setTotalResources(response.data.count);
@@ -154,9 +154,9 @@ function Profile() {
 
     try {
       await Promise.all([
-        axios.delete(`http://localhost:5000/api/profile/delete/${clerkId}`),
-        axios.delete(`http://localhost:5000/api/progress/delete/${clerkId}`),
-        axios.delete(`http://localhost:5000/api/users/delete/${clerkId}`),
+        axios.delete(`https://careercompas.onrender.com/api/profile/delete/${clerkId}`),
+        axios.delete(`https://careercompas.onrender.com/api/progress/delete/${clerkId}`),
+        axios.delete(`https://careercompas.onrender.com/api/users/delete/${clerkId}`),
       ]);
 
       await user.delete(); // Clerk deletion
@@ -171,7 +171,7 @@ function Profile() {
     try {
        setIsSaving(true);
       const response = await axios.put(
-        `http://localhost:5000/api/profile/update-profile-picture/${clerkId}`,
+        `https://careercompas.onrender.com/api/profile/update-profile-picture/${clerkId}`,
         data,
         {
           headers: {
