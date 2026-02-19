@@ -1,5 +1,5 @@
 import Sidebar from "../components/Navbar/Sidebar";
-import MobileNav from "../components/Navbar/Mobilenav";
+import MobileNav from "../components/Navbar/MobileNav";
 import { useEffect,useState } from "react";
 
 const AppLayout = ({ children }) => {
