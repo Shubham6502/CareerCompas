@@ -76,7 +76,7 @@ const Home = () => {
       </section>
 
       {/* PREVIEW MOCK SECTION */}
-      <section className="flex justify-center px-6 pb-32">
+      <section className="flex justify-center px-6 pb-32 hidden sm:block">
         <div className="w-full max-w-2xl rounded-2xl  p-6">
           <div className="h-98 rounded-xl flex items-center justify-center text-gray-500">
           <img src={mockUI} alt=""className="h-98 w-full bg-cover object-cover " />
