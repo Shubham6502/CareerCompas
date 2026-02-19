@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import { UserButton, useUser, SignOutButton } from "@clerk/clerk-react";
 import { useState, useEffect } from "react";
 import logo from "../../assets/logo1.png";
-import { useTheme } from "../../themeContext.jsx";
+import { useTheme } from "../../ThemeContext.jsx";
 
 import {
   LayoutDashboard,
