@@ -28,6 +28,7 @@ function Resources() {
   const [totalPages, setTotalPages] = useState(1);
   const [topContributor, setTopContributor] = useState(null);
   const [clicked, setClicked] = useState(false);
+  const [loading,setLoading]=useState(true);
 
   
   const clerkId = user.id;
@@ -46,8 +47,10 @@ function Resources() {
       .then((response) => {
         setData(response.data.data);
         setTotalPages(response.data.totalPages);
+        setLoading(false);
       })
       .catch((err) => {
+        setLoading(false);
         console.log("Something Wrong", err);
       });
   }, [currentPage, search, activeFilter, clicked]);
@@ -79,62 +82,92 @@ function Resources() {
         console.log("Error", err);
       });
   };
-
+   if(loading){
+    return(  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+      <div className="w-12 h-12 border-4 border-blue-500/20 border-t-blue-600 rounded-full animate-spin"></div>
+    </div>)
+  }
   const filters = ["All", "Frontend", "Backend", "DSA"];
   return (
-    <div className="space-y-4 w-full overflow-x-hidden ">
-      <div className="flex  flex-wrap items-center gap-4 ">
-        {/* Search Box */}
-        <div
-          className="flex items-center gap-3 px-5 py-3 rounded-3xl border text-color card-border 
-                     card-color focus-within:border-blue-400 
-                     focus-within:ring-2 focus-within:ring-blue-400/30
-                     transition-all text-color"
-        >
-          <Search size={18} className="text-color" />
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search resources..."
-            className="bg-transparent outline-none text-sm 
-                       placeholder:text-color"
+   <div className="space-y-4 w-full overflow-x-hidden">
+  <div className="flex flex-col lg:flex-row lg:items-center gap-4 w-full">
+
+    {/* 🔎 Search */}
+    <div
+      className="
+        flex items-center gap-3
+        w-full lg:max-w-md
+        px-5 py-3
+        rounded-full
+        border card-border
+        card-color
+        focus-within:border-blue-500
+        focus-within:ring-2 focus-within:ring-blue-500/20
+        transition-all
+      "
+    >
+      <Search size={18} />
+      <input
+        type="text"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder="Search resources..."
+        className="bg-transparent outline-none text-sm w-full"
+      />
+    </div>
+
+    {/* 🎯 Filters */}
+    <div
+      className="
+        flex items-center gap-2
+        w-full lg:flex-1
+        px-2 py-2
+        lg:px-4
+        rounded-full
+        border card-border
+        card-color
+        overflow-x-auto
+        whitespace-nowrap
+        scrollbar-none
+      "
+    >
+      {filters.map((filter) => (
+        <div key={filter} className="flex-shrink-0">
+          <ButtonSearch
+            title={filter}
+            isActive={activeFilter === filter}
+            onClick={() => setActiveFilter(filter)}
           />
         </div>
+      ))}
+    </div>
 
-        {/* Filter Buttons */}
-        <div
-          className="flex flex-wrap items-center
-    gap-2 card-color
-    md:rounded-full
-    px-3 sm:px-5
-    py-2
-    md:border card-border 
-    hover:bg-color
-    max-w-full 
-    overflow-x-auto sm:overflow-visible"
-        >
-          {filters.map((filter) => (
-            <ButtonSearch
-              key={filter}
-              title={filter}
-              isActive={activeFilter === filter}
-              onClick={() => setActiveFilter(filter)}
-            />
-          ))}
-        </div>
+    {/* ⬆ Upload Button */}
+    <div className="w-full lg:w-auto lg:ml-auto">
+      <button
+        onClick={() => setOpen(true)}
+        className="
+          w-full lg:w-auto
+          flex items-center justify-center gap-2
+          px-6 py-3
+          rounded-xl
+          bg-blue-600
+          text-white
+          font-medium
+          shadow-md
+          hover:bg-blue-700
+          transition-all
+        "
+      >
+        <CloudUpload size={18} />
+        Upload Resources
+      </button>
+      <ResourcesForm open={open} onClose={() => setOpen(false)} />
+    </div>
 
-        <div className="flex text-color bg-blue-600 px-4 py-3 rounded-xl shadow-[0_0_20px_rgba(59,130,246,0.5)] md:ml-auto">
-          <button
-            className="flex items-center gap-2 cursor-pointer"
-            onClick={() => setOpen(true)}
-          >
-            <CloudUpload />
-            Upload Resources
-          </button>
-          <ResourcesForm open={open} onClose={() => setOpen(false)} />
-        </div>
-      </div>
+  </div>
+
+
 
       <div className=" md:flex  gap-3 text-color">
         {/* Resources Section */}
@@ -143,7 +176,7 @@ function Resources() {
             className="
     relative
     min-h-[60vh] sm:min-h-[73vh]
-    max-h-[60vh] sm:max-h-[73vh]
+    sm:max-h-[73vh]
     overflow-y-auto
     rounded-2xl
   shadow-xl
@@ -323,7 +356,7 @@ function Resources() {
         {/* Need Help Section */}
         <div
           className="flex flex-col gap-3 justify-center
-                  text-center"
+                  text-center hidden sm:block"
         >
           <div className="w-full md:w-48  card-color border card-border rounded-xl p-4">
             <span className="font-medium">Need Help?</span>
@@ -366,7 +399,7 @@ const ButtonSearch = ({ title, isActive, onClick }) => {
       className={`px-5 py-3 rounded-xl text-sm font-medium transition-all
         ${
           isActive
-            ? "bg-blue-500 text-color shadow-[0_0_25px_rgba(59,130,246,0.45)]"
+            ? "bg-blue-500 text-white shadow-[0_0_25px_rgba(59,130,246,0.45)]"
             : "border border-white/20 text-color hover:bg-white/5"
         }`}
     >
@@ -374,5 +407,6 @@ const ButtonSearch = ({ title, isActive, onClick }) => {
     </button>
   );
 };
+
 
 export default Resources;

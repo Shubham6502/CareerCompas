@@ -15,6 +15,7 @@ const Roadmap = () => {
   const clerkId = user?.id;
   const navigate = useNavigate();
   const [progress, setProgress] = useState({});
+  const [loading,setLoading]=useState(true);
 
   
   useEffect(() => {
@@ -32,6 +33,7 @@ const Roadmap = () => {
       .get(`https://careercompas.onrender.com/api/roadmap/${progress.domain}`)
       .then((response) => {
         setRoadmap(response.data.days);
+        setLoading(false);
       });
   }, [progress.domain]);
 
@@ -50,6 +52,11 @@ const Roadmap = () => {
       alert("locked");
     }
   };
+  if(loading){
+    return(  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+      <div className="w-12 h-12 border-4 border-blue-500/20 border-t-blue-600 rounded-full animate-spin"></div>
+    </div>)
+  }
 
   return (
     /* OUTER CARD (NO SCROLL HERE) */

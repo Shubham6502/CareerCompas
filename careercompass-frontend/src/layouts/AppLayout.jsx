@@ -15,7 +15,7 @@ const AppLayout = ({ children }) => {
 
       {/* Main Content */}
 
-      <main className="relative flex-1 px-10 py-6">{children}</main>
+      <main className="relative flex-1 px-6 py-6">{children}</main>
 
       {/* Mobile Bottom Nav */}
       <MobileNav 

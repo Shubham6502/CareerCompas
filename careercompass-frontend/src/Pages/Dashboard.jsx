@@ -18,7 +18,7 @@ const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
   const { isLoaded } = useUser();
   const [completedTaskIds, setCompletedTaskIds] = useState([]);
-  const [loading, setLoading] = useState(false); //assessment loading state
+  const [loading, setLoading] = useState(true); //assessment loading state
   const [questions, setQuestions] = useState([]); //assessment questions state
   const [completedDays, setCompletedDays] = useState([]);
   const [refreshProgress, setRefreshProgress] = useState(false);
@@ -47,6 +47,7 @@ const Dashboard = () => {
         } else {
           console.log("Something went wrong");
         }
+        setLoading(false);
       });
   }, [isLoaded, user, refreshProgress, assessment]);
 
@@ -65,6 +66,7 @@ const Dashboard = () => {
       })
       .then((response) => {
         setTasks(response.data.days[0].tasks);
+        setLoading(false);
       })
       .catch((error) => {
         // console.log("Error fetching tasks:", error);
@@ -73,7 +75,7 @@ const Dashboard = () => {
         } else {
          console.log("Something went wrong");
         }
-        // setLoading(false);
+        setLoading(false);
       });
   }, [domain, day]);
 
@@ -137,8 +139,10 @@ const Dashboard = () => {
       setLoading(false);
     }
   };
-  if (loading) {
-    return <AssessmentLoading />;
+    if(loading){
+    return(  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+      <div className="w-12 h-12 border-4 border-blue-500/20 border-t-blue-600 rounded-full animate-spin"></div>
+    </div>)
   }
 
   const streakData = Array.from({ length: 90 }, (_, i) => ({
@@ -272,7 +276,7 @@ const Dashboard = () => {
           Go To Assessment
         </button>
       )}
-      {!domain && (
+      {!domain && !loading && (
         <div className="space-y-8">
           <h1 className="text-3xl font-semibold text-grey-400">
             Career Assessment

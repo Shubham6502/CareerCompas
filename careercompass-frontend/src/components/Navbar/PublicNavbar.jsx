@@ -14,6 +14,8 @@ const PublicNavbar = () => {
       </div>
 
       {/* Auth Buttons */}
+
+    
       <div className="flex items-center gap-4">
          <button
             onClick={() => setIsDarkMode(!isDarkMode)}
@@ -25,20 +27,27 @@ const PublicNavbar = () => {
             </div>
           </button>
 
-        <button
-          onClick={openSignIn}
-          className="text-sm subText-color hover:text-color transition "
-        >
-          Login
-        </button>
+       <button
+  onClick={openSignIn}
+  className="px-4 py-2 text-sm font-medium
+             rounded-lg
+             card-color backdrop-blur-md
+             border border-blue-400
+             text-color
+             hover:card-color
+             transition-all duration-200"
+>
+  Login
+</button>
 
-        <button
+
+        {/* <button
           onClick={openSignUp}
           className="px-4 py-1.5 rounded-md text-sm font-medium
                      bg-white text-black hover:bg-gray-200 transition"
         >
           Get Started
-        </button>
+        </button> */}
       </div>
     </nav>
   );

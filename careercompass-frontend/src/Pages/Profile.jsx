@@ -198,7 +198,6 @@ function Profile() {
       className="
         w-[95%]
         h-[90vh]
-       
         overflow-hidden
       "
     >
@@ -206,14 +205,14 @@ function Profile() {
         className="
           relative
           h-full
-          overflow-y-auto
-          px-6 py-3
-          scrollbar-thin
+          overflow-y-auto px-4
+          sm:px-6  py-3
+          scrollbar-none
           scrollbar-thumb-blue-600/40
           scrollbar-track-transparent
         "
       >
-        <div className="max-w-5xl mx-auto px-4 py-6 space-y-6">
+        <div className="max-w-5xl mx-auto sm:px-4  py-6 space-y-6">
           {/* Profile Header */}
 
           <div className="relative flex flex-col sm:flex-row items-center gap-6 card-color shadow-xl rounded-2xl p-6 ">
@@ -511,6 +510,7 @@ function Profile() {
     </div>
   );
 }
+
 
 const Info = ({ label, value }) => (
   <div>

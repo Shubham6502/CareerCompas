@@ -8,7 +8,7 @@ const Home = () => {
   const { user } = useUser();
   
   return (
-      <div className="min-h-screen card-color grid-bg">
+       <div className="min-h-screen card-color grid-bg">
 
 
       {/* HERO SECTION */}
@@ -135,6 +135,7 @@ const ModuleCard = ({ title, desc }) => (
     </div>
   </div>
 );
+
 
 
 export default Home;
