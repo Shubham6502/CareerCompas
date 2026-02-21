@@ -104,7 +104,7 @@ function Profile() {
     );
     console.log(res.data.updatedLinks);
     setUserProfile(res.data.updatedLinks);
-    setIsEditing(false);
+    setIsLink(false);
   };
   const editEducation = async (index, formData) => {
     console.log(formData, index);

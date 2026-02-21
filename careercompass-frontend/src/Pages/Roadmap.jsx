@@ -52,6 +52,9 @@ const Roadmap = () => {
       alert("locked");
     }
   };
+  if(!progress.domain){
+    return <div className="text-center py-10">Please complete the Assessment First</div>
+  }
   if(loading){
     return(  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
       <div className="w-12 h-12 border-4 border-blue-500/20 border-t-blue-600 rounded-full animate-spin"></div>
