@@ -7,6 +7,7 @@ const EditPersonalModal = ({ userProfile, onClose, onSave }) => {
     birthdate: userProfile.birthdate ? userProfile.birthdate.split("T")[0]:"",
     city: userProfile.city || "",
   });
+  const [error,setError]=useState("");
 
   const handleChange = (e) => {
     setFormData({
@@ -14,8 +15,21 @@ const EditPersonalModal = ({ userProfile, onClose, onSave }) => {
       [e.target.name]: e.target.value,
     });
   };
+  const validatecity=(value)=>{
+
+     const regex = /^[A-Za-z]+(?:[ -][A-Za-z]+)*$/;
+     if(!regex.test(value)){
+      setError("Enter a valid city name (letters only)");
+      return false;
+     }
+      setError("");
+      return true;
+  }
 
   const handleSubmit = () => {
+    if(formData.city && !validatecity(formData.city)){
+      return;
+    }
     onSave(formData);
   };
   const today = new Date().toISOString().split("T")[0];
@@ -24,15 +38,17 @@ const EditPersonalModal = ({ userProfile, onClose, onSave }) => {
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
       <div className="card-color rounded-xl p-6 w-full max-w-md space-y-4">
         <h3 className="text-lg font-semibold text-color">Edit Profile</h3>
-
+        <div className="text-sm subText-color">Email</div>
         <input
           type="email" 
           name="email"
           value={formData.email}
           onChange={handleChange}
           placeholder="Email@gmail.com"
+          readOnly
           className="w-full subcard-color text-color rounded-lg px-4 py-2 outline-none"
         />
+        <div className="text-sm subText-color">Birthdate</div>
         <input
           type="date"
           name="birthdate"
@@ -83,6 +99,7 @@ const EditPersonalModal = ({ userProfile, onClose, onSave }) => {
             Save
           </button>
         </div>
+          {error && <p style={{ color: "red" }}>{error}</p>}
       </div>
     </div>
   );

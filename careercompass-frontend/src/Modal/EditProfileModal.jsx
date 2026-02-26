@@ -6,16 +6,30 @@ const EditProfileModal = ({ userProfile, onClose, onSave,isSaving }) => {
     lastname:userProfile.lastname||"",
     bio: userProfile.bio || "",
   });
-
+  connst [error, setError] = useState("");
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
+  const validateName = (value) => {
+    // letters + space + hyphen + apostrophe
+    const regex = /^[A-Za-z]+([ '-][A-Za-z]+)*$/;
+
+    if (!regex.test(value)) {
+      setError("Enter a valid name (letters only)");
+      return false;
+    }
+
+    setError("");
+    return true;
+  };
 
   const handleSubmit = () => {
     onSave(formData);
+    validateName(formData.firstname);
+    validateName(formData.lastname);
   };
 
   return (
@@ -66,6 +80,7 @@ const EditProfileModal = ({ userProfile, onClose, onSave,isSaving }) => {
             {isSaving ? "Saving..." : "Save"}
           </button>
         </div>
+         {error && <p style={{ color: "red" }}>{error}</p>}
 
       </div>
     </div>

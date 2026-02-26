@@ -65,7 +65,7 @@ const Home = () => {
   
   <a
     href="#modules"
-    className="px-6 py-3 rounded-lg border border-white/10
+    className="px-6 py-3 rounded-lg border card-border 
                hover:bg-white/5 transition text-color"
   >
     Explore Modules
@@ -109,6 +109,7 @@ const Home = () => {
           />
         </div>
       </section>
+     
 
       {/* FOOTER */}
       <footer className="py-6 text-center text-sm text-gray-500 border-t border-white/10">

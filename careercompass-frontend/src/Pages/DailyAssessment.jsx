@@ -109,7 +109,7 @@ function DailyAssessment() {
     return(<div className="text-color text-center mt-10">You Failed.. <span>You can Retake this Assessment After 2 Hours </span></div>);
   }
 
-    if(!completedTasks){
+    if(!completedTasks && !completed && canRetake()){
         return(<div className="text-color text-center mt-10">Before Taking Test You Need To Complete Todays Tasks</div>);
     }
  

@@ -10,6 +10,7 @@ const EditEducationModal = ({ education, onClose, onSave }) => {
     start: education.start || "",
     end: education.end || "",
   });
+  const [error,setError]=useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,7 +29,20 @@ const EditEducationModal = ({ education, onClose, onSave }) => {
     }));
   };
 
+  const isValid =(value=>{
+    const regex=/^[A-Za-z]+(?:[ -][A-Za-z]+)*$/;
+    return regex.test(value);
+  })
+
   const handleSubmit = () => {
+    if(!isValid(formData.college)){
+      setError("Enter a valid college name (letters only)");
+      return;
+    }
+    if(!isValid(formData.field)){
+      setError("Enter a valid department name (letters only)");
+      return;
+    }
     onSave(formData);
   };
   const today= new Date().toISOString().split("T")[0];
@@ -42,6 +56,7 @@ const EditEducationModal = ({ education, onClose, onSave }) => {
           name="college"
           value={formData.college}
           onChange={handleChange}
+          required
           placeholder="College Name"
           className="w-full subcard-color rounded-lg px-4 py-2 outline-none"
         />
@@ -50,6 +65,7 @@ const EditEducationModal = ({ education, onClose, onSave }) => {
           name="field"
           value={formData.field}
           onChange={handleChange}
+          required
           placeholder="Department"
           className="w-full subcard-color rounded-lg px-4 py-2 outline-none"
         />
@@ -101,6 +117,7 @@ const EditEducationModal = ({ education, onClose, onSave }) => {
             Save
           </button>
         </div>
+         {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
       </div>
     </div>
   );

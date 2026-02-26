@@ -7,6 +7,7 @@ const [formData, setFormData] = useState({
     portfolio:userProfile.links.portfolio||"",
 });
 
+const[error,setError]=useState("");
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -15,7 +16,25 @@ const [formData, setFormData] = useState({
     }));
   };
   
+  const isValidUrl = (url) => {
+  const pattern =
+    /^(https?:\/\/)?([\w\d-]+\.)+[\w-]{2,}(\/.*)?$/i;
+  return pattern.test(url);
+};
+
   const handleSubmit = () => {
+    if (formData.linkedin && !isValidUrl(formData.linkedin)) {
+      setError("Please enter a valid LinkedIn URL");
+      return;
+    }
+    if (formData.github && !isValidUrl(formData.github)) {
+      setError("Please enter a valid GitHub URL");
+      return;
+    }
+    if (formData.portfolio && !isValidUrl(formData.portfolio)) {
+      setError("Please enter a valid Portfolio URL");
+      return;
+    }
     console.log(formData);
     onSave(formData);
   };
@@ -67,6 +86,7 @@ const [formData, setFormData] = useState({
             Save
           </button>
         </div>
+          {error && <p style={{ color: "red" }}>{error}</p>}
       </div>
     </div>
   );

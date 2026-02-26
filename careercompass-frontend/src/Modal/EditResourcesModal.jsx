@@ -39,9 +39,19 @@ useEffect(() => {
   };
 
   const handleSubmit = () => {
+    if(!isValidUrl(formData.url)){
+      alert("Please enter a valid URL");
+      return;
+    }
     onSave(formData);
     onClose();
   };
+
+  const isValidUrl = (url) => {
+  const pattern =
+    /^(https?:\/\/)?([\w\d-]+\.)+[\w-]{2,}(\/.*)?$/i;
+  return pattern.test(url);
+};
 
   return createPortal(
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
@@ -60,6 +70,7 @@ useEffect(() => {
           name="domain"
           value={formData.domain}
           onChange={handleChange}
+          required
           className="w-full bg-gray-800 text-white rounded-lg px-4 py-2 outline-none"
         >
               <option value="SoftwareEngineer" >Software Engineer</option>
@@ -73,6 +84,7 @@ useEffect(() => {
           name="subject"
           value={formData.subject}
           onChange={handleChange}
+          required
           className="w-full bg-gray-800 text-white rounded-lg px-4 py-2 outline-none"
         >
           <option value="">Select subject</option>
@@ -88,6 +100,7 @@ useEffect(() => {
           name="url"
           value={formData.url}
           onChange={handleChange}
+          required
           className="w-full bg-gray-800 text-white rounded-lg px-4 py-2 outline-none"
         />
 

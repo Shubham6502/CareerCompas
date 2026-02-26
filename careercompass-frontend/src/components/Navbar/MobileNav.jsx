@@ -5,16 +5,18 @@ import { useTheme } from "../../themeContext";
 import {
   Menu,
   X,
- LayoutDashboard,
+  LayoutDashboard,
   ClipboardList,
   Map,
   BookOpen,
-  User,Moon, Sun
+  User,
+  Moon,
+  Sun,
 } from "lucide-react";
 
 const MobileDrawer = () => {
   const [open, setOpen] = useState(false);
-  const{ isDarkMode, setIsDarkMode } = useTheme();
+  const { isDarkMode, setIsDarkMode } = useTheme();
   return (
     <>
       {/* Hamburger Button (Right Side) */}
@@ -57,12 +59,10 @@ const MobileDrawer = () => {
           <button onClick={() => setOpen(false)}>
             <X className="text-color" size={20} />
           </button>
-           
         </div>
 
         {/* Links */}
         <nav className="flex flex-col p-3 gap-1">
-         
           <DrawerLink
             onClick={() => setOpen(false)}
             to="/dashboard"
@@ -70,46 +70,39 @@ const MobileDrawer = () => {
             label="Dashboard"
           />
           <DrawerLink
-          onClick={() => setOpen(false)}
+            onClick={() => setOpen(false)}
             to="/dailyassessment"
             icon={<ClipboardList size={18} />}
             label="Assessment"
           />
           <DrawerLink
-          onClick={() => setOpen(false)}
-           to="/roadmap" 
-           icon={<Map size={18} />}
+            onClick={() => setOpen(false)}
+            to="/roadmap"
+            icon={<Map size={18} />}
             label="Roadmap"
-             />
+          />
 
           <DrawerLink
-          onClick={() => setOpen(false)}
+            onClick={() => setOpen(false)}
             to="/resources"
             icon={<BookOpen size={18} />}
             label="Resources"
           />
           <DrawerLink
-          onClick={() => setOpen(false)}
+            onClick={() => setOpen(false)}
             to="/profile"
             icon={<User size={18} />}
             label="Profile"
           />
-           
         </nav>
-         <div className="px-4 py-4 border-t border-white/10 flex items-center gap-3">
+        <div className="px-4 py-4 border-t border-white/10 flex items-center gap-3">
           <SignOutButton>
             <button className="px-4 py-2 border text-color rounded-md">
               Logout
             </button>
           </SignOutButton>
-          
         </div>
-           
-        
-
-   
       </aside>
-      
     </>
   );
 };
@@ -117,7 +110,6 @@ const MobileDrawer = () => {
 const DrawerLink = ({ to, icon, label }) => (
   <NavLink
     to={to}
-    
     className={({ isActive }) =>
       `flex items-center gap-3 px-4 py-3 rounded-lg transition
        ${
