@@ -11,6 +11,7 @@ import {
   BookOpen,
   User,
   Moon,
+  ClipboardPen,
   Sun,
 } from "lucide-react";
 
@@ -87,6 +88,12 @@ const MobileDrawer = () => {
             to="/resources"
             icon={<BookOpen size={18} />}
             label="Resources"
+          />
+          <DrawerLink
+          onClick={() => setOpen(false)}
+            to="/jobtracker"
+            icon={<ClipboardPen size={18} />}
+            label="Job Tracker"
           />
           <DrawerLink
            

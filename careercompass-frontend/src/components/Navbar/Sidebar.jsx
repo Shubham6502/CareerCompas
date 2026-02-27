@@ -12,7 +12,7 @@ import {
   User,
   LogOut,
   Moon,
-  Sun,
+  Sun,ClipboardPen,
 } from "lucide-react";
 
 const Sidebar = () => {
@@ -61,6 +61,11 @@ const Sidebar = () => {
             to="/resources"
             icon={<BookOpen size={18} />}
             label="Resources"
+          />
+           <SidebarLink
+            to="/jobtracker"
+            icon={<ClipboardPen size={18} />}
+            label="Job Tracker"
           />
           <SidebarLink
             to="/profile"
