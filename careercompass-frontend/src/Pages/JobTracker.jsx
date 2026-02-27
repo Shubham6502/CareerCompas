@@ -232,7 +232,7 @@ export default function JobTracker() {
               >
                 <span>{app.company}</span>
                 <span>{app.role}</span>
-                <span>{app.date}</span>
+                <span>{new Date(app.date).toLocaleDateString()}</span>
                 <span className={`${app.status === "Applied" ? "text-blue-400" : app.status === "Interview" ? "text-purple-400" : app.status === "Offer" ? "text-green-400" : "text-red-400"}`}>{app.status}</span>
                 <span className="text-right flex items-center justify-end gap-4">
                   <div
@@ -282,7 +282,7 @@ export default function JobTracker() {
 
                 <div className="flex justify-between">
                   <span className="text-gray-400 text-sm">Date</span>
-                  <span className="text-sm">{app.date}</span>
+                  <span className="text-sm">{new Date(app.date).toLocaleDateString()}</span>
                 </div>
 
                 <div className="flex justify-between">

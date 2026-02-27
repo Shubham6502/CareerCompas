@@ -19,7 +19,7 @@ const createJobApplicationSchema = new mongoose.Schema({
         location:{
             type:String,
         },
-        appliedDate:{
+        date:{
             type:Date,
         },
         status:{
