@@ -11,6 +11,7 @@ import progressRoutes from "./routes/ProgressRoutes.js";
 import ResourceRoute from "./routes/ResourceRoute.js"
 import DailyAssessment from "./routes/DailyAssessmentRoute.js";
 import ProfileRoute from "./routes/ProfileRoutes.js"
+import JobApplicationRoute from "./routes/JobApplications.js";
 import rateLimit from "express-rate-limit";
 
 
@@ -52,6 +53,7 @@ app.use("/api/progress",progressRoutes);
 app.use("/api/Resource",ResourceRoute)
 app.use("/api/DailyAssessment",DailyAssessment)
 app.use("/api/profile",ProfileRoute);
+app.use("/api/applications",JobApplicationRoute);
 
 
 app.get("/", (req, res) => {

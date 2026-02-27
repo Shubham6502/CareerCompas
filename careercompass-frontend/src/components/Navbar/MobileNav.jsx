@@ -64,32 +64,32 @@ const MobileDrawer = () => {
         {/* Links */}
         <nav className="flex flex-col p-3 gap-1">
           <DrawerLink
-            onClick={() => setOpen(false)}
+            
             to="/dashboard"
             icon={<LayoutDashboard size={18} />}
             label="Dashboard"
           />
           <DrawerLink
-            onClick={() => setOpen(false)}
+           
             to="/dailyassessment"
             icon={<ClipboardList size={18} />}
             label="Assessment"
           />
           <DrawerLink
-            onClick={() => setOpen(false)}
+           
             to="/roadmap"
             icon={<Map size={18} />}
             label="Roadmap"
           />
 
           <DrawerLink
-            onClick={() => setOpen(false)}
+           
             to="/resources"
             icon={<BookOpen size={18} />}
             label="Resources"
           />
           <DrawerLink
-            onClick={() => setOpen(false)}
+           
             to="/profile"
             icon={<User size={18} />}
             label="Profile"
@@ -118,6 +118,7 @@ const DrawerLink = ({ to, icon, label }) => (
            : "text-gray-400 hover:bg-white/5 hover:text-white"
        }`
     }
+     onClick={() => setOpen(false)}
   >
     {icon}
     <span className="text-sm font-medium">{label}</span>

@@ -60,7 +60,7 @@ function Resources() {
       .get("https://careercompas.onrender.com/api/resource/topContributors")
       .then((res) => {
         setTopContributor(res.data);
-        console.log(res.data);
+       
       })
       .catch((err) => {
         console.log("Something Went Wrong");

@@ -7,18 +7,17 @@ function DailyAssessment() {
   const [questions, setQuestions] = useState([]);
   const [score, setScore] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
- const totalTasks=3; 
+  const totalTasks = 3;
   const [selected, setSelected] = useState(null);
-  const [isSubmitted,setSubmitted]=useState(false);
-  const {user,isLoaded}=useUser();
-  const [domain,setDomain]=useState("");
-  const [day,setDay]=useState(0);
-  const [assessment,setAssessment]=useState({})
-  const [completed,setCompleted]=useState(false);
- const [completedTasks, setCompletedTasks] = useState(false);
+  const [isSubmitted, setSubmitted] = useState(false);
+  const { user, isLoaded } = useUser();
+  const [domain, setDomain] = useState("");
+  const [day, setDay] = useState(0);
+  const [assessment, setAssessment] = useState({});
+  const [completed, setCompleted] = useState(false);
+  const [completedTasks, setCompletedTasks] = useState(false);
 
-  
-  if(!user){
+  if (!user) {
     return <Navigate to="/" replace />;
   }
 
@@ -26,64 +25,59 @@ function DailyAssessment() {
     setSelected(option);
   };
   const handleNext = (correctAnswer) => {
-    
-  if (!selected) {
-    alert("Please select an option");
-    return;
-  }
+    if (!selected) {
+      alert("Please select an option");
+      return;
+    }
 
-  if (selected === correctAnswer) {
-    setScore((prev) => prev + 20);
-  }
+    if (selected === correctAnswer) {
+      setScore((prev) => prev + 20);
+    }
 
-  setSelected(null);
-  setCurrentIndex((prev) => prev + 1);
-
- };
-    const handleSubmit = () => {
+    setSelected(null);
+    setCurrentIndex((prev) => prev + 1);
+  };
+  const handleSubmit = () => {
     if (!selected) return alert("Please select an option");
 
-      axios.post("https://careercompas.onrender.com/api/progress/assessment",{
-        clerkId:user.id,
-        day:day,
-        score:score
-    })
-    if(score>75){
+    axios.post("https://careercompas.onrender.com/api/progress/assessment", {
+      clerkId: user.id,
+      day: day,
+      score: score,
+    });
+    if (score > 75) {
       setCompleted(true);
     }
     setSubmitted(true);
-   
-  
-    
-  }
-  useEffect(()=>{
-    axios.get(`https://careercompas.onrender.com/api/progress/getProgress/${user.id}`,{
-        params:{clerkId:user.id}
-    })
-    .then((response)=>{
-        console.log(response.data.completedTasks.tasks.length);
+  };
+  useEffect(() => {
+    axios
+      .get(
+        `https://careercompas.onrender.com/api/progress/getProgress/${user.id}`,
+        {
+          params: { clerkId: user.id },
+        },
+      )
+      .then((response) => {
         setDomain(response.data.domain);
         setDay(response.data.currentDay);
-        setAssessment(response.data.completedTasks.Assessment)
-        if(response.data.completedTasks.tasks.length===totalTasks){
-            setCompletedTasks(true)
-            
+        setAssessment(response.data.completedTasks.Assessment);
+        if (response.data.completedTasks.tasks.length === totalTasks) {
+          setCompletedTasks(true);
         }
-        console.log(assessment);
-        console.log(day)
-    })
-  },[isLoaded])
+      });
+  }, [isLoaded]);
 
   const canRetake = () => {
-  if (!assessment?.lastAttemptAt) return true;
+    if (!assessment?.lastAttemptAt) return true;
 
-  const last = new Date(assessment.lastAttemptAt);
-  const now = new Date();
+    const last = new Date(assessment.lastAttemptAt);
+    const now = new Date();
 
-  const diff = (now - last) / (1000 * 60 * 60);
-  
-  return diff >= 2;
-};
+    const diff = (now - last) / (1000 * 60 * 60);
+
+    return diff >= 2;
+  };
 
   useEffect(() => {
     axios
@@ -97,43 +91,55 @@ function DailyAssessment() {
         console.error("Error fetching assessment:", error);
       });
   }, [day]);
- 
-  
 
-  
-
-  if(completed){
-    return(<div className="text-color text-center mt-10">You Passed This Assessment</div>);
+  if (completed) {
+    return (
+      <div className="text-color text-center mt-10">
+        You Passed This Assessment
+      </div>
+    );
   }
-  if(!canRetake()){
-    return(<div className="text-color text-center mt-10">You Failed.. <span>You can Retake this Assessment After 2 Hours </span></div>);
+  if (!canRetake()) {
+    return (
+      <div className="text-color text-center mt-10">
+        You Failed.. <span>You can Retake this Assessment After 2 Hours </span>
+      </div>
+    );
   }
 
-    if(!completedTasks && !completed && canRetake()){
-        return(<div className="text-color text-center mt-10">Before Taking Test You Need To Complete Todays Tasks</div>);
-    }
- 
+  if (!completedTasks && !completed && canRetake()) {
+    return (
+      <div className="text-color text-center mt-10">
+        Before Taking Test You Need To Complete Todays Tasks
+      </div>
+    );
+  }
+
   if (!questions.length) {
     return (
       <div className="text-color text-center mt-10">Loading assessment...</div>
     );
   }
 
-if (isSubmitted) {
-  return (
-    <div className="flex flex-col items-center justify-center mt-20 text-color">
-      <h2 className="text-3xl font-semibold mb-4">Assessment Completed 🎉</h2>
-      <p className="text-xl">
-        Your Score: <span className="text-blue-400">{score}</span>
-      </p>
+  if (isSubmitted) {
+    return (
+      <div className="flex flex-col items-center justify-center mt-20 text-color">
+        <h2 className="text-3xl font-semibold mb-4">Assessment Completed 🎉</h2>
+        <p className="text-xl">
+          Your Score: <span className="text-blue-400">{score}</span>
+        </p>
 
-      {score>75
-      ?<div>Great You Passed The Assessment</div>
-      :<div> You Failed!.....<p>You can Retake This Assessment After 2 Hr</p></div>
-    }
-    </div>
-  );
-}
+        {score > 75 ? (
+          <div>Great You Passed The Assessment</div>
+        ) : (
+          <div>
+            {" "}
+            You Failed!.....<p>You can Retake This Assessment After 2 Hr</p>
+          </div>
+        )}
+      </div>
+    );
+  }
   const currentQuestion = questions[currentIndex];
 
   return (
@@ -164,10 +170,10 @@ if (isSubmitted) {
           ))}
         </div>
       </div>
-       <div className="flex justify-end">
+      <div className="flex justify-end">
         {currentIndex < questions.length - 1 ? (
           <button
-            onClick={()=>handleNext(currentQuestion.answer)}
+            onClick={() => handleNext(currentQuestion.answer)}
             className="px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-color"
           >
             Next →

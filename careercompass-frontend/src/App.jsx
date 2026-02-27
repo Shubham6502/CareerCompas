@@ -16,6 +16,7 @@ import DailyAssessment from "./Pages/DailyAssessment";
 import Profile from "./Pages/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import UserResources from "./Pages/UserResources";
+import JobTracker from "./Pages/JobTracker";
 function App() {
   const { isSignedIn, isLoaded } = useUser();
   useSaveUser();
@@ -122,6 +123,12 @@ function App() {
           element={
             <AppLayout>
               <UserResources />
+            </AppLayout>
+          }
+          />
+          <Route path="/jobtracker" element={
+            <AppLayout>
+              <JobTracker/>
             </AppLayout>
           }
           />
