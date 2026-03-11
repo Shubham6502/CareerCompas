@@ -1,20 +1,19 @@
-import { Plus, Trash2, Pencil, Edit } from "lucide-react";
-import { useState } from "react";
-import { useEffect } from "react";
+import { Plus, Trash2, Pencil, Search, Briefcase, Building2, Calendar, MapPin, ExternalLink, MoreVertical } from "lucide-react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useUser } from "@clerk/clerk-react";
 import TrackApplicationModal from "../Modal/TrackApplicationModal";
 import EditTrackApplication from "../Modal/EditTrackApplication";
 
-
 export default function JobTracker() {
   const [applications, setApplications] = useState([]);
   const [allApplications, setAllApplications] = useState([]);
   const [open, setOpen] = useState(false);
-  const [editApp,setEditApp] = useState(false);
-  const [editData,setEditData] = useState({});
+  const [editApp, setEditApp] = useState(false);
+  const [editData, setEditData] = useState({});
   const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [activeFilter, setActiveFilter] = useState("All");
   const { user } = useUser();
   const clerkId = user?.id;
 
@@ -22,19 +21,26 @@ export default function JobTracker() {
     const fetchApplications = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(
-          `https://careercompas.onrender.com/api/applications/${clerkId}`,
-        );
+        const response = await axios.get(`https://careercompas.onrender.com/api/applications/${clerkId}`);
         setApplications(response.data.applications);
         setAllApplications(response.data.applications);
-       setLoading(false);
       } catch (error) {
         console.error("Error fetching applications:", error);
+      } finally {
         setLoading(false);
       }
     };
-    fetchApplications();
-  }, [clerkId,refresh]);
+    if (clerkId) fetchApplications();
+  }, [clerkId, refresh]);
+
+  const filterApplications = (status) => {
+    setActiveFilter(status);
+    if (status === "All") {
+      setApplications(allApplications);
+    } else {
+      setApplications(allApplications.filter(app => app.status === status));
+    }
+  };
 
   const handleOnSave = async (data) => {
     const filterDataForBackend = {
@@ -47,262 +53,324 @@ export default function JobTracker() {
     };
     try {
       setLoading(true);
-      const response = await axios.post(
-        `https://careercompas.onrender.com/api/applications/${clerkId}`,
-        filterDataForBackend,
-      );
+      const response = await axios.post(`https://careercompas.onrender.com/api/applications/${clerkId}`, filterDataForBackend);
       setApplications(response.data.applications);
       setAllApplications(response.data.applications);
-
+      setActiveFilter("All");
     } catch (error) {
       console.error("Error saving application:", error);
-    }
-    finally{
+    } finally {
       setRefresh(prev => !prev);
       setLoading(false);
     }
   };
 
   const handleOnEditSave = async (data) => {
-  setLoading(true);
-  try {
-    setEditApp(false);
-    await axios.put(
-      `https://careercompas.onrender.com/api/applications/${data._id}`,
-      data
-    );
+    setLoading(true);
+    try {
+      setEditApp(false);
+      await axios.put(`https://careercompas.onrender.com/api/applications/${data._id}`, data);
+      setRefresh(prev => !prev);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    
-    setRefresh(prev => !prev);
-    setLoading(false);
-  } catch (error) {
-    console.error(error);
-  }
-};
   const editApplication = (id) => {
-    const appToEdit = applications.find((app) => app._id === id);
+    const appToEdit = allApplications.find((app) => app._id === id);
     setEditApp(true);
     setEditData(appToEdit);
-
   };
 
   const deleteApplication = (id) => {
     if (window.confirm("Are you sure you want to delete this application?")) {
-
-        const deleteApp = async () => {
-          setLoading(true);
-          try {
-            await axios.delete(
-              `https://careercompas.onrender.com/api/applications/${clerkId}/${id}`,
-            );
-            setRefresh(prev => !prev);
-          } catch (error) {
-            console.error("Error deleting application:", error);
-          }
-          finally{
-            setLoading(false);
-          }
-        };
-        deleteApp();
-     
+      const deleteApp = async () => {
+        setLoading(true);
+        try {
+          await axios.delete(`https://careercompas.onrender.com/api/applications/${clerkId}/${id}`);
+          setRefresh(prev => !prev);
+        } catch (error) {
+          console.error("Error deleting application:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      deleteApp();
     }
   };
+
   const handleSearch = (e) => {
     const query = e.target.value.toLowerCase();
+    let baseApps = activeFilter === "All" ? allApplications : allApplications.filter(a => a.status === activeFilter);
+    
     if (!query) {
-    setApplications(allApplications);
-    return;
-  }
-    const filteredApps = allApplications.filter(
-      (app) =>
-        app.company.toLowerCase().includes(query) ||  app.role.toLowerCase().includes(query)
+      setApplications(baseApps);
+      return;
+    }
+    const filteredApps = baseApps.filter(
+      (app) => app.company.toLowerCase().includes(query) || app.role.toLowerCase().includes(query)
     );
     setApplications(filteredApps);
-   
   };
 
-  if(loading){
+  const getStatusColor = (status) => {
+    switch(status) {
+      case "Applied": return "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20";
+      case "Interview": return "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20";
+      case "Offer": return "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20";
+      case "Rejected": return "bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20";
+      default: return "bg-gray-500/10 text-gray-600 dark:text-gray-400 border-gray-500/20";
+    }
+  };
+
+  if (loading && !allApplications.length) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center overflow-hidden justify-center bg-black/40 backdrop-blur-sm">  
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/5 backdrop-blur-sm dark:bg-black/40">  
+        <div className="w-8 h-8 md:w-10 md:h-10 border-2 border-gray-300 border-t-black dark:border-gray-700 dark:border-t-white rounded-full animate-spin"></div>
       </div>
     );
   }
 
+  const counts = {
+    All: allApplications.length,
+    Applied: allApplications.filter(a => a.status === "Applied").length,
+    Interview: allApplications.filter(a => a.status === "Interview").length,
+    Offer: allApplications.filter(a => a.status === "Offer").length,
+  };
+
   return (    
-    <div className=" text-color px-4 sm:px-8 py-8">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+    <div className="max-w-6xl mx-auto text-color pb-10">
+      
+      {/* ── HEADER SECTION ── */}
+      <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-8">
         <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-            Career & Placements
+          <h1 className="text-3xl font-semibold tracking-tight text-color mb-1.5">
+            Applications
           </h1>
-          <p className="subText-color mt-1">
-            Track your journey to the dream job.
+          <p className="subText-color text-sm">
+            Manage and track your career opportunities.
           </p>
-
-          {/* Stats */}
-          <div className="mt-4 overflow-x-hidden">
-            <div className="flex gap-2 text-sm subText-color cursor-pointer min-w-max">
-               <div className="flex items-center gap-2 whitespace-nowrap " onClick={()=> setApplications(allApplications)}>
-                <span className="w-2 h-2 rounded-full bg-red-300"></span>
-                 All ({allApplications.length})
-              </div>
-              <div className="flex items-center gap-2 whitespace-nowrap   text-color " onClick={()=> setApplications(allApplications.filter(app => app.status === "Applied"))}>
-                <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-                {allApplications.filter(app => app.status === "Applied").length} Applied
-              </div>
-
-              <div className="flex items-center gap-2 whitespace-nowrap   text-color" onClick={()=> setApplications(allApplications.filter(app => app.status === "Interview"))}>
-                <span className="w-2 h-2 rounded-full bg-purple-500"></span>
-                {allApplications.filter(app => app.status === "Interview").length} In
-                Progress
-              </div>
-
-              <div className="flex items-center gap-2 whitespace-nowrap    text-color  " onClick={()=> setApplications(allApplications.filter(app => app.status === "Offer"))}>
-                <span className="w-2 h-2 rounded-full bg-green-500"></span>{
-                  allApplications.filter(app => app.status === "Offer").length}  Offers
-              </div>
-            </div>
-          </div>
         </div>
 
-        {/* Track Button */}
-        <button
-          onClick={() => setOpen(true)}
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white transition px-6 py-3 rounded-xl shadow-lg shadow-blue-500/20"
-        >
-          <Plus size={18} />
-          Track Application
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setOpen(true)}
+            className="flex items-center gap-2 bg-black dark:bg-white text-white dark:text-black transition-all hover:opacity-80 px-5 py-2.5 rounded-xl font-medium text-sm shadow-md"
+          >
+            <Plus size={16} />
+            <span>New Application</span>
+          </button>
+        </div>
       </div>
 
-      {/* Modal */}
+      {/* ── CONTROLS: TABS & SEARCH ── */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        
+        {/* Apple-style Segmented Control */}
+        <div className="flex items-center p-1 rounded-xl subcard-color border card-border overflow-x-auto hide-scrollbar sm:max-w-fit">
+          {["All", "Applied", "Interview", "Offer"].map(filter => (
+            <button
+              key={filter}
+              onClick={() => filterApplications(filter)}
+              className={`flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-lg text-[12px] sm:text-[13px] font-medium transition-all whitespace-nowrap
+                ${activeFilter === filter 
+                  ? "bg-blue-500/10 text-blue-600 dark:text-blue-400 shadow-sm border border-black/5 dark:border-white/10" 
+                  : "text-gray-500 dark:text-gray-400 hover:text-color"}`}
+            >
+              {filter}
+              <span className={`px-1.5 py-0.5 rounded-md text-[10px] bg-black/5 dark:bg-white/10`}>
+                {counts[filter]}
+              </span>
+            </button>
+          ))}
+        </div>
+
+        {/* Search Bar */}
+        <div className="relative w-full sm:max-w-xs">
+          <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+          <input
+            type="text"
+            onChange={handleSearch}
+            placeholder="Search company or role..."
+            className="w-full card-color border card-border rounded-xl pl-10 pr-4 py-2.5 text-[13px] text-color placeholder-gray-400/80 focus:outline-none focus:ring-2 focus:ring-black/10 dark:focus:ring-white/20 transition-all shadow-sm"
+          />
+        </div>
+      </div>
+
+      {/* ── LISTINGS ── */}
+      {applications.length === 0 ? (
+        <div className="card-color border card-border rounded-2xl flex flex-col items-center justify-center py-20 sm:py-24 text-center shadow-sm">
+          <div className="w-14 h-14 sm:w-16 sm:h-16 bg-color rounded-2xl flex items-center justify-center mb-4">
+            <Briefcase size={24} strokeWidth={1.5} className="text-gray-400" />
+          </div>
+          <h3 className="text-base font-medium text-color mb-1">No applications yet</h3>
+          <p className="text-sm subText-color max-w-xs">Click "New Application" to start tracking your job search.</p>
+        </div>
+      ) : (
+        <>
+          {/* Desktop/Tablet Column Headers (hidden on mobile) */}
+          <div className="hidden md:grid grid-cols-12 gap-4 px-5 py-2 mb-1 text-[11px] font-semibold tracking-wider text-gray-400 dark:text-gray-500 uppercase">
+            <div className="col-span-5">Company & Role</div>
+            <div className="col-span-3">Date Applied</div>
+            <div className="col-span-2">Status</div>
+            <div className="col-span-2 text-right">Actions</div>
+          </div>
+
+          <div className="space-y-3 sm:space-y-3">
+            {applications.map((app) => (
+              <div
+                key={app._id}
+                className="card-color border border-gray-200 dark:border-color rounded-2xl shadow-sm dark:shadow-[0_2px_8px_rgba(0,0,0,0.3)] hover:shadow-md dark:hover:shadow-[0_4px_20px_rgba(0,0,0,0.4)] hover:-translate-y-0.5 transition-all duration-300 group"
+              >
+                {/* ─── DESKTOP / TABLET (md+): Horizontal grid ─── */}
+                <div className="hidden md:grid grid-cols-12 gap-4 items-center px-5 py-4">
+                  {/* Company & Role */}
+                  <div className="col-span-5 flex items-center gap-3.5">
+                    <div className="w-10 h-10 rounded-xl bg-color dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex items-center justify-center shrink-0">
+                      <span className="text-base font-bold subText-color dark:text-gray-400">{app.company.charAt(0).toUpperCase()}</span>
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-semibold text-[14px] text-color dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
+                        {app.role}
+                      </p>
+                      <div className="flex items-center gap-1.5 text-[12px] subText-color dark:text-gray-400 mt-0.5">
+                        <Building2 size={11} />
+                        <span className="truncate">{app.company}</span>
+                        {app.location && (
+                          <>
+                            <span className="subText-color">&bull;</span>
+                            <span className="truncate max-w-[100px]">{app.location}</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Date */}
+                  <div className="col-span-3 flex items-center gap-1.5 text-[13px] subText-color dark:text-gray-300">
+                    <Calendar size={13} className="text-gray-400 dark:text-gray-500" />
+                    {new Date(app.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                  </div>
+
+                  {/* Status */}
+                  <div className="col-span-2">
+                    <span className={`inline-flex items-center px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${getStatusColor(app.status)}`}>
+                      {app.status}
+                    </span>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="col-span-2 flex items-center justify-end gap-1">
+                    {app.link && (
+                      <a
+                        href={app.link.startsWith('http') ? app.link : `https://${app.link}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2 rounded-lg text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-colors"
+                        title="Open Link"
+                      >
+                        <ExternalLink size={15} />
+                      </a>
+                    )}
+                    <button
+                      onClick={() => editApplication(app._id)}
+                      className="p-2 rounded-lg text-gray-400 hover:text-gray-700 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+                      title="Edit"
+                    >
+                      <Pencil size={15} />
+                    </button>
+                    <button
+                      onClick={() => deleteApplication(app._id)}
+                      className="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
+                      title="Delete"
+                    >
+                      <Trash2 size={15} />
+                    </button>
+                  </div>
+                </div>
+
+                {/* ─── MOBILE (<md): Stacked card layout ─── */}
+                <div className="md:hidden p-4">
+                  {/* Row 1: Avatar + Role/Company info */}
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex items-center justify-center shrink-0">
+                      <span className="text-base font-bold text-gray-500 dark:text-gray-400">{app.company.charAt(0).toUpperCase()}</span>
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="font-semibold text-[14px] text-gray-900 dark:text-gray-100 truncate">{app.role}</p>
+                      <div className="flex items-center gap-1.5 text-[12px] text-gray-500 dark:text-gray-400 mt-0.5">
+                        <Building2 size={11} className="shrink-0" />
+                        <span className="truncate">{app.company}</span>
+                        {app.location && (
+                          <>
+                            <span className="shrink-0 text-gray-300 dark:text-gray-600">&bull;</span>
+                            <span className="truncate">{app.location}</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Row 2: Status + Date + Actions */}
+                  <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100 dark:border-gray-700/40">
+                    <div className="flex items-center gap-3">
+                      <span className={`inline-flex items-center px-2.5 py-1 rounded-lg text-[10px] font-bold border ${getStatusColor(app.status)}`}>
+                        {app.status}
+                      </span>
+                      <div className="flex items-center gap-1 text-[11px] text-gray-400 dark:text-gray-500">
+                        <Calendar size={11} className="shrink-0" />
+                        {new Date(app.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-0.5">
+                      {app.link && (
+                        <a
+                          href={app.link.startsWith('http') ? app.link : `https://${app.link}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-1.5 rounded-lg text-gray-400 active:bg-blue-500/10 active:text-blue-500 transition-colors"
+                        >
+                          <ExternalLink size={14} />
+                        </a>
+                      )}
+                      <button
+                        onClick={() => editApplication(app._id)}
+                        className="p-1.5 rounded-lg text-gray-400 active:bg-gray-200 dark:active:bg-white/10 active:text-gray-700 dark:active:text-white transition-colors"
+                      >
+                        <Pencil size={14} />
+                      </button>
+                      <button
+                        onClick={() => deleteApplication(app._id)}
+                        className="p-1.5 rounded-lg text-gray-400 active:bg-red-50 dark:active:bg-red-500/10 active:text-red-500 transition-colors"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
+      {/* Modals */}
       <TrackApplicationModal
         isOpen={open}
         onClose={() => setOpen(false)}
         onSave={handleOnSave}
-       
       />
-
-      {/* Search Bar */}
-      <div className="mt-8">
-        <input
-          type="text"
-          name="search "
-          onChange={handleSearch}
-          placeholder="Search companies, roles..."
-          className="w-full card-color border border-gray-500 rounded-xl px-4 py-3 text-sm text-color placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      {editApp && (
+        <EditTrackApplication
+          isEditOpen={editApp}
+          onClose={() => setEditApp(false)}
+          onSave={handleOnEditSave}
+          application={editData}
         />
-      </div>
-        { editApp &&<EditTrackApplication
-                    isEditOpen={editApp}
-                    onClose={() => setEditApp(false)}
-                    onSave={handleOnEditSave}
-                    application={editData}
-                  />}
-
-      {/* Table Section */}
-  
-      <div className="mt-6 card-color  shadow-xl rounded-2xl">
-        {/* Desktop Table */}
-        <div className="hidden md:block">
-          <div className="grid  grid-cols-5 px-6 py-4 subText-color text-sm  border-b reverse-border">
-            <span>Company</span>
-            <span>Role</span>
-            <span>Date Applied</span>
-            <span>Status</span>
-            <span className="text-right">Actions</span>
-          </div>
-
-          {applications.length === 0 && (
-            <div className="flex flex-col items-center justify-center py-20 text-gray-500">
-              <div className="w-12 h-12 border border-gray-200 rounded-lg flex items-center justify-center mb-4 text-xl">
-                📁
-              </div>
-              <p>No applications found.</p>
-            </div>
-          )}
-          <div className="max-h-90 overflow-y-auto">
-          {applications.length > 0 &&
-            applications.map((app, index) => (
-              <div
-                key={index}
-                className="grid grid-cols-5 px-6 py-4 text-sm  items-center"
-              >
-                <span>{app.company}</span>
-                <span>{app.role}</span>
-                <span>{new Date(app.date).toLocaleDateString()}</span>
-                <span className={`${app.status === "Applied" ? "text-blue-400" : app.status === "Interview" ? "text-purple-400" : app.status === "Offer" ? "text-green-400" : "text-red-400"}`}>{app.status}</span>
-                <span className="text-right flex items-center justify-end gap-4">
-                  <div
-                    className="border rounded-4xl p-2"
-                    onClick={() => editApplication(app._id,index)}
-                  >
-                    <Pencil size={16} className="text-green-400" />
-                  </div>
-                 
-
-                  <div
-                    className="border rounded-4xl p-2"
-                    onClick={() => deleteApplication(app._id)}
-                  >
-                    <Trash2 size={16} className="text-red-400" />
-                  </div>
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Mobile Card Layout */}
-        <div className="md:hidden p-4 space-y-4">
-          {applications.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-16 text-gray-500">
-              <div className="w-12 h-12 border border-color rounded-lg flex items-center justify-center mb-4 text-xl">
-                📁
-              </div>
-              <p>No applications found.</p>
-            </div>
-          ) : (
-            applications.map((app, index) => (
-              <div
-                key={index}
-                className="card-color border reverse-border rounded-xl p-4 space-y-2"
-              >
-                <div className="flex justify-between">
-                  <span className="text-gray-400 text-sm">Company</span>
-                  <span className="text-sm">{app.company}</span>
-                </div>
-
-                <div className="flex justify-between">
-                  <span className="text-gray-400 text-sm">Role</span>
-                  <span  className="text-sm">{app.role}</span>
-                </div>
-
-                <div className="flex justify-between">
-                  <span className="text-gray-400 text-sm">Date</span>
-                  <span className="text-sm">{new Date(app.date).toLocaleDateString()}</span>
-                </div>
-
-                <div className="flex justify-between">
-                  <span className="text-gray-400 text-sm">Status</span>
-                  <span className={`text-sm ${app.status === "Applied" ? "text-blue-400" : app.status === "Interview" ? "text-purple-400" : app.status === "Offer" ? "text-green-400" : "text-red-400"}`}>{app.status}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <div onClick={() => deleteApplication(app._id)}>
-                    <Trash2 size={16} className="text-red-400" />
-                  </div>
-                  <div className=" " onClick={() => editApplication(app._id,index)}>
-                    <Pencil size={16} className="text-green-400" />
-                  </div>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-      </div>
+      )}
     </div>
-   
   );
 }
