@@ -154,7 +154,7 @@ function DailyAssessment() {
         </h2>
 
         <div className="space-y-3">
-          {currentQuestion.options.map(({ option }, idx) => (
+          {currentQuestion.options.map((option , idx) => (
             <button
               key={idx}
               onClick={() => handleOptionClick(option)}
