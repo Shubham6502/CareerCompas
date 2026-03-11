@@ -113,20 +113,20 @@ function Resources() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search resources..."
-            className="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700/50 rounded-xl pl-10 pr-4 py-2.5 text-[13px] text-color placeholder-gray-400/80 focus:outline-none focus:ring-2 focus:ring-black/10 dark:focus:ring-white/20 transition-all shadow-sm"
+            className="w-full bg-color border border-gray-200 dark:border-gray-700/50 rounded-xl pl-10 pr-4 py-2.5 text-[13px] text-color placeholder-gray-400/80 focus:outline-none focus:ring-2 focus:ring-black/10 dark:focus:ring-white/20 transition-all shadow-sm"
           />
         </div>
 
         {/* Segmented Filters */}
-        <div className="flex items-center p-1 rounded-xl bg-gray-100 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700/40 overflow-x-auto hide-scrollbar max-w-full">
+        <div className="flex items-center p-1 rounded-xl card-color border border-gray-200 dark:border-gray-700/40 overflow-x-auto hide-scrollbar max-w-full">
           {filters.map((filter) => (
             <button
               key={filter}
               onClick={() => setActiveFilter(filter)}
               className={`px-3.5 sm:px-4 py-1.5 rounded-lg text-[12px] sm:text-[13px] font-medium transition-all whitespace-nowrap
                 ${activeFilter === filter
-                  ? "bg-white dark:bg-gray-700 text-black dark:text-white shadow-sm border border-black/5 dark:border-white/10"
-                  : "text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
+                  ? "bg-blue-500 text-black dark:text-white shadow-sm border border-black/5 dark:border-white/10"
+                  : "text-color hover:text-gray-800 dark:hover:text-gray-200"
                 }`}
             >
               {filter}
@@ -141,7 +141,7 @@ function Resources() {
         {/* Resource Cards Column */}
         <div className="flex-1 min-w-0 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-transparent pb-4">
           {!data.length ? (
-            <div className="bg-white dark:bg-gray-900/80 border border-gray-200 dark:border-gray-700/50 rounded-2xl shadow-sm flex flex-col items-center justify-center py-20 text-center">
+            <div className="bg-color border border-gray-200 dark:border-gray-700/50 rounded-2xl shadow-sm flex flex-col items-center justify-center py-20 text-center">
               <div className="w-14 h-14 bg-gray-100 dark:bg-white/5 rounded-2xl flex items-center justify-center mb-4">
                 <BookOpen size={24} strokeWidth={1.5} className="text-gray-400" />
               </div>
@@ -153,7 +153,7 @@ function Resources() {
               {data.map((card, idx) => (
                 <div
                   key={idx}
-                  className="bg-white dark:bg-gray-900/80 border border-gray-200 dark:border-gray-700/50 rounded-xl shadow-sm hover:shadow-md dark:hover:shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:-translate-y-0.5 transition-all duration-300 p-3 sm:p-4 group"
+                  className="card-color border border-gray-200 dark:border-gray-700/50 rounded-xl shadow-sm hover:shadow-md dark:hover:shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:-translate-y-0.5 transition-all duration-300 p-3 sm:p-4 group"
                 >
                   {/* Top: Badges */}
                   <div className="flex items-center gap-2 mb-2">
@@ -172,19 +172,19 @@ function Resources() {
                     target="_blank"
                     className="block group/link"
                   >
-                    <h3 className="text-[14px] sm:text-[15px] font-semibold text-gray-900 dark:text-gray-100 leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    <h3 className="text-[14px] sm:text-[15px] font-semibold text-color  leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                       {card.title}
                       <ExternalLink size={13} className="inline ml-1.5 opacity-0 group-hover/link:opacity-60 transition-opacity -mt-0.5" />
                     </h3>
-                    <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed">
+                    <p className="mt-1.5 text-[13px] subText-color line-clamp-2 leading-relaxed">
                       {card.description}
                     </p>
                   </Link>
 
                   {/* Footer: Author + Stats */}
                   <div className="mt-3 pt-2.5 border-t border-gray-100 dark:border-gray-700/40 flex items-center justify-between">
-                    <span className="text-[12px] text-gray-400 dark:text-gray-500">
-                      by <span className="font-medium text-gray-600 dark:text-gray-300">{card.userName}</span>
+                    <span className="text-[12px] subText-color">
+                      by <span className="font-medium text-color">{card.userName}</span>
                     </span>
 
                     <div className="flex items-center gap-1">
@@ -232,19 +232,19 @@ function Resources() {
               <button
                 disabled={currentPage === 1}
                 onClick={() => setCurrentPage((p) => p - 1)}
-                className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-[13px] font-medium border border-gray-200 dark:border-gray-700/50 text-color bg-white dark:bg-gray-900/80 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors shadow-sm"
+                className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-[13px] font-medium border border-gray-200 card-color text-color bg-color hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors shadow-sm"
               >
                 <ChevronLeft size={14} /> Prev
               </button>
 
-              <span className="text-[13px] text-gray-500 dark:text-gray-400 tabular-nums">
+              <span className="text-[13px] text-color tabular-nums">
                 {currentPage} / {totalPages}
               </span>
 
               <button
                 disabled={currentPage === totalPages}
                 onClick={() => setCurrentPage((p) => p + 1)}
-                className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-[13px] font-medium border border-gray-200 dark:border-gray-700/50 text-color bg-white dark:bg-gray-900/80 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors shadow-sm"
+                className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-[13px] font-medium border border-gray-200 dark:border-gray-700/50 text-color card-color hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors shadow-sm"
               >
                 Next <ChevronRight size={14} />
               </button>
@@ -255,16 +255,16 @@ function Resources() {
         {/* ── SIDEBAR (desktop only) ── */}
         <div className="hidden lg:flex flex-col gap-4 w-52 shrink-0">
           {/* Need Help Card */}
-          <div className="bg-white dark:bg-gray-900/80 border border-gray-200 dark:border-gray-700/50 rounded-2xl p-5 shadow-sm">
+          <div className="card-color border border-gray-200 dark:border-gray-700/50 rounded-2xl p-5 shadow-sm">
             <h4 className="text-sm font-semibold text-color mb-1.5">Need Help?</h4>
-            <p className="text-[12px] text-gray-500 dark:text-gray-400 leading-relaxed">
+            <p className="text-[12px] subText-color leading-relaxed">
               Can't find what you're looking for? Request a resource from the community.
             </p>
           </div>
 
           {/* Top Contributor Card */}
           {topContributor && topContributor[0] && (
-            <div className="bg-white dark:bg-gray-900/80 border border-gray-200 dark:border-gray-700/50 rounded-2xl p-5 shadow-sm">
+            <div className="card-color border border-gray-200 dark:border-gray-700/50 rounded-2xl p-5 shadow-sm">
               <div className="flex items-center gap-2 mb-3">
                 <Trophy size={15} className="text-amber-500" />
                 <h4 className="text-sm font-semibold text-color">Top Contributor</h4>
@@ -272,7 +272,7 @@ function Resources() {
 
               <div className="flex items-center gap-3 mb-3">
                 <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-100 to-amber-200 dark:from-amber-900/40 dark:to-amber-800/30 border border-amber-200 dark:border-amber-700/40 flex items-center justify-center shrink-0">
-                  <span className="text-sm font-bold text-amber-600 dark:text-amber-400">
+                  <span className="text-sm font-bold text-white">
                     {topContributor[0]?.userName?.charAt(0)?.toUpperCase() || "?"}
                   </span>
                 </div>
