@@ -4,6 +4,7 @@ import { use, useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
 import { useNavigate,Navigate } from "react-router-dom";
 
+
 const Roadmap = () => {
   const { user } = useUser();
   if(!user){
@@ -12,10 +13,10 @@ const Roadmap = () => {
 
   const [roadmap, setRoadmap] = useState([]);
   const { isLoaded } = useUser();
+  const [loading,setLoading]=useState(true);
   const clerkId = user?.id;
   const navigate = useNavigate();
   const [progress, setProgress] = useState({});
-  const [loading,setLoading]=useState(true);
 
   
   useEffect(() => {
@@ -52,16 +53,11 @@ const Roadmap = () => {
       alert("locked");
     }
   };
-   if(loading){
+  if(loading && progress.domain){
     return(  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
       <div className="w-12 h-12 border-4 border-blue-500/20 border-t-blue-600 rounded-full animate-spin"></div>
     </div>)
   }
-  
-  if(!progress.domain && !loading){
-    return <div className="text-center py-10">Please complete the Assessment First</div>
-  }
- 
 
   return (
     /* OUTER CARD (NO SCROLL HERE) */
@@ -121,28 +117,28 @@ const Roadmap = () => {
               {/* Node */}
               <div className="absolute left-1/2 -translate-x-1/2 z-10">
                 <div
-                  className={`w-10 h-10 rounded-full flex items-center justify-center shadow-lg
+                  className={`w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all
                     ${
                       item === "completed"
-                        ? "bg-green-500"
+                        ? "bg-green-500 text-white"
                         : item === "active"
-                        ? "bg-blue-500 animate-pulse"
+                        ? "bg-blue-600 text-white animate-[pulse_2s_ease-in-out_infinite] shadow-[0_0_20px_rgba(37,99,235,0.6)] border-2 border-white dark:border-gray-900"
                         : item === "incomplete"
-                        ? "bg-green-900/50"
-                        : "bg-amber-600"
+                        ? "bg-gray-200 dark:bg-gray-800 text-gray-500 border border-gray-300 dark:border-gray-700"
+                        : "bg-gray-100 dark:bg-gray-900 text-gray-400 border border-gray-200 dark:border-gray-800"
                     }`}
                 >
                   {item === "completed" && (
-                    <CheckCircle size={18} className="text-color" />
+                    <CheckCircle size={18} />
                   )}
                   {item === "locked" && (
-                    <Lock size={16} className="text-blue-300" />
+                    <Lock size={16} />
                   )}
                   {item === "incomplete" && (
-                    <CircleDotDashed size={16} className="text-color" />
+                    <CircleDotDashed size={16} />
                   )}
                   {item === "active" && (
-                    <span className="w-3 h-3 bg-color rounded-full" />
+                    <span className="w-3 h-3 bg-white rounded-full" />
                   )}
                 </div>
               </div>
@@ -150,19 +146,19 @@ const Roadmap = () => {
               {/* Card */}
               <div
                 onClick={() => handleClick(daysItem)}
-                className={`w-64 px-5 py-3 rounded-xl border text-sm transition
+                className={`w-64 px-5 py-4 rounded-2xl border text-sm transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:shadow-lg
                   ${
                     item === "completed"
-                      ? "bg-green-500 border-green-600/30 text-color"
+                      ? "bg-green-500/10 border-green-500/30 text-green-700 dark:text-green-400 hover:border-green-500/60"
                       : item === "active"
-                      ? "bg-blue-600/70 border-blue-500/30 text-color"
+                      ? "bg-blue-600/10 border-blue-500/50 text-blue-700 dark:text-blue-400 shadow-[0_4px_20px_rgba(37,99,235,0.15)] hover:border-blue-500/80"
                       : item === "incomplete"
-                      ? "bg-green-900/50 text-color border-green-700/20"
-                      : "bg-amber-200/20 border-amber-500 text-color"
+                      ? "subcard-color border card-border text-color hover:border-gray-400 dark:hover:border-gray-500"
+                      : "bg-gray-50/50 dark:bg-gray-800/30 border border-gray-200 dark:border-gray-800 text-gray-400 dark:text-gray-500 opacity-70"
                   }`}
               >
-                <p className="text-xs opacity-70">Day {daysItem.day}</p>
-                <p className="font-medium">{daysItem.topic}</p>
+                <p className="text-xs font-semibold tracking-wider uppercase opacity-80 mb-1">Day {daysItem.day}</p>
+                <p className="font-bold text-base leading-tight">{daysItem.topic}</p>
               </div>
             </div>
           );
