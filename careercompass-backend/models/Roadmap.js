@@ -101,5 +101,5 @@ const roadmapSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
+roadmapSchema.index({ domain: 1, "days.day": 1 })
 export default mongoose.model("Roadmap", roadmapSchema);

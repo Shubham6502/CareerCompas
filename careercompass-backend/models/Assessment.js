@@ -27,6 +27,5 @@ const AssessmentSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-roadmapSchema.index({ domain: 1 });
-roadmapSchema.index({day:1})
+
 export default mongoose.model("Assessment", AssessmentSchema);

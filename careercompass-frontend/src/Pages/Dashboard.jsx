@@ -77,7 +77,7 @@ const Dashboard = () => {
         }
         setLoading(false);
       });
-  }, [domain, day]);
+  }, [domain, day,refreshProgress]);
 
   const handleTaskClick = async (task) => {
     try {
