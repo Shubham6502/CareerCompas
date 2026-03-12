@@ -98,7 +98,7 @@ function DailyAssessment() {
       }
     });
   }, [isLoaded]);
-  console.log(score);
+  console.log(completedTasks);
   const canRetake = () => {
     if (!assessment?.lastAttemptAt) return true;
 
