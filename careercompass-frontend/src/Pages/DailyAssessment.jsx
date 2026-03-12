@@ -110,20 +110,20 @@ function DailyAssessment() {
     return diff >= 2;
   };
 
-  useEffect(() => {
-     if(day==0){
-      return;
-    }
-    axios.get("https://careercompas.onrender.com/api/DailyAssessment/get", {
-      params: { day },
-    })
-    .then((response) => {
-      setQuestions(response.data);
-    })
-    .catch((error) => {
-      console.error("Error fetching assessment:", error);
-    });
-  }, [day]);
+ useEffect(() => {
+
+  const dayNumber = Number(day);
+  console.log(dayNumber);
+  if (!dayNumber) return;
+
+  axios.get("https://careercompas.onrender.com/api/DailyAssessment/get", {
+    params: { day: dayNumber },
+  })
+  .then((response) => {
+    setQuestions(response.data);
+  });
+
+}, [day]);
 
   if (score>60) {
     return (
