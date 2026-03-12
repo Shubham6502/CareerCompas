@@ -122,7 +122,8 @@ function DailyAssessment() {
   .then((response) => {
     setQuestions(response.data);
   });
-
+console.log(questions)
+   console.log(questions.length);
 }, [day]);
 
   if (score>60) {
