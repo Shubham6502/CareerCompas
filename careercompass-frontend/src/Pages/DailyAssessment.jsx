@@ -111,6 +111,9 @@ function DailyAssessment() {
   };
 
   useEffect(() => {
+     if(day==0){
+      return;
+    }
     axios.get("https://careercompas.onrender.com/api/DailyAssessment/get", {
       params: { day },
     })
