@@ -1,6 +1,6 @@
-import Sidebar from "../components/Navbar/Sidebar";
-import MobileNav from "../components/Navbar/Mobilenav";
-import MobileHeader from "../components/Navbar/MobileHeader";
+import Sidebar from "../components/Navbar/Sidebar.jsx";
+import MobileNav from "../components/Navbar/MobileNav.jsx";
+import MobileHeader from "../components/Navbar/MobileHeader.jsx";
 import { useEffect, useState } from "react";
 
 const AppLayout = ({ children }) => {

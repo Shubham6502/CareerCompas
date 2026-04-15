@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../hooks/useAuth.js";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../auth.context.jsx";
 import { useNavigate } from "react-router-dom";

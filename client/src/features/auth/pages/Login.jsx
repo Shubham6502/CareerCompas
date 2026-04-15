@@ -5,7 +5,7 @@ import { useContext } from "react";
 import { useAuthContext } from "../auth.context.jsx";
 import {Eye,EyeOff,Check,Sun,Moon,Sparkle} from "lucide-react"
 import { useNavigate } from "react-router-dom";
-import { useTheme } from "../../../Context/ThemeContext.jsx";
+import { useTheme } from "../../../context/ThemeContext.jsx";
 
 const GoogleIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24">

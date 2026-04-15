@@ -2,9 +2,9 @@ import { Plus, Trash2, Pencil, Search, Briefcase, Building2, Calendar, MapPin, E
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useUser } from "@clerk/clerk-react";
-import TrackApplicationModal from "../modals/TrackApplicationModal";
-import EditTrackApplication from "../modals/EditTrackApplication";
-import { useJobTracker } from "../hooks/useJobTracker";
+import TrackApplicationModal from "../modals/TrackApplicationModal.jsx";
+import EditTrackApplication from "../modals/EditTrackApplication.jsx";
+import { useJobTracker } from "../hooks/useJobTracker.js";
 
 export default function JobTracker() {
   
