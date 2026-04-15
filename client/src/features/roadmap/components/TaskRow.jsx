@@ -63,19 +63,21 @@ export default function TaskRow({ task, locked, weekColor, onToggle, index ,show
         ${done ? "subText-color" : "text-color group-hover:subText-color"}`}
       >
 
-        <span className="sm:hidden">
-          {task.title.length > 25
-            ? task.title.slice(0, 23) + "..."
-            : task.title}
-        </span>
-        <span className="hidden sm:inline">
-          {!showUrl && task.title}
-          {showUrl && (
-            <Link to={task.resourceUrl} target="_blank" className="hover:text-blue-400 ">
-              {task.title}
-            </Link>
-          )}
-        </span>
+        <Link
+  to={task.resourceUrl}
+  target="_blank"
+  className="hover:text-blue-400"
+>
+  <span className="sm:hidden">
+    {task.title.length > 25
+      ? task.title.slice(0, 23) + "..."
+      : task.title}
+  </span>
+
+  <span className="hidden sm:inline">
+    {task.title}
+  </span>
+</Link>
       </span>
 
       {/* meta — hide on smallest screens */}

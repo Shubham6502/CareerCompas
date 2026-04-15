@@ -43,7 +43,6 @@ export default function UserResourceCard({ card, onEdit, onDelete }) {
           <button
             onClick={() => {
               setEditModalOpen(true);
-              onEdit(card);
             }}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-medium bg-blue-500/10 text-blue-500 dark:text-blue-400 border border-blue-500/20 hover:bg-blue-500/20 transition-all duration-200"
           >

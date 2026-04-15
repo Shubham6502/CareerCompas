@@ -38,7 +38,8 @@ useEffect(() => {
     }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     onEdit(formData);
     onClose();
   };

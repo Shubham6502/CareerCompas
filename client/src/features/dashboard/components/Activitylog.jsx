@@ -86,9 +86,9 @@ export default function ActivityLog({ progress, activityLogs }) {
 // }, []);
 
   // Auto-scroll to bottom
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [visible]);
+  // useEffect(() => {
+  //   bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  // }, [visible]);
 
   return (
     <motion.div

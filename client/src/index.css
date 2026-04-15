@@ -34,35 +34,26 @@ body {
 
 /* ----- Premium Base Backgrounds ----- */
 .bg-color {
-  background:#f8fafc;
-  color: #0F172A;
-  transition: background 0.5s ease;
+  background: #f1f5f9; /* softer than white */
+  color: #0f172a;
 }
 
 .dark .bg-color {
-  /* background: radial-gradient(circle at top right, #111827 0%, #030712 100%); */
-  background: #0d1320;
-  color: #F8FAFC;
+  background: #0b1220; /* deeper + premium */
+  color: #e2e8f0;
 }
 
 /* ----- Premium Cards (Glassmorphism & Soft Shadows) ----- */
 .card-color {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  box-shadow: 0 4px 24px -2px rgba(15, 23, 42, 0.03), 0 0 1px rgba(15, 23, 42, 0.08);
-  color: #0F172A;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
 }
 
 .dark .card-color {
-  background:#161b29;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
-  color: #F8FAFC;
+  background: #111827; /* cleaner than current */
+  border: 1px solid #1f2937;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 
@@ -82,33 +73,31 @@ body {
 
 /* ----- Typography Colors ----- */
 .text-color {
-  color: #0F172A;
+  color: #0f172a;
 }
 
 .dark .text-color {
-  color: #F1F5F9;
+  color: #f1f5f9;
 }
 
+
 .subText-color {
-  color: #475569;
+  color: #64748b;
 }
 
 .dark .subText-color {
-  color: #94A3B8;
+  color: #9ca3af;
 }
 
 /* ----- Subcards & Child Elements ----- */
 .subcard-color {
-   background: rgba(222, 223, 225, 0.5);
-  
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(15, 23, 42, 0.05);
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
 }
 
 .dark .subcard-color {
- background: #1e2430;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: #1f2937;
+  border: 1px solid #374151;
 }
 /* ----- General Layout Borders ----- */
 .card-border {
