@@ -1,13 +1,13 @@
 import { use, useEffect, useState } from 'react';
-import EarnedBadges from '../components/EarnedBadges';
-import StatsRow from '../components/StatsRow';
-import ProfileHeader from '../components/ProfileHeader';
-import SharedResources from '../components/SharedResources';
-import ActiveModule from '../components/ActiveModule';
-import CourseProgress from '../components/CourseProgress';
-import ExperiencePortfolio from '../components/ExperiencePortfolio';
-import EducationPortfolio from '../components/EducationPortfolio';
-import KnowledgeHeatmap from '../components/KnowledgeHeatmap';
+import EarnedBadges from '../components/EarnedBadges.jsx';
+import StatsRow from '../components/StatsRow.jsx';
+import ProfileHeader from '../components/ProfileHeader.jsx';
+import SharedResources from '../components/SharedResources.jsx';
+import ActiveModule from '../components/ActiveModule.jsx';
+import CourseProgress from '../components/CourseProgress.jsx';
+import ExperiencePortfolio from '../components/ExperiencePortfolio.jsx';
+import EducationPortfolio from '../components/EducationPortfolio.jsx';
+import KnowledgeHeatmap from '../components/KnowledgeHeatmap.jsx';
 import {useProfile} from '../hooks/useProfile.js';
 
 const PROFILE_DATA =  {

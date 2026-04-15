@@ -13,16 +13,16 @@ import {
 } from "../services/dashboard.services.js";
 
 import { useDashboard } from "../hooks/useDashboard.js";
-// import { DashboardContext } from "../Dashboard.context.jsx";
+
 
 // ── Component imports ────────────────────────────────────────────────────────
 import DashboardHeader from "../components/Dashboardheader.jsx";
-import QuickActions from "../components/QuickActions.jsx";
+import QuickActions from "../components/Quickactions.jsx";
 import StatsGrid from "../components/Statsgrid.jsx";
 import TodaysMission from "../components/Todaysmission.jsx";
-import ActivityLog from "../components/ActivityLog.jsx";
-import CodingActivity from "../components/CodingActivity.jsx";
-import SkillRadar from "../components/SkillRadar.jsx";
+import ActivityLog from "../components/Activitylog.jsx";
+import CodingActivity from "../components/Codingactivity.jsx";
+import SkillRadar from "../components/Skillradar.jsx";
 import Leaderboard from "../components/Leaderboard.jsx";
 
 // ── Constants ────────────────────────────────────────────────────────────────

@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CreateCommunityModal from "../modals/CreateCommunityModal";
-import JoinCommunityModal from "../modals/JoinCommunityModal";
+import CreateCommunityModal from "../modals/CreateCommunityModal.jsx";
+import JoinCommunityModal from "../modals/JoinCommunityModal.jsx";
 import {useUser} from "@clerk/clerk-react"
 import axios from "axios";
 

@@ -1,7 +1,7 @@
 import Card from "./Card";
-import SectionLabel from "./SectionLabel";
-import AddExperienceModal from "../modals/AddExperienceModal";
-import EditExperienceModal from "../modals/EditExperienceModal";
+import SectionLabel from "./SectionLabel.jsx";
+import AddExperienceModal from "../modals/AddExperienceModal.jsx";
+import EditExperienceModal from "../modals/EditExperienceModal.jsx";
 import {Pencil} from 'lucide-react';
 import { useState } from "react";
 

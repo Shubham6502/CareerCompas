@@ -1,5 +1,5 @@
 import Card from "./Card";
-import SectionLabel from "./SectionLabel";
+import SectionLabel from "./SectionLabel.jsx";
 export default function StatsRow({ rankData}) {
   
   return (

@@ -1,5 +1,5 @@
 import Card from "./Card";
-import SectionLabel from "./SectionLabel";
+import SectionLabel from "./SectionLabel.jsx";
 import { useNavigate } from "react-router-dom";
 export default function SharedResources({ data,latestResource, count }) {
 

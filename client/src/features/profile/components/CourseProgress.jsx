@@ -1,4 +1,4 @@
-import Card from "./Card";
+import Card from "./Card.jsx";
 import { useState } from "react";
 import { useRoadmapContext } from "../../roadmap/roadmap.context.jsx";
 export default function CourseProgress({ courses}) {

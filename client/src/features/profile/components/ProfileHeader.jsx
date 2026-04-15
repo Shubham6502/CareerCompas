@@ -1,5 +1,5 @@
 import Card from "./Card";
-import SectionLabel from "./SectionLabel";
+import SectionLabel from "./SectionLabel.jsx";
 //importing modal components
 import EditProfileModal from '../modals/EditProfileModal.jsx';
 import EditProfilePictureModal from '../modals/EditProfilePictureModal.jsx';

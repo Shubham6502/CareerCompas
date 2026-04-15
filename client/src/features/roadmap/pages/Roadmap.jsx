@@ -1,8 +1,8 @@
 import { useState, useMemo, useCallback ,useEffect} from "react";
-import Hero from "../components/Hero";
-import StatsRow from "../components/StatsRow";
-import WeekSection from "../components/WeekSection";
-import { useRoadmap } from "../hooks/useRoadmap";
+import Hero from "../components/Hero.jsx";
+import StatsRow from "../components/StatsRow.jsx";
+import WeekSection from "../components/WeekSection.jsx";
+import { useRoadmap } from "../hooks/useRoadmap.js";
 import PageLoader from "../../../components/Loaders/PageLoader.jsx";
 import { useRoadmapContext } from "../roadmap.context.jsx";
 

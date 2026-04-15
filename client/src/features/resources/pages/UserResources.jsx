@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { useAuthContext } from "../../auth/auth.context";
-import PageLoader from "../../../components/Loaders/PageLoader";
-import { useUserResources } from "../hooks/useUserResources";
-import ResourcesHeader from "../components/ResourcesHeader";
-import ResourceFilters from "../components/ResourceFilters";
-import ResourceList from "../components/ResourceList";
-import ResourcePagination from "../components/ResourcePagination";
-import ResourcesForm from "../modals/ResourcesForm";
-import {useResources} from "../hooks/useResources";
+import { useAuthContext } from "../../auth/auth.context.js";
+import PageLoader from "../../../components/Loaders/PageLoaderjsx";
+import { useUserResources } from "../hooks/useUserResources.js";
+import ResourcesHeader from "../components/ResourcesHeaderjsx";
+import ResourceFilters from "../components/ResourceFiltersjsx";
+import ResourceList from "../components/ResourceListjsx";
+import ResourcePagination from "../components/ResourcePaginationjsx";
+import ResourcesForm from "../modals/ResourcesFormjsx";
+import {useResources} from "../hooks/useResources.js";
 
 
 export default function Resources() {

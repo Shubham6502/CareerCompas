@@ -1,5 +1,5 @@
-import Card from "./Card";
-import SectionLabel from "./SectionLabel";
+import Card from "./Card.jsx";
+import SectionLabel from "./SectionLabel.jsx";
 import {useRoadmapContext} from "../../roadmap/roadmap.context.jsx";
 export default function ActiveModule({ module, onContinue, }) {
 

@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Trophy } from "lucide-react";
 import { useEffect, useMemo } from "react";
-import { useDashboardContext } from "../Dashboard.context";
+import { useDashboardContext } from "../Dashboard.context.jsx";
 
 const RANK_COLORS = {
   1: "bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-400",

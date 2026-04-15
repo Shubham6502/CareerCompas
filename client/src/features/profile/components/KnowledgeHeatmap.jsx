@@ -1,5 +1,5 @@
 import Card from "./Card";
-import SectionLabel from "./SectionLabel";
+import SectionLabel from "./SectionLabel.jsx";
 export default function KnowledgeHeatmap({ data }) {
   const COLS = 52;
   const ROWS = 7;

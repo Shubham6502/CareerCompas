@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Sparkles } from 'lucide-react';
-import { TIMELINES } from '../data/onboardingData';
+import { TIMELINES } from '../data/onboardingData.js';
 
 
 

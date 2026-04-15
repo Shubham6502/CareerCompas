@@ -1,9 +1,9 @@
 import { useState } from "react";
 import Card from "./Card";
-import SectionLabel from "./SectionLabel";
+import SectionLabel from "./SectionLabel.jsx";
 import {Pencil} from 'lucide-react';
-import AddEducationModal from '../modals/AddEducationModal'
-import EditEducationModal from '../modals/EditEducationModal'
+import AddEducationModal from '../modals/AddEducationModal.jsx'
+import EditEducationModal from '../modals/EditEducationModal.jsx'
 
 
 
@@ -34,6 +34,7 @@ export default function EducationPortfolio({ education,onSave,onClose,onEdit,onD
     const endB = b.end === "Present" ? new Date() : new Date(b.end);
     return endB - endA;
   });
+  
   return (
     <>
     <Card>

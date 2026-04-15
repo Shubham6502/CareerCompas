@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
-import SelectionCard from '../components/SelectionCard';
-import { EXPERIENCE_LEVELS } from '../data/onboardingData';
+import SelectionCard from '../components/SelectionCard.jsx';
+import { EXPERIENCE_LEVELS } from '../data/onboardingData.js';
 
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.07 } } };

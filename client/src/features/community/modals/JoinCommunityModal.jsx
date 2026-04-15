@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import { X } from "lucide-react";
-import { CommunityContext } from "../../../Context/CommunityContext";
+import { CommunityContext } from "../../../context/CommunityContext";
 
 export default function JoinCommunityModal({ close }) {
   const [code, setCode] = useState("");
