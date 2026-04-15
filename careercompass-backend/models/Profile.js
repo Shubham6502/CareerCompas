@@ -1,0 +1,73 @@
+import mongoose from "mongoose";
+const ProfileSchema=new mongoose.Schema({
+userId:{
+    type:String,
+},
+firstname:{
+    type:String
+},
+lastname:{
+    type:String
+},
+email:{
+    type:String,
+},
+profilepicture:{
+     type:String
+},
+birthdate:{
+    type:Date
+    
+},
+education:[{
+    college:{
+        type:String,
+        default:"",
+    },
+    field:{
+        type:String,
+        default:"",
+    },
+    start:{
+        type:Date,
+    },
+    end:{
+        type:Date
+    },
+    score:{
+        type:Number,
+    }
+}
+],
+city:{
+    type:String,
+     default:"",
+},
+gender:{
+    type:String,
+     default:"",
+},
+bio:{
+    type:String,
+     default:"",
+},
+joineddate:{
+    type:Date
+},
+links:{
+   linkedin:{
+    type:String,
+    default:""
+   },
+   github:{
+    type:String,
+    default:""
+   },
+   portfolio:{
+    type:String,
+    default:""
+   },
+},
+
+})
+export default mongoose.model("Profile",ProfileSchema);
