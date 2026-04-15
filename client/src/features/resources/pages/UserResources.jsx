@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { useAuthContext } from "../../auth/auth.context.js";
-import PageLoader from "../../../components/Loaders/PageLoaderjsx";
+import { useAuthContext } from "../../auth/auth.context.jsx";
+import PageLoader from "../../../components/Loaders/PageLoader.jsx";
 import { useUserResources } from "../hooks/useUserResources.js";
-import ResourcesHeader from "../components/ResourcesHeaderjsx";
-import ResourceFilters from "../components/ResourceFiltersjsx";
-import ResourceList from "../components/ResourceListjsx";
-import ResourcePagination from "../components/ResourcePaginationjsx";
-import ResourcesForm from "../modals/ResourcesFormjsx";
+import ResourcesHeader from "../components/ResourcesHeader.jsx";
+import ResourceFilters from "../components/ResourceFilters.jsx";
+import ResourceList from "../components/ResourceList.jsx";
+import ResourcePagination from "../components/ResourcePagination.jsx";
+import ResourcesForm from "../modals/ResourcesForm.jsx";
 import {useResources} from "../hooks/useResources.js";
 
 

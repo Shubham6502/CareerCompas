@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { useAuthContext } from "../../auth/auth.context.js";
+import { useAuthContext } from "../../auth/auth.context.jsx";
 import PageLoader from "../../../components/Loaders/PageLoader.jsx";
 import { useResources } from "../hooks/useResources.js";
 import ResourcesHeader from "../components/ResourcesHeade.jsxr";
