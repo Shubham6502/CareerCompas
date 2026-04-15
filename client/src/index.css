@@ -1,0 +1,301 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+
+
+body {
+  font-family: 'JetBrains Mono', monospace;
+}
+/* @tailwind utilities; */
+
+@theme {
+  --color-accent: #5b52f5;
+  --color-accent-light: #eeecff;
+  --color-accent-text: #3b33cc;
+  --color-accent-hover: #4740e0;
+  --font-head: 'Plus Jakarta Sans', sans-serif;
+  /* --font-body: 'DM Sans', sans-serif; */
+}
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(8, 1, 1, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(5, 0, 0, 0.06) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* FIXED DARK MODE */
+.dark .grid-bg {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+
+/* ----- Premium Base Backgrounds ----- */
+.bg-color {
+  background:#f8fafc;
+  color: #0F172A;
+  transition: background 0.5s ease;
+}
+
+.dark .bg-color {
+  /* background: radial-gradient(circle at top right, #111827 0%, #030712 100%); */
+  background: #0d1320;
+  color: #F8FAFC;
+}
+
+/* ----- Premium Cards (Glassmorphism & Soft Shadows) ----- */
+.card-color {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 24px -2px rgba(15, 23, 42, 0.03), 0 0 1px rgba(15, 23, 42, 0.08);
+  color: #0F172A;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark .card-color {
+  background:#161b29;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  color: #F8FAFC;
+}
+
+
+
+/* Interactive hover state wrapper classes */
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px -4px rgba(15, 23, 42, 0.08), 0 0 1px rgba(15, 23, 42, 0.08);
+}
+
+.dark .card-hover:hover {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.6) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.4), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+}
+
+/* ----- Typography Colors ----- */
+.text-color {
+  color: #0F172A;
+}
+
+.dark .text-color {
+  color: #F1F5F9;
+}
+
+.subText-color {
+  color: #475569;
+}
+
+.dark .subText-color {
+  color: #94A3B8;
+}
+
+/* ----- Subcards & Child Elements ----- */
+.subcard-color {
+   background: rgba(222, 223, 225, 0.5);
+  
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(15, 23, 42, 0.05);
+}
+
+.dark .subcard-color {
+ background: #1e2430;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+/* ----- General Layout Borders ----- */
+.card-border {
+  border: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.dark .card-border {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.reverse-bg {
+  background-color: #0F172A;
+  color: #F8FAFC;
+}
+
+.dark .reverse-bg {
+  background-color: #F8FAFC;
+  color: #0F172A;
+}
+
+.reverse-border {
+  border: 1px solid rgba(15, 23, 42, 0.2);
+}
+
+.dark .reverse-border {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* ----- Premium Buttons ----- */
+.btn-primary {
+  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+  color: #FFFFFF;
+  box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+  transform: translateY(-2px);
+  filter: brightness(110%);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  color: #0F172A;
+  backdrop-filter: blur(8px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark .btn-secondary {
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #F8FAFC;
+}
+
+.btn-secondary:hover {
+  background: rgba(241, 245, 249, 1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px 0 rgba(15, 23, 42, 0.05);
+}
+
+.dark .btn-secondary:hover {
+  background: rgba(51, 65, 85, 0.8);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* .nav {
+  background: linear-gradient(
+    270deg,
+    rgba(255, 255, 255, 0.2),
+    rgba(240, 240, 240, 0.6),
+    rgba(255, 255, 255, 0.2)
+  );
+
+  background-size: 400% 400%;
+  animation: waterFlow 10s ease infinite;
+}
+
+@keyframes waterFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+} */
+
+
+
+.loader {
+  width: 16px;
+  height: 16px;
+  border: 3px solid #ffffff;
+  border-top: 3px solid transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+/* ===== GLOBAL SCROLLBAR ===== */
+.scroll-container::-webkit-scrollbar {
+  height: 6px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #22222c, #2d1d52);
+  border-radius: 10px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #534f7c, #593890);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Chrome / Edge / Safari */
+::-webkit-scrollbar {
+  width: 0px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(37, 99, 235, 0.4);
+  /* blue */
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Dark Theme button*/
+.theme-switch {
+  width: 52px;
+  height: 26px;
+  background-color: #6e7d9b;
+  border-radius: 999px;
+  padding: 3px;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background-color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.35s ease, background-color 0.25s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Positions */
+.thumb.light {
+  transform: translateX(0);
+  color: #F59E0B;
+  /* Sun */
+}
+
+.thumb.dark {
+  transform: translateX(26px);
+  color: #6366F1;
+  /* Moon */
+}
+
+/* Dark mode track */
+
+.dark .theme-switch {
+  background-color: #3e4a5b;
+}
+
+
+/* Error Bounce Animation */
+@keyframes bounceIn {
+  0%   { transform: scale(0.8); opacity: 0; }
+  60%  { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1);   opacity: 1; }
+}
