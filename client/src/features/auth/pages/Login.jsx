@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {useAuth} from "../hooks/useAuth.js";
 import {Link} from "react-router-dom";
 import { useContext } from "react";
@@ -6,6 +6,8 @@ import { useAuthContext } from "../auth.context.jsx";
 import {Eye,EyeOff,Check,Sun,Moon,Sparkle} from "lucide-react"
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../../../context/ThemeContext.jsx";
+
+
 
 const GoogleIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24">
@@ -30,17 +32,29 @@ const stats = [
 ];
 
 export default function Login() {
-  const { loading, user } = useAuthContext();
+  const { user } = useAuthContext();
   const [dark, setDark] = useState(false);
   const [showPass, setShowPass] = useState(false);
   const [remember, setRemember] = useState(false);
   const {isDarkMode, setIsDarkMode} = useTheme();
+  
 
   dark !== isDarkMode && setDark(isDarkMode);
   const [form, setForm] = useState({ email: "", password: "" });
-  const {handleLogin,error,setError} = useAuth();
+  const {handleLogin,error,setError,getUser,loading} = useAuth();
   const navigate=useNavigate();
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+
+  useEffect(() => {
+    const info=async () => {
+      const responce= await getUser();
+      if(responce.user){
+      navigate("/dashboard");
+    }
+    }
+    info();
+        
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -48,9 +62,10 @@ export default function Login() {
       setError("Please fill in all fields");
       return;
     }
-
+    
+     console.log("Attempting login at", new Date().toLocaleTimeString());
      handleLogin(form.email, form.password);
-
+     console.log("Login process completed at", new Date().toLocaleTimeString());
      if(user){
       navigate("/dashboard");
      }
@@ -72,13 +87,13 @@ export default function Login() {
     : "bg-white border-gray-200 text-gray-800 hover:bg-gray-50";
   const statCard = dark ? "bg-white/10" : "bg-white/20";
 
-  if(loading){
-    return (
-      <div className={`min-h-screen flex items-center justify-center ${bg} transition-colors duration-300`}>
-        <div className="text-gray-500 text-lg">Loading...</div>
-      </div>
-    );
-  }
+  // if(loading){
+  //   return (
+  //     <div className={`min-h-screen flex items-center justify-center ${bg} transition-colors duration-300`}>
+  //       <div className="text-gray-500 text-lg">Loading...</div>
+  //     </div>
+  //   );
+  // }
   return (
     <div className={`min-h-screen flex ${bg} transition-colors duration-300`}>
       {/* Left Panel */}
@@ -209,7 +224,7 @@ export default function Login() {
             </div>
 
             {/* Remember me */}
-            <label className="flex items-center gap-3 cursor-pointer">
+            {/* <label className="flex items-center gap-3 cursor-pointer">
               <div
                 onClick={() => setRemember(!remember)}
                 className={`w-4 h-4 rounded flex items-center justify-center flex-shrink-0 border transition-colors ${
@@ -219,13 +234,14 @@ export default function Login() {
                 {remember && <Check color="#ffffff"/>}
               </div>
               <span className={`text-sm ${subtext}`}>Remember me for 30 days</span>
-            </label>
+            </label> */}
 
             <button
             onClick={handleSubmit}
+            disabled={loading}
               className="w-full py-3 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg text-sm font-semibold transition-colors duration-200 flex items-center justify-center gap-2 mt-1"
             >
-              Sign In
+              {loading ? "Signing in..." : "Sign In"}
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
               </svg>

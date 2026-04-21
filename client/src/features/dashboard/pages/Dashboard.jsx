@@ -101,7 +101,7 @@ export default function Dashboard() {
 
  
   const {user:authenticatedUser,isInitialized: isAuthReady } = useAuthContext();
-  console.log("Authenticated User in Dashboard:", authenticatedUser._id, "Auth Ready:", isAuthReady);
+ 
 
   const [roadmapDays, setRoadmapDays] = useState([]);
   const [selectedDay, setSelectedDay] = useState(1);

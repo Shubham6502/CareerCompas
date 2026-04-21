@@ -45,7 +45,7 @@ export const register = async (req, res) => {
                 createdAt: new Date(),
             
         }, });
-        res.status(201).json({ message: "User registered successfully", user:{ userId:newUser._id,email:newUser.email,displayName:newUser.displayName,token } });
+        res.status(201).json({ message: "User registered successfully", user:{ _id:newUser._id,email:newUser.email,displayName:newUser.displayName,token } });
     } catch (error) {
         console.error("Error registering user:", error);
         res.status(500).json({ message: "Internal server error" });
@@ -93,7 +93,7 @@ export const login = async (req, res) => {
                new: true
              }
            );
-        res.json({ message: "Login successful", user:{ email:user.email,displayName:user.displayName,token ,userId:user._id} });
+        res.json({ message: "Login successful", user:{ email:user.email,displayName:user.displayName,token ,_id:user._id} });
         
 
         

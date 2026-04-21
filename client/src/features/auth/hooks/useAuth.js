@@ -2,7 +2,7 @@ import { login, register,logout,getme } from "../services/auth.services";
 import { useContext ,useState} from "react";
 import { useAuthContext } from "../auth.context.jsx";
 import { useNavigate } from "react-router-dom";
-import Login from "../pages/Login.jsx";
+
 
 
 
@@ -10,6 +10,7 @@ export const useAuth = () => {
   const {user,useLogin,getuserData,useLogout} = useAuthContext();
 
   const [error, setError] = useState(null);
+  const[loading,setLoading]=useState(false);
   const navigate = useNavigate();
 
 
@@ -22,17 +23,20 @@ export const useAuth = () => {
 
 
   const handleLogin = async (email, password) => {
+    setLoading(true);
     try {
+
       const response = await login(email, password);
       console.log("Login successful:", response);
       useLogin(response);
-     setError(null);
+      setError(null);
       navigate("/dashboard");
-
+      setLoading(false);
       return response;
     } catch (error) {
       console.error("Login failed:", error);
       setError("Invalid email or password");
+      setLoading(false);
       throw error;
     }
     
@@ -59,5 +63,5 @@ export const useAuth = () => {
     navigate("/login");
   };
 
-  return { handleLogin, handleRegister, handleLogout,error ,setError};
+  return { handleLogin, handleRegister, handleLogout,error,getUser,setError,loading};
 };

@@ -93,7 +93,7 @@ console.log("Processed leaderboard data:", leaderboardData);
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35 }}
-      className="bg-white dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/10 shadow-sm p-5 mt-4"
+      className="card-color rounded-2xl border border-slate-100 dark:border-white/10 shadow-sm p-5 mt-4"
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
