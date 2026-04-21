@@ -29,7 +29,7 @@ export const AuthContextProvider = ({ children }) => {
   
 
   const useLogin = (userData) => {
-    setUser(userData);
+    setUser(userData.user);
     navigate("/dashboard");
 
   };
