@@ -1,6 +1,6 @@
 import axios from "axios";
-
-const BASE = "https://careercompas.onrender.com/api/resources";
+const API_URL = process.env.API_URL || "http://localhost:5000/api";
+const BASE = `${API_URL}/resources`;
 
 
 export const fetchResources = async (page, search, subject) => {

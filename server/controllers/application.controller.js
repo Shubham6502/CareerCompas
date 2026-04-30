@@ -24,7 +24,9 @@ export const getApplications = async (req, res) => {
   }
   try {
     const applications = await getAllApplications(userId);
-
+    
+    console.log("Fetched applications:", applications);
+    
     res.status(200).json(applications.applications);
   } catch (error) {
     console.error("Error fetching applications:", error);

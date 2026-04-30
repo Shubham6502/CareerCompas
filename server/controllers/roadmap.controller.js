@@ -79,7 +79,7 @@ const lastCompletedDay = taskCompletionDoc.startedAt
           .filter(Boolean),
       };
     });
-    res.json({
+    res.status(200).json({
       success: true,
       roadmapDetails:{
         domain: roadmapData.domain,

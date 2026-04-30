@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const API_URL="https://careercompas.onrender.com/api/applications";
+const API_URL = process.env.API_URL || "http://localhost:5000/api";
 
 export const getJobApplications = async () => {
     try {
-        const response = await axios.get(`${API_URL}/get`, { withCredentials: true });
+        const response = await axios.get(`${API_URL}/applications/get`, { withCredentials: true });
         if(response.data.length === 0) {
             console.log("No applications found for the user.");
             return [];
@@ -19,7 +19,7 @@ export const getJobApplications = async () => {
 export const addJobApplication = async (applicationData) => {
     try {
         console.log("Adding job application with data:", applicationData);
-        const response = await axios.post(`${API_URL}/add`, applicationData, { withCredentials: true });
+        const response = await axios.post(`${API_URL}/applications/add`, applicationData, { withCredentials: true });
         return response.data;
     } catch (error) {
         console.error("Error adding job application:", error);
@@ -29,7 +29,7 @@ export const addJobApplication = async (applicationData) => {
 
 export const updateJobApplication = async (applicationId, updatedData) => {
     try {
-        const response = await axios.put(`${API_URL}/edit/${applicationId}`, updatedData, { withCredentials: true });
+        const response = await axios.put(`${API_URL}/applications/edit/${applicationId}`, updatedData, { withCredentials: true });
         return response.data;
     } catch (error) {
         console.error("Error updating job application:", error);
@@ -39,7 +39,7 @@ export const updateJobApplication = async (applicationId, updatedData) => {
 
 export const deleteJobApplication = async (applicationId) => {
     try {
-        const response = await axios.delete(`${API_URL}/delete/${applicationId}`, { withCredentials: true });
+        const response = await axios.delete(`${API_URL}/applications/delete/${applicationId}`, { withCredentials: true });
         return response.data;
     } catch (error) {
         console.error("Error deleting job application:", error);

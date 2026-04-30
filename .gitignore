@@ -1,17 +1,14 @@
 *.env
 .env
-careercompass-frontend/.env
-careercompass-backend/.env
-<<<<<<< HEAD
-careercompass-backend/seeds
-careercompass-backend/node_modules
-careercompass-frontend/node_modules
+.env.production
+.env.test
+server/seeds
+server/node_modules
+client/node_modules
 node_modules/
 client/node_modules/
 server/node_modules/
 node_modules
 dist
 build
-=======
-* node_modules/
->>>>>>> 54f29c5bfa8fe6bacad1aff387d9b86d3f391559
+

@@ -1,5 +1,6 @@
 import axios from "axios";
-const BASE = "https://careercompas.onrender.com/api/profile";
+const API_URL = process.env.API_URL || "http://localhost:5000/api";
+const BASE = `${API_URL}/profile`;
 
 export const fetchProfileData = async () => {
   const res = await axios.get(`${BASE}`, { withCredentials: true });

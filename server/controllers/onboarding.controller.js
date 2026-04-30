@@ -69,6 +69,7 @@ RULES:
 export const onboardingController = async (req, res) => {
 
   const userId = getUser(req);
+  console.log("Onboarding request by user:", userId);
   if (!userId) return res.status(401).json({ success: false });
 
   const { selections } = req.body;
@@ -128,125 +129,15 @@ export const onboardingController = async (req, res) => {
       // currentDay: 1
 
     });
-     return res.json({ success: true, roadmap });
-    // prevent duplicate
-    // const exists = await UserRoadmap.findOne({
-    //   userId,
-    //   domain: domain,
-    //   targetType: target,
-    //   experienceLevel: experience,
-    //   timelineDays: timelineDays
-    // });
+    console.log("User roadmap created for user:", userId, "with roadmapId:", roadmapId);
 
-    // if (exists) {
-    //   return res.json({ success: true, message: "Already exists" });
-    // }
-
-    
-      // const taskIds = roadmap[0].day.flatMap(d => d.taskIds);
-      // await UserRoadmap.create({
-      //   userId,
-      //   domain: roadmap[0].domain,
-      //   targetType: roadmap[0].targetType,
-      //   experienceLevel: roadmap[0].experienceLevel,
-      //   timelineDays: roadmap[0].timelineDays,
-      //   studyHoursPerDay: roadmap[0].studyHoursPerDay,
-      //   goalRole: roadmap[0].goalRole,
-      //   taskIds: taskIds  
-      // });
-
-      // return res.json({ success: true, message: "Roadmap created" });
+     return res.status(200).json({ success: true, roadmap });
+  
 
   } catch (err) {
     console.error(err);
     return res.status(500).json({ success: false });
     
   }
-    //   const tasksPerDay = timelineDays;
-  //   const totalTasks = timelineDays;
 
-  //   // 🔥 GLOBAL TASKS (sorted by priority)
-  //   const globalTasks = await Task.find({
-  //     domain: domain,
-  //     experienceLevel: experience,
-  //     targetTypes: target,
-  //     userId: "ALL"
-  //   })
-  //     .sort({ priority: 1 })
-  //     .limit(totalTasks);
-
-  //   // 🔥 USER TASKS
-  //   let userTasks = [];
-  //   if (userPrompt) {
-  //     userTasks = await generateUserTasks({ userPrompt, timelineDays });
-  //   }
-
-  //   let order = 1;
-  //   let index = 0;
-
-  //   const progressDocs = [];
-
-  //   for (let day = 1; day <= timelineDays; day++) {
-
-  //     // global tasks
-  //     for (let i = 0; i < tasksPerDay; i++) {
-  //       const task = globalTasks[index++];
-  //       if (!task) break;
-
-  //       progressDocs.push({
-  //         userId,
-  //         roadmapId: roadmap._id,
-  //         taskId: task._id,
-  //         day,
-  //         order: order++
-  //       });
-  //     }
-
-  //     // user task (max 1/day)
-  //     const userTask = userTasks.find(t => t.day === day);
-
-  //     if (userTask) {
-
-  //       const created = await Task.create({
-  //         roadmapId: roadmap._id,
-  //         userId: userId.toString(),
-  //         category: domain,
-  //         difficulty: experience,
-  //         targetTypes: [target],
-  //         title: userTask.title,
-  //         description: userTask.description || "",
-  //         type: "project",
-  //         priority: 1
-  //       });
-
-  //       progressDocs.push({
-  //         userId,
-  //         roadmapId: roadmap._id,
-  //         taskId: created._id,
-  //         day,
-  //         order: order++
-  //       });
-  //     }
-  //   }
-
-  //   await UserTaskProgress.insertMany(progressDocs);
-
-  //   await UserRoadmap.create({
-  //     userId,
-  //     roadmapId: roadmap._id,
-  //     domain,
-  //     targetType: target,
-  //     experienceLevel: experience,
-  //     timelineDays
-  //   });
-
-  //   return res.json({
-  //     success: true,
-  //     totalTasks: progressDocs.length
-  //   });
-
-  // } catch (err) {
-  //   console.error(err);
-  //   res.status(500).json({ success: false });
-  // }
 };
