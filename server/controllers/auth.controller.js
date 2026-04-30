@@ -33,7 +33,7 @@ export const register = async (req, res) => {
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
             path: "/", 
         }); 
         await newUser.save();
@@ -74,7 +74,7 @@ export const login = async (req, res) => {
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
             path: "/", 
         });
         // Log the login activity
