@@ -1,14 +1,15 @@
 import axios from "axios";
-const API_URL = process.env.API_URL || "http://localhost:5000/api";
-const BASE = `${API_URL}/profile`;
+const BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_URL = `${BASE}/api/profile`;
+
 
 export const fetchProfileData = async () => {
-  const res = await axios.get(`${BASE}`, { withCredentials: true });
+  const res = await axios.get(`${API_URL}`, { withCredentials: true });
 
   return res.data;
 };
 export const updateProfileData = async (updatedData) => {
-  const res = await axios.put(`${BASE}`, updatedData, {
+  const res = await axios.put(`${API_URL}`, updatedData, {
     withCredentials: true,
   });
 
@@ -16,7 +17,7 @@ export const updateProfileData = async (updatedData) => {
 };
 
 export const updateProfileimage = async (imageData) => {
-  const res = await axios.post(`${BASE}/updateprofileimage`, imageData, {
+  const res = await axios.post(`${API_URL}/updateprofileimage`, imageData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -26,35 +27,35 @@ export const updateProfileimage = async (imageData) => {
   return res.data;
 };
 export const getMaxStreak = async () => {
-  const res = await axios.get(`${BASE}/maxstreak`, { withCredentials: true });
+  const res = await axios.get(`${API_URL}/maxstreak`, { withCredentials: true });
 
   return res.data;
 };
 
 export const getSharedResourcesCountById = async () => {
-  const res = await axios.get(`${BASE}/sharedresourcescount`, { withCredentials: true });
+  const res = await axios.get(`${API_URL}/sharedresourcescount`, { withCredentials: true });
   console.log("Shared resources count response:", res.data);
   return res.data;
 };
 // export const editEducation = async (updatedEducation) => {
-//   const res = await axios.post(`${BASE}/editeducation`, updatedEducation, {
+//   const res = await axios.post(`${API_URL}/editeducation`, updatedEducation, {
 //     withCredentials: true,
 //   });
 //   return res.data;
 // };
 // export const deleteEducation = async (educationId) => {
-//   const res = await axios.delete(`${BASE}/deleteeducation/${educationId}`, {
+//   const res = await axios.delete(`${API_URL}/deleteeducation/${educationId}`, {
 //     withCredentials: true,
 //   });
 //   return res.data;
 // };
 
 export const fetchRankData = async () => {
-  const res = await axios.get(`${BASE}/rank`, { withCredentials: true });
+  const res = await axios.get(`${API_URL}/rank`, { withCredentials: true });
   return res.data;
 };
 export const getUserModules = async () => {
   console.log("Fetching user modules...");
-  const res = await axios.get(`${BASE}/modules`, { withCredentials: true });
+  const res = await axios.get(`${API_URL}/modules`, { withCredentials: true });
   return res.data;
 };

@@ -41,6 +41,7 @@ describe('Roadmap API', () => {
       email: "test@example.com",
       password: "123456"
     });
+    console.log("Register response:", registerRes.body);
 
   const token = registerRes.body.user.token;
 

@@ -11,10 +11,7 @@ import { OnboardingProvider } from "./features/onboarding/onboarding.context.jsx
 import { DashboardProvider } from "./features/dashboard/Dashboard.context.jsx";
 import { RoadmapProvider } from "./features/roadmap/roadmap.context.jsx";
 
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
-if (!PUBLISHABLE_KEY) {
-  throw new Error("Missing Publishable Key");
-}
+
 
 createRoot(document.getElementById("root")).render(
   
