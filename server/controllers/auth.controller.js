@@ -194,7 +194,7 @@ export const sendOtp = async (req, res) => {
 
     const transporter = nodemailer.createTransport({
   host: "smtp-relay.brevo.com",
-  port: 587,
+  port: 2525,
   secure: false,
   auth: {
     user: process.env.BREVO_USER,
@@ -202,18 +202,149 @@ export const sendOtp = async (req, res) => {
   },
 });
 
-    await transporter.sendMail({
+  await transporter.sendMail({
   from: process.env.EMAIL_FROM,
   to: email,
-  subject: "OTP for Password Reset",
+  subject: "Career Compass • Password Reset OTP",
   html: `
-    <div style="font-family: Arial, sans-serif;">
-      <h2>Password Reset OTP</h2>
-      <p>Your OTP is:</p>
-      <h1>${otp}</h1>
-      <p>This OTP will expire in 5 minutes.</p>
-    </div>
-  `,
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Career Compass OTP</title>
+</head>
+<body style="margin:0;padding:0;background:#f5f7fb;font-family:Inter,Arial,sans-serif;">
+
+<table width="100%" cellpadding="0" cellspacing="0">
+<tr>
+<td align="center" style="padding:40px 20px;">
+
+<table width="600" cellpadding="0" cellspacing="0"
+style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;overflow:hidden;">
+
+<!-- Header -->
+<tr>
+<td style="padding:32px 40px;border-bottom:1px solid #f1f5f9;">
+
+<h1 style="
+margin:0;
+font-size:24px;
+font-weight:700;
+color:#111827;
+">
+Career Compass
+</h1>
+
+<p style="
+margin:8px 0 0;
+font-size:14px;
+color:#64748b;
+">
+Navigate your career with confidence.
+</p>
+
+</td>
+</tr>
+
+<!-- Content -->
+<tr>
+<td style="padding:40px;">
+
+<h2 style="
+margin:0 0 16px;
+font-size:22px;
+color:#111827;
+font-weight:600;
+">
+Password Reset Verification
+</h2>
+
+<p style="
+margin:0 0 24px;
+font-size:15px;
+line-height:1.7;
+color:#475569;
+">
+We received a request to reset your password.
+Use the verification code below to continue.
+</p>
+
+<!-- OTP Box -->
+<div style="
+background:#f8fafc;
+border:1px solid #e2e8f0;
+border-radius:12px;
+padding:24px;
+text-align:center;
+">
+
+<p style="
+margin:0 0 10px;
+font-size:13px;
+letter-spacing:1px;
+color:#64748b;
+text-transform:uppercase;
+">
+Verification Code
+</p>
+
+<div style="
+font-size:40px;
+font-weight:700;
+letter-spacing:10px;
+color:#0f172a;
+">
+${otp}
+</div>
+
+</div>
+
+<p style="
+margin-top:24px;
+font-size:14px;
+color:#475569;
+">
+This code will expire in <strong>5 minutes</strong>.
+</p>
+
+<p style="
+margin-top:20px;
+font-size:14px;
+color:#64748b;
+">
+If you did not request a password reset, you can safely ignore this email.
+</p>
+
+</td>
+</tr>
+
+<!-- Footer -->
+<tr>
+<td style="
+padding:24px 40px;
+border-top:1px solid #f1f5f9;
+">
+
+<p style="
+margin:0;
+font-size:13px;
+color:#94a3b8;
+">
+© ${new Date().getFullYear()} Career Compass. All rights reserved.
+</p>
+
+</td>
+</tr>
+
+</table>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>
+`
 });
     
     return res.status(200).json({
