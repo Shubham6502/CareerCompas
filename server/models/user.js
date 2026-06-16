@@ -77,6 +77,15 @@ const UserSchema=new mongoose.Schema({
     lastActiveAt:{
         type:Date,
         default:Date.now
-    }
+    },
+    resetOtp:{
+        type:String,
+        default:''
+    },
+    resetOtpExpiry:{
+        type:Date,
+        default:null
+    },
+    
 })
 export default mongoose.models.User || mongoose.model("User", UserSchema);

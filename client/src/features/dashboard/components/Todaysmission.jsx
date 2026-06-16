@@ -19,7 +19,19 @@ function TaskItem({ task, onToggle, task_completion, roadmapInfo, totalCount, cu
     onToggle(task.id, task.difficulty, roadmapInfo?.roadmapId, totalCount, currentDay);
  
   }, [task.id, task.difficulty, onToggle, roadmapInfo, totalCount, currentDay]);
-
+// if (task.length===1) return (
+//     <div className="flex items-center gap-3 sm:gap-4 py-3.5 px-4 rounded-xl border border-slate-100 dark:border-white/10 subcard-color animate-pulse">
+//       <div className="w-5 h-5 rounded-full bg-slate-300 dark:bg-white/20" />
+//       <div className="flex-1 space-y-2">  
+//         No tasks for today.
+//          <div className="h-3 rounded bg-slate-300 dark:bg-white/20 w-1/2" />
+//          <div className="h-3 rounded bg-slate-300 dark:bg-white/20 w-1/3" />
+//         <div className="h-3 rounded bg-slate-300 dark:bg-white/20 w-3/4" />
+//         <div className="h-2 rounded bg-slate-300 dark:bg-white/20 w-1/4" />
+//       </div>
+//     </div>
+  
+// );
   return (
     <motion.div
       initial={{ opacity: 0, x: -12 }}

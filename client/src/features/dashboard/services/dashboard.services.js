@@ -35,10 +35,13 @@ export const getRoadmap = async () => {
         const roadmap=await axios.get(`${API_URL}/dashboard/getUserRoadmap`, {
             withCredentials: true,
         });
-        
-    
+        console.log("Roadmap data fetched:", roadmap.data);
           return roadmap.data;
     } catch (error) {
+        if(error.response?.data?.message==="No tasks for today"){
+            console.warn("No tasks for today:", error.response.data);
+            return error.response?.data; // Return empty tasks if no tasks for today
+        }
         console.error("Error fetching roadmap:", error.response ? error.response.data : error.message);
         throw error;
     }

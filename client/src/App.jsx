@@ -18,6 +18,7 @@ import Register from "./features/auth/pages/Register";
 import Login from "./features/auth/pages/Login";
 import { Logout } from "./features/auth/pages/Logout";
 import ErrorPage from "./features/onboarding/pages/ErrorPage";
+import ForgotPassword from "./features/auth/pages/ForgotPassword";
 // import { useAuthContext } from "./features/auth/auth.context.jsx";
 function App() {
 
@@ -33,6 +34,10 @@ function App() {
         <Route
         path="/login"
           element={<Login />}
+        />
+        <Route
+        path="/forgot-password"
+          element={<ForgotPassword />}
         />
 
         <Route

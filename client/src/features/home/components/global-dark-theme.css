@@ -1,0 +1,108 @@
+/* ============================================================
+   CareerCompass — Global dark theme tokens
+   Add these to your index.css / global.css
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500&display=swap');
+
+:root {
+  --font-head: 'Syne', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  /* Base dark palette */
+  --bg-base:        #0a0814;   /* deepest background */
+  --bg-surface:     rgba(255,255,255,0.03);
+  --bg-surface-hover: rgba(124,58,237,0.08);
+
+  /* Purple accent ramp */
+  --purple-dim:     #7c3aed;
+  --purple-mid:     #a855f7;
+  --purple-light:   #a78bfa;
+  --purple-pale:    #c4b5fd;
+
+  /* Text ramp */
+  --text-primary:   #ffffff;
+  --text-secondary: rgba(203,213,225,0.85);
+  --text-muted:     rgba(148,163,184,0.7);
+  --text-faint:     rgba(148,163,184,0.4);
+
+  /* Borders */
+  --border-subtle:  rgba(255,255,255,0.08);
+  --border-accent:  rgba(167,139,250,0.25);
+}
+
+/* ── Reset body ── */
+body {
+  font-family: var(--font-body);
+  background: var(--bg-base);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Utility: purple gradient text ── */
+.gradient-text {
+  background: linear-gradient(90deg, #a78bfa 0%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Utility: purple glow button ── */
+.btn-primary {
+  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 12px 28px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: box-shadow 0.2s, transform 0.2s;
+  box-shadow: 0 0 32px rgba(124,58,237,0.4);
+}
+.btn-primary:hover {
+  box-shadow: 0 0 48px rgba(124,58,237,0.6);
+  transform: translateY(-1px);
+}
+
+/* ── Utility: ghost button ── */
+.btn-ghost {
+  background: rgba(255,255,255,0.05);
+  color: rgba(203,213,225,0.85);
+  font-weight: 500;
+  font-size: 14px;
+  padding: 12px 24px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.12);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-ghost:hover {
+  border-color: rgba(167,139,250,0.4);
+  color: #fff;
+}
+
+/* ── Glass card ── */
+.glass-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+  transition: border-color 0.25s, background 0.25s, transform 0.2s;
+}
+.glass-card:hover {
+  border-color: rgba(167,139,250,0.3);
+  background: rgba(124,58,237,0.08);
+}
+
+/* ── Subtle grid background (apply to page wrapper) ── */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(124,58,237,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124,58,237,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* ── Remove if you had old light-mode tokens ── */
+/* Delete or override: bg-color, card-color, text-color, subText-color, card-border */

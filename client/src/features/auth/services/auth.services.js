@@ -60,3 +60,35 @@ export const login = async (email, password) => {
         }   
 
 };
+export const sendOtp = async(email)=>{
+    try{
+        const response= await axios.post(`${API_URL}/auth/send-otp`,{email});
+        return response.data;
+
+    }
+    catch(error){
+        console.error("Error sending OTP:", error.response ? error.response.data : error.message);
+        throw error;
+    }
+}
+export const verifyOtp = async(email,otp)=>{
+    try{
+        const response= await axios.post(`${API_URL}/auth/verify-otp`,{email,otp});
+        return response.data;
+    }
+    catch(error){
+        console.error("Error verifying OTP:", error.response ? error.response.data : error.message);
+        throw error;
+    }
+
+}
+export const resetPassword = async(email,newPassword)=>{
+    try{
+        const response= await axios.post(`${API_URL}/auth/reset-password`,{email,newPassword});
+        return response.data;
+    }
+    catch(error){
+        console.error("Error resetting password:", error.response ? error.response.data : error.message);
+        throw error;
+    }
+}

@@ -30,6 +30,7 @@ export async function getUserRoadmap(req, res) {
   
 
     if (!userRoadmapDoc) {
+      console.log("User roadmap not found for userId:", userId);
       return res.status(404).json({
         success: false,
         message: "User roadmap not found",
@@ -58,6 +59,7 @@ export async function getUserRoadmap(req, res) {
     ]);
 
     if (!roadmap) {
+      console.log("Roadmap not found for roadmapId in getUserRoadmap:", roadmapId);
       return res.status(404).json({
         success: false,
         message: "Roadmap not found",
@@ -87,9 +89,16 @@ export async function getUserRoadmap(req, res) {
     );
 
     if (!todayData) {
-      return res.status(404).json({
+      return res.status(202).json({
         success: false,
         message: "No tasks for today",
+        tasks: [' No tasks for today! Take a break or explore other roadmaps!'],
+        progress,
+        roadmap: {
+          timelineDays: roadmap.timelineDays,
+          goalRole: roadmap.goalRole,
+          roadmapId,
+        },
       });
     }
 

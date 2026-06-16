@@ -3,9 +3,9 @@ import {motion, AnimatePresence} from "framer-motion";
 export default function StatsRow({ doneTasks, totalTasks,currentDay }) {
   const remaining = totalTasks - doneTasks;
   const STATS = [
-    { val: doneTasks,  label: "Completed", color: "text-green-500" },
+    { val: doneTasks,  label: "Completed Tasks", color: "text-green-500" },
     { val: currentDay, label: "Current Day", color: "text-blue-400"  },
-    { val: remaining,  label: "Remaining",  color: "text-yellow-500"},
+    { val: remaining,  label: "Remaining Tasks",  color: "text-yellow-500"},
   ];
   return (
     <div className="grid grid-cols-3 gap-2.5 mb-4">

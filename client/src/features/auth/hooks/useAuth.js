@@ -1,4 +1,4 @@
-import { login, register,logout,getme } from "../services/auth.services";
+import { login, register,logout,getme,sendOtp,verifyOtp,resetPassword } from "../services/auth.services";
 import { useContext ,useState} from "react";
 import { useAuthContext } from "../auth.context.jsx";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +11,7 @@ export const useAuth = () => {
 
   const [error, setError] = useState(null);
   const[loading,setLoading]=useState(false);
+  const [otpError,setOtpError]=useState(null);
   const navigate = useNavigate();
 
 
@@ -62,5 +63,45 @@ export const useAuth = () => {
     navigate("/login");
   };
 
-  return { handleLogin, handleRegister, handleLogout,error,getUser,setError,loading};
+
+  //otp related functions
+  const handleOtpMail=async(email)=>{
+    try{
+         const response=await sendOtp(email);
+      console.log("OTP sent successfully:", response);
+      return response;
+    }
+    catch(error){
+        console.error("Error sending OTP At UseAuth:", error.response ? error.response.data : error.message);
+        setOtpError(error.response?.data?.message || "Error sending OTP");
+        throw error;
+    }
+  }
+
+    const handleVerifySentOtp=async(email,otp)=>{
+      try{
+        const response=await verifyOtp(email,otp);
+        console.log("OTP verified successfully:", response);
+        return response;
+      }
+      catch(error){
+        console.error("Error verifying OTP At UseAuth:", error.response ? error.response.data : error.message);
+        setOtpError(error.response?.data?.message || "Invalid OTP");
+        throw error;
+      }
+    }
+    const  handleResetPassword=async(email,newPassword)=>{
+      try{
+        const response=await resetPassword(email,newPassword);
+        console.log("Password reset successfully:", response);
+        return response;
+      }
+      catch(error){
+        console.error("Error resetting password At UseAuth:", error.response ? error.response.data : error.message);
+        setOtpError(error.response?.data?.message || "Error resetting password");
+        throw error;
+      }
+    }
+
+  return { handleLogin, handleRegister, handleLogout,handleOtpMail,handleVerifySentOtp,error,getUser,setError,loading,otpError,handleResetPassword};
 };

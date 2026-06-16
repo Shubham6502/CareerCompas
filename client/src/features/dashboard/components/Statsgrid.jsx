@@ -45,7 +45,7 @@ export default function StatsGrid({ activeDayData, progress = {}, roadmapInfo = 
 
   const pct = totalCount ? Math.min(Math.round((doneCount / totalCount) * 100), 100) : 0;
     const { currentUserRank, totalUsers } = useDashboardContext();
-  
+  console.log("activeDayData in StatsGrid:", activeDayData);
  const hr =useMemo(() => {
   return activeDayData.tasks.reduce((sum, t) => {
     return completedTasksToday.includes(t.id) ? sum + t.mins : sum;
