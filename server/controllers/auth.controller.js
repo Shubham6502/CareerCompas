@@ -173,6 +173,7 @@ export const sendOtp = async (req, res) => {
   try {
     const { email } = req.body;
 
+
     const user = await User.findOne({ email });
     
 
@@ -192,19 +193,28 @@ export const sendOtp = async (req, res) => {
     await user.save();
 
     const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
+  host: "smtp-relay.brevo.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.BREVO_USER,
+    pass: process.env.BREVO_PASS,
+  },
+});
 
     await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: "OTP for Password Reset",
-      text: `Your OTP for password reset is: ${otp}`,
-    });
+  from: process.env.EMAIL_FROM,
+  to: email,
+  subject: "OTP for Password Reset",
+  html: `
+    <div style="font-family: Arial, sans-serif;">
+      <h2>Password Reset OTP</h2>
+      <p>Your OTP is:</p>
+      <h1>${otp}</h1>
+      <p>This OTP will expire in 5 minutes.</p>
+    </div>
+  `,
+});
     
     return res.status(200).json({
       message: "OTP sent successfully",
