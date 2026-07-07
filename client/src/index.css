@@ -1,25 +1,25 @@
-/* @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap'); */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Syne:wght@600;700&display=swap');
-
 @import "tailwindcss";
-
 
 html {
   scroll-behavior: smooth;
 }
+
 body {
   font-family: 'Inter', sans-serif;
 }
-/* @tailwind utilities; */
 
 @theme {
   --color-accent: #5b52f5;
   --color-accent-light: #eeecff;
   --color-accent-text: #3b33cc;
   --color-accent-hover: #4740e0;
-  --font-head: 'Plus Jakarta Sans', sans-serif;
-  /* --font-body: 'DM Sans', sans-serif; */
+  --font-head: 'Syne', sans-serif;
 }
+
+/* ============================================================
+   GRID BACKGROUND
+   ============================================================ */
 .grid-bg {
   background-image:
     linear-gradient(rgba(8, 1, 1, 0.04) 1px, transparent 1px),
@@ -27,27 +27,29 @@ body {
   background-size: 40px 40px;
 }
 
-/* FIXED DARK MODE */
 .dark .grid-bg {
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
   background-size: 40px 40px;
 }
 
-
-/* ----- Premium Base Backgrounds ----- */
+/* ============================================================
+   BASE PAGE BACKGROUND
+   ============================================================ */
 .bg-color {
-  background: #f1f5f9; /* softer than white */
+  background: #f1f5f9;
   color: #0f172a;
 }
 
 .dark .bg-color {
-  background: #0b1220; /* deeper + premium */
-  color: #e2e8f0;
+  background: #0a0a0f;
+  color: #e4e4f0;
 }
 
-/* ----- Premium Cards (Glassmorphism & Soft Shadows) ----- */
+/* ============================================================
+   CARDS
+   ============================================================ */
 .card-color {
   background: #ffffff;
   border: 1px solid #e2e8f0;
@@ -55,61 +57,61 @@ body {
 }
 
 .dark .card-color {
-  background: #111827; /* cleaner than current */
-  border: 1px solid #1f2937;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  background: #12121b;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
 }
 
-
-
-/* Interactive hover state wrapper classes */
 .card-hover:hover {
   transform: translateY(-4px);
   box-shadow: 0 12px 32px -4px rgba(15, 23, 42, 0.08), 0 0 1px rgba(15, 23, 42, 0.08);
 }
 
 .dark .card-hover:hover {
-  background: linear-gradient(135deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.6) 100%);
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.08) 0%, rgba(18, 18, 27, 0.6) 100%);
   border: 1px solid rgba(255, 255, 255, 0.12);
   transform: translateY(-4px);
-  box-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.4), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+  box-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
 }
 
-/* ----- Typography Colors ----- */
-.text-color {
-  color: #0f172a;
-}
-
-.dark .text-color {
-  color: #f1f5f9;
-}
-
-
-.subText-color {
-  color: #64748b;
-}
-
-.dark .subText-color {
-  color: #9ca3af;
-}
-
-/* ----- Subcards & Child Elements ----- */
 .subcard-color {
   background: #f8fafc;
   border: 1px solid #e2e8f0;
 }
 
 .dark .subcard-color {
-  background: #1f2937;
-  border: 1px solid #374151;
+  background: #181822;
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
-/* ----- General Layout Borders ----- */
+
+/* ============================================================
+   TYPOGRAPHY
+   ============================================================ */
+.text-color {
+  color: #0f172a;
+}
+
+.dark .text-color {
+  color: #f5f5fa;
+}
+
+.subText-color {
+  color: #64748b;
+}
+
+.dark .subText-color {
+  color: #8b8a9c;
+}
+
+/* ============================================================
+   BORDERS
+   ============================================================ */
 .card-border {
   border: 1px solid rgba(15, 23, 42, 0.08);
 }
 
 .dark .card-border {
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .reverse-bg {
@@ -130,17 +132,19 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* ----- Premium Buttons ----- */
+/* ============================================================
+   BUTTONS
+   ============================================================ */
 .btn-primary {
-  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
   color: #FFFFFF;
-  box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.3);
+  box-shadow: 0 4px 14px 0 rgba(124, 58, 237, 0.35);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border: none;
 }
 
 .btn-primary:hover {
-  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.45);
   transform: translateY(-2px);
   filter: brightness(110%);
 }
@@ -154,7 +158,7 @@ body {
 }
 
 .dark .btn-secondary {
-  background: rgba(30, 41, 59, 0.5);
+  background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: #F8FAFC;
 }
@@ -166,37 +170,14 @@ body {
 }
 
 .dark .btn-secondary:hover {
-  background: rgba(51, 65, 85, 0.8);
-  border-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.2);
+  background: rgba(124, 58, 237, 0.12);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.3);
 }
 
-/* .nav {
-  background: linear-gradient(
-    270deg,
-    rgba(255, 255, 255, 0.2),
-    rgba(240, 240, 240, 0.6),
-    rgba(255, 255, 255, 0.2)
-  );
-
-  background-size: 400% 400%;
-  animation: waterFlow 10s ease infinite;
-}
-
-@keyframes waterFlow {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-} */
-
-
-
+/* ============================================================
+   LOADER
+   ============================================================ */
 .loader {
   width: 16px;
   height: 16px;
@@ -205,7 +186,14 @@ body {
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
-/* ===== GLOBAL SCROLLBAR ===== */
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================================
+   SCROLLBARS
+   ============================================================ */
 .scroll-container::-webkit-scrollbar {
   height: 6px;
 }
@@ -219,20 +207,12 @@ body {
   background: linear-gradient(135deg, #534f7c, #593890);
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Chrome / Edge / Safari */
 ::-webkit-scrollbar {
   width: 0px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(37, 99, 235, 0.4);
-  /* blue */
+  background: rgba(124, 58, 237, 0.4);
   border-radius: 6px;
 }
 
@@ -240,7 +220,9 @@ body {
   background: transparent;
 }
 
-/* Dark Theme button*/
+/* ============================================================
+   THEME TOGGLE SWITCH
+   ============================================================ */
 .theme-switch {
   width: 52px;
   height: 26px;
@@ -252,6 +234,10 @@ body {
   position: relative;
   display: flex;
   align-items: center;
+}
+
+.dark .theme-switch {
+  background-color: #2a2a38;
 }
 
 .thumb {
@@ -266,29 +252,194 @@ body {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
-/* Positions */
 .thumb.light {
   transform: translateX(0);
   color: #F59E0B;
-  /* Sun */
 }
 
 .thumb.dark {
   transform: translateX(26px);
-  color: #6366F1;
-  /* Moon */
+  color: #7c3aed;
 }
 
-/* Dark mode track */
-
-.dark .theme-switch {
-  background-color: #3e4a5b;
-}
-
-
-/* Error Bounce Animation */
+/* ============================================================
+   ERROR ANIMATION
+   ============================================================ */
 @keyframes bounceIn {
   0%   { transform: scale(0.8); opacity: 0; }
   60%  { transform: scale(1.05); opacity: 1; }
   100% { transform: scale(1);   opacity: 1; }
+}
+
+/* ============================================================
+   SIDEBAR — PURPLE ACCENT SYSTEM (light + dark)
+   ============================================================ */
+
+/* Logo badge (the small rounded square/circle behind the logo mark) */
+.sidebar-logo-badge {
+  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  box-shadow: 0 0 16px rgba(124, 58, 237, 0.35);
+}
+
+.dark .sidebar-logo-badge {
+  box-shadow: 0 0 18px rgba(124, 58, 237, 0.5);
+}
+
+/* Inactive nav link */
+.sidebar-link {
+  color: #64748b;
+}
+
+.dark .sidebar-link {
+  color: #8b8a9c;
+}
+
+.sidebar-link:hover {
+  background: rgba(124, 58, 237, 0.06);
+  color: #0f172a;
+}
+
+.dark .sidebar-link:hover {
+  background: rgba(124, 58, 237, 0.1);
+  color: #f5f5fa;
+}
+
+/* Active nav link — gradient pill, matches screenshot */
+.sidebar-link-active {
+  background: linear-gradient(135deg, #7c3aed 0%, #9333ea 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3);
+}
+
+.dark .sidebar-link-active {
+  background: linear-gradient(135deg, #7c3aed 0%, #9333ea 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 18px rgba(124, 58, 237, 0.45);
+}
+
+/* "NEW" badge next to AI Coach style links */
+.sidebar-badge-new {
+  background: rgba(124, 58, 237, 0.15);
+  color: #7c3aed;
+}
+
+.dark .sidebar-badge-new {
+  background: rgba(124, 58, 237, 0.25);
+  color: #c4b5fd;
+}
+
+/* Upgrade to Pro card */
+.sidebar-upgrade-card {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.08), rgba(168, 85, 247, 0.04));
+  border: 1px solid rgba(124, 58, 237, 0.18);
+}
+
+.dark .sidebar-upgrade-card {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.18), rgba(168, 85, 247, 0.07));
+  border: 1px solid rgba(124, 58, 237, 0.28);
+}
+
+.sidebar-upgrade-icon {
+  background: rgba(124, 58, 237, 0.12);
+  color: #7c3aed;
+}
+
+.dark .sidebar-upgrade-icon {
+  background: rgba(124, 58, 237, 0.22);
+  color: #c4b5fd;
+}
+
+.sidebar-upgrade-btn {
+  background: linear-gradient(135deg, #7c3aed, #9333ea);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3);
+  transition: all 0.25s ease;
+}
+
+.sidebar-upgrade-btn:hover {
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.45);
+  transform: translateY(-1px);
+}
+
+/* User profile footer card */
+.sidebar-profile-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.dark .sidebar-profile-card {
+  background: #14101f;
+  border: 1px solid rgba(124, 58, 237, 0.18);
+}
+
+.sidebar-profile-card:hover {
+  background: #f1f5f9;
+}
+
+.dark .sidebar-profile-card:hover {
+  background: #1b1530;
+}
+
+/* Avatar circle (initials) */
+.sidebar-avatar {
+  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(124, 58, 237, 0.3);
+}
+
+/* XP progress bar */
+.sidebar-xp-track {
+  background: #e2e8f0;
+}
+
+.dark .sidebar-xp-track {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.sidebar-xp-fill {
+  background: linear-gradient(90deg, #7c3aed, #a855f7);
+}
+
+/* Tier label (e.g. "ARCHITECT TIER") */
+.sidebar-tier-label {
+  color: #94a3b8;
+  letter-spacing: 0.06em;
+}
+
+.dark .sidebar-tier-label {
+  color: #6e6488;
+}
+
+/* ============================================================
+   MODAL INPUT — shared across TrackApplicationModal and EditTrackApplication
+   ============================================================ */
+.modal-input {
+  width: 100%;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  padding: 0.625rem 1rem;
+  font-size: 0.8125rem;
+  color: inherit;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+}
+
+.modal-input:focus {
+  border-color: rgba(99, 102, 241, 0.6);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.modal-input::placeholder {
+  color: #6b7280;
+}
+
+/* Light mode overrides */
+@media (prefers-color-scheme: light) {
+  .modal-input {
+    border-color: #e2e8f0;
+  }
+  .modal-input:focus {
+    border-color: rgba(99, 102, 241, 0.5);
+  }
 }

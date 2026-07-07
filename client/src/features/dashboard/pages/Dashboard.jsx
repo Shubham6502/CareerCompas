@@ -1,6 +1,5 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useContext } from "react";
 import PageLoader from "../../../components/Loaders/PageLoader.jsx";
 import { useAuthContext } from "../../auth/auth.context.jsx";
 
@@ -14,17 +13,19 @@ import {
 
 import { useDashboard } from "../hooks/useDashboard.js";
 
-
 // ── Component imports ────────────────────────────────────────────────────────
 import DashboardHeader from "../components/Dashboardheader.jsx";
+import CareerGoalHero from "../components/Careergoalhero.jsx";
 import QuickActions from "../components/Quickactions.jsx";
 import StatsGrid from "../components/Statsgrid.jsx";
 import TodaysMission from "../components/Todaysmission.jsx";
-import ActivityLog from "../components/Activitylog.jsx";
-import CodingActivity from "../components/Codingactivity.jsx";
-import SkillRadar from "../components/Skillradar.jsx";
-import Leaderboard from "../components/Leaderboard.jsx";
-
+import RoadmapProgress from "../components/RoadmapProgress.jsx";
+import RoadmapOverview from "../components/RoadmapOverview.jsx";
+import RecentActivity from "../components/RecentActivity.jsx";
+import UpcomingMilestone from "../components/UpcomingMilestone.jsx";
+import WeeklySummary from "../components/WeeklySummary.jsx";
+import AICoach from "../components/AICoach.jsx";
+import JobPipeline from "../components/JobPipeline.jsx";
 
 // ── Constants ────────────────────────────────────────────────────────────────
 const DEFAULT_PROGRESS = { xp: 0, currentStreak: 0, longestStreak: 0 };
@@ -75,20 +76,10 @@ function FullSkeleton() {
     <div className="animate-pulse space-y-4">
       <div className="h-8 w-56 rounded-xl bg-slate-100 dark:bg-white/10" />
       <div className="h-4 w-72 rounded-lg bg-slate-100 dark:bg-white/10" />
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        {[1, 2, 3, 4].map((i) => (
-          <div
-            key={i}
-            className="h-24 rounded-2xl bg-slate-100 dark:bg-white/10"
-          />
-        ))}
-      </div>
+      <div className="h-40 rounded-2xl bg-slate-100 dark:bg-white/10" />
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         {[1, 2, 3, 4, 5, 6].map((i) => (
-          <div
-            key={i}
-            className="h-20 rounded-2xl bg-slate-100 dark:bg-white/10"
-          />
+          <div key={i} className="h-20 rounded-2xl bg-slate-100 dark:bg-white/10" />
         ))}
       </div>
       <div className="h-56 rounded-2xl bg-slate-100 dark:bg-white/10" />
@@ -100,9 +91,8 @@ function FullSkeleton() {
 export default function Dashboard() {
   const { task_completion } = useDashboard();
 
- 
-  const {user:authenticatedUser,isInitialized: isAuthReady } = useAuthContext();
-  
+  const { user: authenticatedUser, isInitialized: isAuthReady } = useAuthContext();
+
   const [roadmapDays, setRoadmapDays] = useState([]);
   const [selectedDay, setSelectedDay] = useState(1);
   const [currentDay, setCurrentDay] = useState(1);
@@ -124,7 +114,6 @@ export default function Dashboard() {
 
   const pendingTaskIds = useRef(new Set());
 
- 
   useEffect(() => {
     if (!isAuthReady || !authenticatedUser) return;
 
@@ -149,7 +138,6 @@ export default function Dashboard() {
           getLeaderBoardData(),
         ]);
 
-      
         if (isCancelled) return;
 
         // ── Roadmap ──
@@ -166,9 +154,7 @@ export default function Dashboard() {
           setRoadmapDays(formattedDays);
           setSelectedDay(validDay);
 
-          setCompletedTaskIds(
-            roadmapResponse.progress?.completedTasks || []
-          );
+          setCompletedTaskIds(roadmapResponse.progress?.completedTasks || []);
 
           setUserProgress({
             xp: roadmapResponse.progress?.xp || 0,
@@ -179,6 +165,7 @@ export default function Dashboard() {
           setRoadmapDetails({
             timelineDays: roadmapResponse.roadmap?.timelineDays || 30,
             goalRole: roadmapResponse.roadmap?.goalRole || "Software Engineer",
+            targetCompany: roadmapResponse.roadmap?.targetCompany || null,
             roadmapId: roadmapResponse.roadmap?.roadmapId || null,
             studyHoursPerDay: roadmapResponse.roadmap?.studyHoursPerDay || 2,
           });
@@ -195,7 +182,6 @@ export default function Dashboard() {
         }
 
         // ── Leaderboard ──
-     
         if (leaderboardResponse?.leaderboard) {
           setLeaderboardUsers(leaderboardResponse.leaderboard);
         }
@@ -217,95 +203,83 @@ export default function Dashboard() {
     };
   }, [isAuthReady, authenticatedUser]);
 
-
   const refreshActivityLogs = useCallback(async () => {
-  try {
-    const updatedLogs = await getActivityLog();
-    if (updatedLogs) {
-      setActivityLogs(updatedLogs);
-    }
-  } catch (error) {
-    console.error("Failed to refresh activity logs", error);
-  }
-}, []);
-
-
-const handleTaskToggle = useCallback(
-  async (taskId, difficulty, roadmapId, totalTasks, currentDayValue) => {
-    if (pendingTaskIds.current.has(taskId)) return;
-    pendingTaskIds.current.add(taskId);
-
-    let wasTaskCompleted = false;
-
-    // Optimistic update
-    setRoadmapDays((previousDays) =>
-      previousDays.map((day) => ({
-        ...day,
-        tasks: day.tasks.map((task) => {
-          if (task.id === taskId) {
-            wasTaskCompleted = task.done;
-            return { ...task, done: !task.done };
-          }
-          return task;
-        }),
-      }))
-    );
-
-    setCompletedTaskIds((previousTaskIds) =>
-      wasTaskCompleted
-        ? previousTaskIds.filter((id) => id !== taskId)
-        : [...previousTaskIds, taskId]
-    );
-
     try {
-      await task_completion(
-        taskId,
-        difficulty,
-        roadmapId,
-        totalTasks,
-        currentDayValue
-      );
-
-      // Refresh progress (XP / streak)
-      const updatedRoadmap = await getRoadmap();
-
-      if (updatedRoadmap) {
-        setUserProgress({
-          xp: updatedRoadmap.progress?.xp || 0,
-          currentStreak:
-            updatedRoadmap.progress?.currentStreak || 0,
-          longestStreak:
-            updatedRoadmap.progress?.longestStreak || 0,
-        });
+      const updatedLogs = await getActivityLog();
+      if (updatedLogs) {
+        setActivityLogs(updatedLogs);
       }
-
-      refreshActivityLogs();
     } catch (error) {
-      console.error(error);
+      console.error("Failed to refresh activity logs", error);
+    }
+  }, []);
 
-      // Rollback on failure
+  const handleTaskToggle = useCallback(
+    async (taskId, difficulty, roadmapId, totalTasks, currentDayValue) => {
+      if (pendingTaskIds.current.has(taskId)) return;
+      pendingTaskIds.current.add(taskId);
+
+      let wasTaskCompleted = false;
+
+      // Optimistic update
       setRoadmapDays((previousDays) =>
         previousDays.map((day) => ({
           ...day,
-          tasks: day.tasks.map((task) =>
-            task.id === taskId
-              ? { ...task, done: !task.done }
-              : task
-          ),
+          tasks: day.tasks.map((task) => {
+            if (task.id === taskId) {
+              wasTaskCompleted = task.done;
+              return { ...task, done: !task.done };
+            }
+            return task;
+          }),
         }))
       );
 
       setCompletedTaskIds((previousTaskIds) =>
         wasTaskCompleted
-          ? [...previousTaskIds, taskId]
-          : previousTaskIds.filter((id) => id !== taskId)
+          ? previousTaskIds.filter((id) => id !== taskId)
+          : [...previousTaskIds, taskId]
       );
-    } finally {
-      pendingTaskIds.current.delete(taskId);
-    }
-  },
-  [task_completion, refreshActivityLogs]
-);
+
+      try {
+        await task_completion(taskId, difficulty, roadmapId, totalTasks, currentDayValue);
+
+        // Refresh progress (XP / streak)
+        const updatedRoadmap = await getRoadmap();
+
+        if (updatedRoadmap) {
+          setUserProgress({
+            xp: updatedRoadmap.progress?.xp || 0,
+            currentStreak: updatedRoadmap.progress?.currentStreak || 0,
+            longestStreak: updatedRoadmap.progress?.longestStreak || 0,
+          });
+        }
+
+        refreshActivityLogs();
+      } catch (error) {
+        console.error(error);
+
+        // Rollback on failure
+        setRoadmapDays((previousDays) =>
+          previousDays.map((day) => ({
+            ...day,
+            tasks: day.tasks.map((task) =>
+              task.id === taskId ? { ...task, done: !task.done } : task
+            ),
+          }))
+        );
+
+        setCompletedTaskIds((previousTaskIds) =>
+          wasTaskCompleted
+            ? [...previousTaskIds, taskId]
+            : previousTaskIds.filter((id) => id !== taskId)
+        );
+      } finally {
+        pendingTaskIds.current.delete(taskId);
+      }
+    },
+    [task_completion, refreshActivityLogs]
+  );
 
   // ── Derived values ──
   const activeDayData = useMemo(() => {
@@ -325,7 +299,6 @@ const handleTaskToggle = useCallback(
     [completedTaskIds.length, activeDayData]
   );
 
-  // ✅ FIX: correct loading condition
   if (!isAuthReady || isLoading) {
     return <PageLoader />;
   }
@@ -334,16 +307,10 @@ const handleTaskToggle = useCallback(
   if (errorMessage) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4 text-center">
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          className="text-5xl"
-        >
+        <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="text-5xl">
           ⚠️
         </motion.div>
-        <p className="text-sm font-medium text-slate-600 dark:text-white/60">
-          {errorMessage}
-        </p>
+        <p className="text-sm font-medium text-slate-600 dark:text-white/60">{errorMessage}</p>
         <button
           onClick={() => window.location.reload()}
           className="text-xs px-5 py-2.5 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition-colors font-medium"
@@ -354,7 +321,6 @@ const handleTaskToggle = useCallback(
     );
   }
 
-  // 🔥 ONLY CHANGE HERE: use authenticatedUser
   return (
     <div className="w-full h-[93vh] overflow-hidden">
       <div
@@ -363,12 +329,7 @@ const handleTaskToggle = useCallback(
       >
         <AnimatePresence mode="wait">
           {isLoading ? (
-            <motion.div
-              key="skeleton"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
+            <motion.div key="skeleton" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
               <FullSkeleton />
             </motion.div>
           ) : (
@@ -378,6 +339,7 @@ const handleTaskToggle = useCallback(
               animate={{ opacity: 1 }}
               className="flex gap-6 xl:gap-8 items-start"
             >
+              {/* ── Main column ── */}
               <div className="flex-1 min-w-0">
                 <DashboardHeader
                   roadmapInfo={roadmapDetails}
@@ -385,7 +347,30 @@ const handleTaskToggle = useCallback(
                   currentDay={currentDay}
                 />
 
-                <QuickActions />
+                <CareerGoalHero roadmapInfo={roadmapDetails} currentDay={currentDay} />
+
+                {/* Today's Mission + Roadmap Progress, side by side on large screens */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5 items-start">
+                  <TodaysMission
+                    activeDayData={activeDayData}
+                    allDays={roadmapDays}
+                    selectedDay={selectedDay}
+                    onSelectDay={setSelectedDay}
+                    onToggle={handleTaskToggle}
+                    task_completion={task_completion}
+                    roadmapInfo={roadmapDetails}
+                    totalCount={totalCount}
+                    completedTasksToday={completedTaskIds}
+                    pendingTasks={pendingTaskIds.current}
+                    loading={false}
+                  />
+
+                  <RoadmapProgress roadmapDays={roadmapDays} currentDay={currentDay} />
+                </div>
+
+                <RoadmapOverview timelineDays={roadmapDetails.timelineDays} currentDay={currentDay} />
+
+                {/* <QuickActions /> */}
 
                 <StatsGrid
                   activeDayData={activeDayData}
@@ -396,44 +381,19 @@ const handleTaskToggle = useCallback(
                   totalCount={totalCount}
                 />
 
-                <TodaysMission
-                  activeDayData={activeDayData}
-                  allDays={roadmapDays}
-                  selectedDay={selectedDay}
-                  onSelectDay={setSelectedDay}
-                  onToggle={handleTaskToggle}
-                  task_completion={task_completion}
-                  roadmapInfo={roadmapDetails}
-                  totalCount={totalCount}
-                  completedTasksToday={completedTaskIds}
-                  pendingTasks={pendingTaskIds.current}
-                  loading={false}
-                />
-
-                <ActivityLog progress={userProgress} activityLogs={activityLogs} />
-
-                <CodingActivity
-                  taskCompletionData={taskCompletionGraph}
-                  createdAt={accountCreatedAt}
-                  maxStreak={longestStreak}
-                />
-                <div className="md:hidden">
-                 <Leaderboard
-                  data={leaderboardUsers}
-                  currentUserId={ authenticatedUser?._id}
-                />
+                {/* Recent Activity + Upcoming Milestone, side by side */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5 items-stretch">
+                  <RecentActivity activityLogs={activityLogs} />
+                  <UpcomingMilestone />
                 </div>
               </div>
-              
 
-              <aside className="hidden xl:flex flex-col gap-4 w-[280px] flex-shrink-0 sticky top-0">
-                <SkillRadar />
-                <Leaderboard
-                  data={leaderboardUsers}
-                  currentUserId={ authenticatedUser?._id}
-                />
+              {/* ── Right panel ── */}
+              <aside className="hidden xl:flex flex-col gap-5 w-[300px] flex-shrink-0 sticky top-0">
+                <WeeklySummary />
+                <AICoach />
+                <JobPipeline />
               </aside>
-               
             </motion.div>
           )}
         </AnimatePresence>

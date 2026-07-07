@@ -1,302 +1,124 @@
-import { use, useEffect, useState } from 'react';
-import EarnedBadges from '../components/EarnedBadges.jsx';
-import StatsRow from '../components/StatsRow.jsx';
-import ProfileHeader from '../components/ProfileHeader.jsx';
-import SharedResources from '../components/SharedResources.jsx';
-import ActiveModule from '../components/ActiveModule.jsx';
-import CourseProgress from '../components/CourseProgress.jsx';
-import ExperiencePortfolio from '../components/ExperiencePortfolio.jsx';
-import EducationPortfolio from '../components/EducationPortfolio.jsx';
-import KnowledgeHeatmap from '../components/KnowledgeHeatmap.jsx';
-import {useProfile} from '../hooks/useProfile.js';
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
-const PROFILE_DATA =  {
-  // name: "Shubham Patil",
-  // bio: "Full Stack Developer passionate about MERN stack and DSA. Building the future of tech education.",
-  tags: ["SOFTWARE ENGINEER", "CONTENT CREATOR", "OPEN SOURCE"],
-  avatar: "https://i.pravatar.cc/120?img=12",
-  globalRank: "#128",
-  developerLevel: "LVL 42",
-};
-
-
-const ACTIVE_MODULE = {
-  title: "Advanced System Design",
-  progress: 75,
-  description:
-    "Mastering high-availability systems, sharding strategies, and multi-region deployment. Currently exploring Byzantine Fault Tolerance.",
-  nextUp: "DISTRIBUTED CONSENSUS",
-};
-
-const SHARED_RESOURCES = {
-  activeAssets: 14,
-  items: [
-    { name: "System Design PDF", stat: "2.4k views" },
-    { name: "Node.js Auth Boilerplate", stat: "1.1k stars" },
-  ],
-};
-
-const EXPERIENCE = [
-  {
-    role: "Senior Developer @ TechEdu",
-    period: "2021 — Present",
-    desc: "Leading the migration of core services to microservices architecture using Node.js and AWS.",
-    active: true,
-  },
-  {
-    role: "Full Stack Intern @ DevStudio",
-    period: "2020 — 2021",
-    desc: "Collaborated on building a real-time collaborative code editor with Socket.io.",
-    active: false,
-  },
-];
-const EDUCATION = [
-  {
-    role: "Bachelor of Science in Computer Science",
-    period: "2018 — 2022",
-    desc: "Specialized in Software Engineering and Data Structures.",
-    active: false,
-  },
-];
-const RUNNING_COURSES = [
-  { title: "Compiler Design", progress: 40, color: "#bc8cff" },
-  { title: "Distributed Databases", progress: 12, color: "#3fb950" },
-  ];
-
-
-const ARCHIVED_COURSES = [
-  { title: "Full Stack Mastery: Node.js", date: "OCT 12, 2023" },
-];
-
-const HEATMAP_DATA = Array.from({ length: 52 * 7 }, () =>
-  Math.random() > 0.6 ? Math.floor(Math.random() * 4) + 1 : 0
-);
-
-
-
-
-// ─── Root Dashboard Panel ─────────────────────────────────────────────────
+import ProfileHeader     from "../components/ProfileHeader.jsx";
+import EarnedBadges      from "../components/EarnedBadges.jsx";
+import StatsRow          from "../components/StatsRow.jsx";
+import SharedResources   from "../components/SharedResources.jsx";
+import ActiveModule      from "../components/ActiveModule.jsx";
+import CourseProgress    from "../components/CourseProgress.jsx";
+import ExperiencePortfolio from "../components/ExperiencePortfolio.jsx";
+import EducationPortfolio  from "../components/EducationPortfolio.jsx";
+import { useProfile }    from "../hooks/useProfile.js";
 
 export default function DashboardPanel() {
-const { getProfileData, saveProfileData, updateProfileImageData,getMaxStreakData,deleteEducationData,getSharedResourcesCount ,fetchRank,userModules} = useProfile();
-const [profileData, setProfileData] = useState('');
-const [refreshing, setRefreshing] = useState(false);
-const [imageUploading, setImageUploading] = useState(false);
-const [rankData, setRankData] = useState({rank: -1, xp: 0});
+  const {
+    getProfileData, saveProfileData, updateProfileImageData,
+    getMaxStreakData, getSharedResourcesCount, fetchRank, userModules,
+    deleteEducationData,
+  } = useProfile();
 
-//Profile Data fetching and updating logic
-useEffect(() => {
+  const [profileData,      setProfileData]      = useState({});
+  const [refreshing,       setRefreshing]        = useState(false);
+  const [imageUploading,   setImageUploading]    = useState(false);
+  const [rankData,         setRankData]          = useState({ rank: -1, xp: 0 });
+  const [maxStreak,        setMaxStreak]         = useState(0);
+  const [resourcesCount,   setResourcesCount]    = useState(0);
+  const [latestResource,   setLatestResource]    = useState(null);
 
+  // ── Data fetching ──────────────────────────────────────────────────────────
+  useEffect(() => {
+    getProfileData()
+      .then(r => setProfileData(r.userProfile))
+      .catch(e => console.error(e));
+  }, [refreshing]);
 
-  const fetchData = async () => {
-    try {
-      const response = await getProfileData(); 
+  useEffect(() => {
+    fetchRank().then(setRankData).catch(console.error);
+    getMaxStreakData().then(r => setMaxStreak(r.maxStreak)).catch(console.error);
+    getSharedResourcesCount()
+      .then(r => { setResourcesCount(r.resourcesCount); setLatestResource(r.latestResource); })
+      .catch(console.error);
+  }, []);
 
-      setProfileData(response.userProfile);
-    } catch (error) {
-      console.error("Fetch error:", error);
-    }
+  // ── Handlers ───────────────────────────────────────────────────────────────
+  const handleEdit        = (d) => { saveProfileData(d); setProfileData(d); };
+  const handleImageSave   = async (d) => {
+    setImageUploading(true);
+    await updateProfileImageData(d);
+    setRefreshing(p => !p);
+    setImageUploading(false);
   };
 
-  fetchData();
-}, [refreshing]);
+  const handleAddEdu      = (d) => { const u = { ...profileData, education: [...(profileData.education||[]), d] }; saveProfileData(u); setProfileData(u); };
+  const handleEditEdu     = (d, idx) => { const list = (profileData.education||[]).map((e,i)=>i===idx?{...d}:e); const u={...profileData,education:list}; saveProfileData(u); setProfileData(u); };
+  const handleDeleteEdu   = (id) => { const list=(profileData.education||[]).filter(e=>e._id!==id); const u={...profileData,education:list}; setProfileData(u); saveProfileData(u); };
 
-useEffect(() => {
-  const fetchRankData = async () => {
-    console.log("Fetching rank data...");
-    try {
-      const response = await fetchRank();
-      setRankData(response);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const handleAddExp      = (d) => { const u={...profileData,experience:[...(profileData.experience||[]),d]}; saveProfileData(u); setProfileData(u); };
+  const handleEditExp     = (d, idx) => { const list=(profileData.experience||[]).map((e,i)=>i===idx?{...d}:e); const u={...profileData,experience:list}; saveProfileData(u); setProfileData(u); };
+  const handleDeleteExp   = (exp, idx) => { const list=(profileData.experience||[]).filter((_,i)=>i!==idx); const u={...profileData,experience:list}; setProfileData(u); saveProfileData(u); };
 
-  fetchRankData();
-}, []);
-console.log("Rank data in Profile component:", rankData);
-console.log("User modules in Profile component:", userModules);
-
-const handleEdit = (updatedData) => {
-
-  saveProfileData(updatedData);
-  setProfileData(updatedData); 
-};
-
-const handleImageSave = async(updatedImage) => {
-  setImageUploading(true);
-  const res= await updateProfileImageData(updatedImage);
-  setRefreshing(prev => !prev);
-  setImageUploading(false);
-  
-  };
-
-const handleAddEducation = (newEducation) => {
- 
-  const updatedEducation = [...profileData.education, newEducation];
-  const updatedProfile = { ...profileData, education: updatedEducation };
-  saveProfileData(updatedProfile);
-  setProfileData(updatedProfile); 
-
-   // Close the modal after saving
-};
-const handleEditEducation = (updatedEducation,idx) => {
-  console.log("handleEditEducation called with:", updatedEducation);
-
-  const updatedEducationList = profileData.education.map((edu, index) =>
-    index === idx ? {...updatedEducation } : edu
-  );
-
-  console.log("Updated education list:", updatedEducationList);
-  const updatedProfile = {
-    ...profileData,
-    education: updatedEducationList,
-  };
-
-  saveProfileData(updatedProfile);
-  setProfileData(updatedProfile);
-};
-
-const handleDeleteEducation = async (educationId) => {
- try{
-    // await deleteEducationData(educationId);
-    const updatedEducationList = profileData.education.filter(edu => edu._id !== educationId);
-    const updatedProfile = { ...profileData, education: updatedEducationList };
-    setProfileData(updatedProfile); 
-    saveProfileData(updatedProfile);
-  } catch (error) {
-    console.error("Error deleting education:", error);
-  }
-};
-
-const handleAddExperience = (newExperience) => {
-  const updatedExperience = [...profileData.experience, newExperience];
-  const updatedProfile = { ...profileData, experience: updatedExperience };
-  saveProfileData(updatedProfile);
-  setProfileData(updatedProfile);
-};
-
-const handleEditExperience = (updatedExperience,idx) => {
-
-  console.log("handleEditExperience called with:", updatedExperience, "at index:", idx);
-  const updatedExperienceList = profileData.experience.map((exp, index) =>
-    index === idx ? {...updatedExperience } : exp
-  );
-console.log("Updated experience list:", updatedExperienceList);
-  const updatedProfile = {
-    ...profileData,
-    experience: updatedExperienceList,
-  };
-
-  saveProfileData(updatedProfile);
-  setProfileData(updatedProfile);
-};
-
-const handleDeleteExperience =(exp, idx) => {
- try{
-    // await deleteEducationData(educationId);
-    const updatedExperienceList = profileData.experience.filter((e, i) => i !== idx);
-    const updatedProfile = { ...profileData, experience: updatedExperienceList };
-    setProfileData(updatedProfile); 
-    saveProfileData(updatedProfile);
-  } catch (error) {
-    console.error("Error deleting experience:", error);
-  }
-};
-
-
-console.log(rankData);
-  
-  const handleShare = () => alert("Share Console clicked");
+  const handleShare    = () => alert("Share Console clicked");
   const handleContinue = () => alert("Continue Learning clicked");
-  const handleViewResources = () => alert("View Resources clicked");
-
-// Badges data And logic
-const [maxStreak, setMaxStreak] = useState(0);
-useEffect(() => {
-  const fetchMaxStreak = async () => {
-    try {
-      const response = await getMaxStreakData(); 
-
-      setMaxStreak(response.maxStreak);
-    } catch (error) {
-      console.error("Error fetching max streak:", error);
-    }
-  };
-
-  fetchMaxStreak();
-}, []);
-   
-
-// get shared resources data
-const [sharedResourcesCount, setSharedResourcesCount] = useState(0);
-const [latestSharedResource, setLatestSharedResource] = useState(null);
-useEffect(() => {
-  const fetchSharedResources = async () => {
-    try {
-      const response = await getSharedResourcesCount();
-      // console.log("Shared resources count fetched in component:", response);
-      setSharedResourcesCount(response.resourcesCount);
-      setLatestSharedResource(response.latestResource);
-    } catch (error) {
-      console.error("Error fetching shared resources:", error);
-    }
-  };
-
-
-  fetchSharedResources();
-}, []);
 
   return (
     <div className="w-full h-[93vh] overflow-hidden">
-      <div
-        className="h-full overflow-y-auto px-2 md:px-4 py-6 sm:py-8
-        scrollbar-thin scrollbar-thumb-indigo-500/30 scrollbar-track-transparent"
-      >
-    <div className="w-full min-w-0 h-full px-3 space-y-4">
+      <div className="h-full overflow-y-auto px-3 sm:px-5 py-6
+        scrollbar-thin scrollbar-thumb-indigo-500/30 scrollbar-track-transparent">
 
-          {/* 1. Profile Header */}
+        <div className="w-full max-w-6xl mx-auto space-y-5 pb-8">
+
+          {/* ── 1. Profile Header — full width ── */}
           <ProfileHeader
-            data={profileData} // ✅ fallback to static data
+            data={profileData}
             onEdit={handleEdit}
             onImageSave={handleImageSave}
             onShare={handleShare}
             isImageUploading={imageUploading}
           />
 
-          {/* 2. Earned Badges */}
-          <EarnedBadges maxStreak={maxStreak}  />
+          {/* ── 2. Badges strip — full width ── */}
+          {/* <EarnedBadges maxStreak={maxStreak} /> */}
 
-          {/* 3. Stats + Active Module side by side on large screens */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          {/* ── 3. Three-column section ── */}
+          {/*
+            Layout (lg+):
+              col 1 (narrow): Stats + Shared Resources
+              col 2-3 (wide): Active Module + Course Progress
+            On mobile: stacks vertically
+          */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+            {/* Left narrow column */}
             <div className="flex flex-col gap-4">
-              <StatsRow
-                rankData={rankData}
-              />
-              <SharedResources
-                data={SHARED_RESOURCES}
-                latestResource={latestSharedResource}
-                count={sharedResourcesCount}
-              />
+              <StatsRow rankData={rankData} />
+              <SharedResources count={resourcesCount} latestResource={latestResource} />
             </div>
+
+            {/* Right wide column — spans 2 grid columns */}
             <div className="lg:col-span-2 flex flex-col gap-4">
               <ActiveModule module={userModules} onContinue={handleContinue} />
-              <CourseProgress
-                courses={userModules}
-                // archived={ARCHIVED_COURSES}
-              />
+              <CourseProgress courses={userModules || []} />
             </div>
           </div>
 
-          {/* 4. Education Portfolio full width */}
-          <ExperiencePortfolio experiences={profileData.experience || [] } onSave={handleAddExperience} onEdit={handleEditExperience} onDelete={handleDeleteExperience} />
-          <EducationPortfolio education={profileData.education || []} onSave={handleAddEducation} onEdit={handleEditEducation} onDelete={handleDeleteEducation} />
+          {/* ── 4. Experience + Education side by side on lg ── */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            <ExperiencePortfolio
+              experiences={profileData.experience || []}
+              onSave={handleAddExp}
+              onEdit={handleEditExp}
+              onDelete={handleDeleteExp}
+            />
+            <EducationPortfolio
+              education={profileData.education || []}
+              onSave={handleAddEdu}
+              onEdit={handleEditEdu}
+              onDelete={handleDeleteEdu}
+            />
+          </div>
 
-          {/* 5. Knowledge Heatmap */}
-          {/* <KnowledgeHeatmap data={HEATMAP_DATA} /> */}
-        </div>
         </div>
       </div>
-   
+    </div>
   );
 }
