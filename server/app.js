@@ -4,7 +4,7 @@ import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
 
 // Routes
-import authRoutes from "./routes/auth.routes.js";
+import authRoutes from "./modules/auth/auth.routes.js";
 import onboarding from "./routes/onboarding.routes.js";
 import dashboard from "./routes/dashboard.routes.js";
 import leaderboard from "./routes/leaderboard.js";
