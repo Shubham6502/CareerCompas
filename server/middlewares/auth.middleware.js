@@ -1,4 +1,4 @@
-import TokenBlacklist from "../models/tokenBlacklist.js";
+import TokenBlacklist from "../modules/auth/tokenBlacklist.model.js";
 import jwt from "jsonwebtoken";
 
 export const authenticateToken = async (req, res, next) => {

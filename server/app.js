@@ -5,13 +5,13 @@ import rateLimit from "express-rate-limit";
 
 // Routes
 import authRoutes from "./modules/auth/auth.routes.js";
-import onboarding from "./routes/onboarding.routes.js";
-import dashboard from "./routes/dashboard.routes.js";
-import leaderboard from "./routes/leaderboard.js";
-import roadmap from "./routes/roadmap.routes.js";
-import resources from "./routes/resources.routes.js";
-import ProfileRoute from "./routes/profileRoutes.js";
-import JobApplicationRoute from "./routes/jobapplications.route.js";
+// import onboarding from "./routes/onboarding.routes.js";
+// import dashboard from "./routes/dashboard.routes.js";
+// import leaderboard from "./routes/leaderboard.js";
+// import roadmap from "./routes/roadmap.routes.js";
+// import resources from "./routes/resources.routes.js";
+// import ProfileRoute from "./routes/profileRoutes.js";
+// import JobApplicationRoute from "./routes/jobapplications.route.js";
 
 const app = express();
 
@@ -43,14 +43,14 @@ const limiter = rateLimit({
 // app.use(limiter);
 
 // Routes
-app.use("/api/resources", resources);
-app.use("/api/profile", ProfileRoute);
-app.use("/api/applications", JobApplicationRoute);
+// app.use("/api/resources", resources);
+// app.use("/api/profile", ProfileRoute);
+// app.use("/api/applications", JobApplicationRoute);
 app.use("/api/auth", authRoutes);
-app.use("/api/onboarding", onboarding);
-app.use("/api/dashboard", dashboard);
-app.use("/api/leaderboard", leaderboard);
-app.use("/api/roadmap", roadmap);
+// app.use("/api/onboarding", onboarding);
+// app.use("/api/dashboard", dashboard);
+// app.use("/api/leaderboard", leaderboard);
+// app.use("/api/roadmap", roadmap);
 
 app.get("/", (req, res) => {
   res.send("CareerCompass Backend is Running");
