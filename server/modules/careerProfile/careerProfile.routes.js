@@ -1,12 +1,13 @@
 import express from 'express';
-import careerProfileController from './careerProfile.controller';
+import * as careerProfileController from './careerProfile.controller.js';
+import { authenticateToken } from '../../shared/middlewares/authenticateToken.js';
 
 const router = express.Router();
 
-router.get('/', careerProfileController.getCareerProfiles);
-router.get('/:id', careerProfileController.getCareerProfileById);
-router.post('/', careerProfileController.createCareerProfile);
-router.put('/:id', careerProfileController.updateCareerProfile);
-router.delete('/:id', careerProfileController.deleteCareerProfile);
+router.get('/', authenticateToken, careerProfileController.getCareerProfiles);
+// router.get('/:id', careerProfileController.getCareerProfileById);
+router.post('/', authenticateToken, careerProfileController.createCareerProfile);
+router.put('/:id', authenticateToken, careerProfileController.updateCareerProfile);
+router.delete('/:id', authenticateToken, careerProfileController.deleteCareerProfile);
 
 export default router;

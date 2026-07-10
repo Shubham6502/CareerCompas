@@ -5,6 +5,8 @@ import rateLimit from "express-rate-limit";
 
 // Routes
 import authRoutes from "./modules/auth/auth.routes.js";
+import careerProfileRoutes from "./modules/careerProfile/careerProfile.routes.js";
+import dailyPlanRoutes from "./modules/daily-plan/dailyPlan.routes.js";
 // import onboarding from "./routes/onboarding.routes.js";
 // import dashboard from "./routes/dashboard.routes.js";
 // import leaderboard from "./routes/leaderboard.js";
@@ -47,6 +49,8 @@ const limiter = rateLimit({
 // app.use("/api/profile", ProfileRoute);
 // app.use("/api/applications", JobApplicationRoute);
 app.use("/api/auth", authRoutes);
+app.use("/api/career-profile", careerProfileRoutes);
+app.use("/api/daily-plan", dailyPlanRoutes);
 // app.use("/api/onboarding", onboarding);
 // app.use("/api/dashboard", dashboard);
 // app.use("/api/leaderboard", leaderboard);
