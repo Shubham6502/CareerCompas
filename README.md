@@ -118,6 +118,12 @@ REST API (Node.js + Express)
 ↓
 MongoDB Database
 
+## 📚 Developer & AI Documentation
+We have compiled structured documentation for developers and AI coding assistants:
+* [Database Schema Guide](file:///c:/Users/shubh/Desktop/LocalENV/V3/CareerCompas/docs/db_schemas.md) - Deep dive into MongoDB schemas, indexes, and relations.
+* [System Architecture](file:///c:/Users/shubh/Desktop/LocalENV/V3/CareerCompas/docs/architecture.md) - Overview of server directories, modular layouts, and layered coding practices.
+* [Implementation Guidelines](file:///c:/Users/shubh/Desktop/LocalENV/V3/CareerCompas/docs/implementation.md) - Templates, coding rules, spaced-repetition math, and graph traversal.
+
 ## 📸 Screenshots
 <img width="848" height="411" alt="Screenshot 2026-02-21 221151" src="https://github.com/user-attachments/assets/b8c9a331-c862-47ec-a522-dc0cb7dc5967" />
 

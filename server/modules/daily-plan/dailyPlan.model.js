@@ -8,9 +8,10 @@ const DailyPlanSchema = new Schema({
     taskId: { type: Schema.Types.ObjectId, ref: "Task", required: true },
     taskSlug: String,
     topicId: Schema.Types.ObjectId,
-    reason: { type: String, enum: ["weak-area","revision-due","unlock","interview-prep","new-topic"], default: "new-topic" },
-    triggerData: Schema.Types.Mixed, // e.g. { accuracy: 42, threshold: 50, daysSinceLastReview: 21 }
+    reason: { type: String, default: "new-topic" },
+    triggerData: Schema.Types.Mixed , // e.g. { accuracy: 42, threshold: 50, daysSinceLastReview: 21 }
     completed: { type: Boolean, default: false },
+    completedAt: { type: Date, default: null },
     _id: false,
   }],
   studyHoursBudget: { type: Number, required: true },
