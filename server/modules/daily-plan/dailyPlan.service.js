@@ -323,6 +323,7 @@ const generatePlanTasks = async ({
   studyMinutesBudget,
 }) => {
   const completedTaskIds = await dailyPlanRepository.getCompletedTaskIds(userId);
+  
   const latestPlan = await dailyPlanRepository.getLatestPlan(userId);
   let currentTopicId = getPreviousTopicId(latestPlan);
 

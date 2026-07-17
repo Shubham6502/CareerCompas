@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+const { Schema } = mongoose;
 const InterviewSessionSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   sessionType: { type: String, enum: ["behavioral","technical-coding","system-design"], required: true },
