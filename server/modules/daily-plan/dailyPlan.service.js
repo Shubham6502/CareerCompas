@@ -28,11 +28,6 @@ const resolvePrimaryCareerTrack = (targetCompanies) => {
       "At least one target company is required to generate a daily plan."
     );
   }
-
-  /*
-   * Lowest priority number means
-   * highest-priority target company.
-   */
   const [primaryCompany] = [...targetCompanies].sort(
     (a, b) => (a.priority ?? Infinity) - (b.priority ?? Infinity)
   );
@@ -41,33 +36,14 @@ const resolvePrimaryCareerTrack = (targetCompanies) => {
     throw new Error("Primary target company does not have a career tier.");
   }
 
-  /*
-   * Important:
-   *
-   * Task:
-   * careerTracks: ["faang", "product"]
-   *
-   * Profile may contain:
-   * "FAANG"
-   *
-   * Normalize before querying.
-   */
   return primaryCompany.tier.trim().toLowerCase();
 };
-
-/* -------------------------------------------------------------------------- */
-/* Previous Plan State                                                        */
-/* -------------------------------------------------------------------------- */
 
 const getPreviousTopicId = (latestPlan) => {
   if (!latestPlan?.tasks?.length) {
     return null;
   }
 
-  /*
-   * Continue from the final topic
-   * reached in the previous plan.
-   */
   const lastTask = latestPlan.tasks[latestPlan.tasks.length - 1];
   return lastTask?.topicId ?? null;
 };
@@ -121,9 +97,7 @@ const resolveGraphNextTopic = async ({
     return null;
   }
 
-  /*
-   * Highest graph weight first.
-   */
+ 
   const candidates = [...currentTopic.nextTopics].sort(
     (a, b) => (b.edgeWeight ?? 0) - (a.edgeWeight ?? 0)
   );

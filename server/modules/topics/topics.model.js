@@ -66,7 +66,16 @@ _id: {
       default:Date.now},
   updatedAt:{
       type:Date,
-      default:Date.now}
+      default:Date.now},
+  isDeleted: {
+      type: Boolean,
+      default: false,
+      index: true
+  },
+  deletedAt: {
+      type: Date,
+      default: null
+  }
 }
 );
 export default mongoose.model("Topic", topicSchema);

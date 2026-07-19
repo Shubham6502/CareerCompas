@@ -10,6 +10,11 @@ const CareerProfileSchema = new Schema(
       unique: true,
       index: true,
     },
+    activeRoadmapId: {
+      type: Schema.Types.ObjectId,
+      ref: "Roadmap",
+      default: null,
+    },
     targetRole: {
       type: String,
       required: true,

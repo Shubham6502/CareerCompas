@@ -46,13 +46,14 @@ export const login = async (req, res) => {
       path: "/",
     });
 
-    return res.status(201).json({
-      message: "User registered successfully",
+    return res.status(200).json({
+      message: "User logged in successfully",
       user: result.user,
     });  
   } catch (error) {
     console.error("Error logging in:", error);
-    res.status(500).json({ message: "Internal server error" });
+    const status = error.statusCode === 401 ? 400 : (error.statusCode || 500);
+    return res.status(status).json({ message: error.message || "Internal server error" });
   }
 };
 // LogOut------

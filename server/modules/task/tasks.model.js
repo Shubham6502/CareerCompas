@@ -390,6 +390,10 @@ const TaskSchema = new Schema(
       enum: ["seed", "admin", "ai", "import"],
       default: "seed",
     },
+    order: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true },
 );

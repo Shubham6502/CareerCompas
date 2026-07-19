@@ -198,6 +198,48 @@ const topicMasterySchema = new mongoose.Schema(
       },
     },
 
+    clusterId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "LearningCluster",
+      default: null,
+      index: true,
+    },
+    mastery: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 100,
+    },
+    confidence: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 100,
+    },
+    accuracy: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 100,
+    },
+    attempts: {
+      type: Number,
+      default: 0,
+    },
+    averageScore: {
+      type: Number,
+      default: 0,
+    },
+    lastReviewed: {
+      type: Date,
+      default: null,
+    },
+    nextRevision: {
+      type: Date,
+      default: null,
+      index: true,
+    },
+
     schemaVersion: {
       type: Number,
       default: 1,

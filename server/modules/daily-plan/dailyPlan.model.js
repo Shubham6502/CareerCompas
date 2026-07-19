@@ -3,6 +3,8 @@ const { Schema } = mongoose;
 
 const DailyPlanSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  roadmapId: { type: Schema.Types.ObjectId, ref: "Roadmap", required: true },
+  clusterId: { type: Schema.Types.ObjectId, ref: "LearningCluster", required: true },
   planDate: { type: Date, required: true }, // date-only, normalized to midnight UTC
   tasks: [{
     taskId: { type: Schema.Types.ObjectId, ref: "Task", required: true },

@@ -46,10 +46,12 @@ describe('Roadmap API', () => {
   const token = registerRes.body.user.token;
 
   // 2. Insert roadmap data
-  const Roadmap = (await import("../models/roadmap.js")).default;
+  const Roadmap = (await import("../modules/roadmap/roadmap.model.js")).default;
 
   await Roadmap.create({
+    title: "SWE Roadmap",
     domain: "SWE",
+    track: "beginner",
     experienceLevel: "beginner",
     targetType: "faang_product",
     timelineDays: 30,
@@ -91,10 +93,12 @@ it('should get the roadmap for user', async () => {
   const token = registerRes.body.user.token;
 
   // 2. Insert roadmap data
-  const Roadmap = (await import("../models/roadmap.js")).default;
+  const Roadmap = (await import("../modules/roadmap/roadmap.model.js")).default;
 
   await Roadmap.create({
+    title: "SWE Roadmap",
     domain: "SWE",
+    track: "beginner",
     experienceLevel: "beginner",
     targetType: "faang_product",
     timelineDays: 30,

@@ -5,56 +5,53 @@ const optionSchema = new mongoose.Schema(
     id: {
       type: String,
       required: true,
-      // Example: opt_a, opt_b, opt_c, opt_d
     },
-
     text: {
       type: String,
       required: true,
       trim: true,
     },
   },
+  { _id: false }
+);
+
+const referenceSchema = new mongoose.Schema(
   {
-    _id: false,
-  }
+    title: String,
+    url: String,
+    type: {
+      type: String,
+      enum: [
+        "article",
+        "video",
+        "documentation",
+        "book",
+        "leetcode",
+        "youtube",
+        "other",
+      ],
+      default: "article",
+    },
+  },
+  { _id: false }
 );
 
 const questionSchema = new mongoose.Schema(
   {
-    // =========================
-    // RELATIONSHIPS
-    // =========================
+    // ============================
+    // ASSESSMENT
+    // ============================
 
-    topicId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Topic",
-      required: true,
-      index: true,
-    },
-
-    skillId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Skill",
-      index: true,
-    },
-
-    // =========================
-    // QUESTION CONTENT
-    // =========================
-
-    questionType: {
+    assessmentGroup: {
       type: String,
-      enum: [
-        "single_choice",
-        "multiple_choice",
-        "true_false",
-        "code_output",
-        "code_debugging",
-        "scenario_based",
-        "short_answer",
-      ],
       required: true,
       index: true,
+    },
+
+    title: {
+      type: String,
+      required: true,
+      trim: true,
     },
 
     question: {
@@ -63,14 +60,22 @@ const questionSchema = new mongoose.Schema(
       trim: true,
     },
 
-    codeSnippet: {
-      type: String,
-      default: null,
-    },
+    // ============================
+    // QUESTION TYPE
+    // ============================
 
-    programmingLanguage: {
+    questionType: {
       type: String,
-      default: null,
+      enum: [
+        "mcq",
+        "multiple-select",
+        "true-false",
+        "fill-blank",
+        "coding",
+        "short-answer",
+      ],
+      required: true,
+      index: true,
     },
 
     options: {
@@ -78,34 +83,14 @@ const questionSchema = new mongoose.Schema(
       default: [],
     },
 
-    // Store option IDs, not array indexes
-    // Example: ["opt_b"]
     correctAnswer: {
-      type: [String],
+      type: mongoose.Schema.Types.Mixed,
       required: true,
     },
 
-    explanation: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-
-    // =========================
-    // LEARNING METADATA
-    // =========================
-
-    concept: {
-      type: String,
-      required: true,
-      trim: true,
-      index: true,
-    },
-
-    subConcepts: {
-      type: [String],
-      default: [],
-    },
+    // ============================
+    // DIFFICULTY
+    // ============================
 
     difficulty: {
       type: String,
@@ -114,82 +99,161 @@ const questionSchema = new mongoose.Schema(
       index: true,
     },
 
-    cognitiveLevel: {
+    estimatedTimeSeconds: {
+      type: Number,
+      default: 90,
+      min: 10,
+    },
+
+    points: {
+      type: Number,
+      default: 5,
+      min: 1,
+    },
+
+    negativeMarks: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+
+    // ============================
+    // LEARNING METADATA
+    // ============================
+
+    bloomLevel: {
       type: String,
       enum: [
         "remember",
         "understand",
         "apply",
         "analyze",
+        "evaluate",
+        "create",
       ],
       required: true,
     },
 
-    tags: {
+    learningObjective: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    interviewFrequency: {
+      type: String,
+      enum: [
+        "low",
+        "medium",
+        "high",
+        "very-high",
+      ],
+      default: "medium",
+    },
+
+    topicSlugs: {
+      type: [String],
+      required: true,
+      index: true,
+    },
+
+    conceptTags: {
+      type: [String],
+      default: [],
+      index: true,
+    },
+
+    prerequisites: {
       type: [String],
       default: [],
     },
 
-    estimatedTimeSeconds: {
-      type: Number,
-      default: 60,
-      min: 10,
+    companyTags: {
+      type: [String],
+      default: [],
+      index: true,
     },
 
-    // =========================
-    // QUESTION SOURCE
-    // =========================
+    // ============================
+    // ANSWER
+    // ============================
 
-    source: {
-      type: {
+    explanation: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    whyCorrect: {
+      type: String,
+      default: "",
+    },
+
+    whyIncorrect: {
+      type: Map,
+      of: String,
+      default: {},
+    },
+
+    hints: {
+      type: [String],
+      default: [],
+    },
+
+    commonMistakes: {
+      type: [String],
+      default: [],
+    },
+
+    references: {
+      type: [referenceSchema],
+      default: [],
+    },
+
+    // ============================
+    // AI METADATA
+    // ============================
+
+    aiMetadata: {
+      generatedBy: {
         type: String,
-        enum: [
-          "manual",
-          "ai_generated",
-          "rag_generated",
-        ],
-        default: "manual",
+        default: "Claude",
       },
 
       model: {
         type: String,
-        default: null,
+        default: "",
       },
 
-      sourceDocumentIds: [
-        {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "KnowledgeDocument",
-        },
-      ],
-    },
-
-    // =========================
-    // AI METADATA
-    // =========================
-
-    aiMetadata: {
-      generationPromptVersion: {
+      promptVersion: {
         type: String,
-        default: null,
+        default: "v1",
       },
 
-      confidenceScore: {
-        type: Number,
-        min: 0,
-        max: 1,
-        default: null,
+      generationDate: {
+        type: Date,
+        default: Date.now,
       },
 
-      verified: {
+      reviewed: {
         type: Boolean,
         default: false,
       },
+
+      reviewedBy: {
+        type: String,
+        default: "",
+      },
+
+      version: {
+        type: Number,
+        default: 1,
+      },
     },
 
-    // =========================
+    // ============================
     // STATUS
-    // =========================
+    // ============================
 
     isActive: {
       type: Boolean,
@@ -202,31 +266,32 @@ const questionSchema = new mongoose.Schema(
   }
 );
 
-// Fast assessment question selection
+// ============================
+// Indexes
+// ============================
+
 questionSchema.index({
-  topicId: 1,
+  assessmentGroup: 1,
   difficulty: 1,
   questionType: 1,
   isActive: 1,
 });
 
-// Fast concept-based retrieval
 questionSchema.index({
-  topicId: 1,
-  concept: 1,
+  topicSlugs: 1,
   difficulty: 1,
 });
 
-// Basic text search
 questionSchema.index({
-  question: "text",
-  concept: "text",
-  tags: "text",
+  companyTags: 1,
+  difficulty: 1,
 });
 
-const Question = mongoose.model(
-  "Question",
-  questionSchema
-);
+questionSchema.index({
+  question: "text",
+  title: "text",
+  learningObjective: "text",
+  conceptTags: "text",
+});
 
-export default Question;
+export default mongoose.model("Question", questionSchema);
