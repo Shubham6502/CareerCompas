@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import * as progressService from "../progress/progress.service.js";
 import * as masteryService from "../topic-mastery/mastery.service.js";
 import * as revisionService from "../revision/revision.service.js";
+import { updateUserStreak } from "../careerProfile/streak.service.js";
 import * as plannerService from "../daily-plan/planner.service.js";
 import * as assessmentRepository from "../assessment/assessment.repository.js";
 import Roadmap from "../roadmap/roadmap.model.js";
@@ -323,6 +324,8 @@ export const submitAssessment = async (userId, clusterId, answers) => {
       });
     }
   }
+
+  await updateUserStreak(userId);
 
   return {
     score: correctCount,

@@ -1,4 +1,5 @@
 import * as userTaskProgressRepository from './userTaskProgress.repository.js';
+import { updateUserStreak } from '../careerProfile/streak.service.js';
 
 export const createUserTaskProgress = async (userId, taskProgressData) => {
   const { taskId, progress } = taskProgressData;
@@ -29,12 +30,13 @@ export const updateUserTaskProgress = async (userId, taskProgressId, progress) =
   if (!planId) {
     throw new Error("Plan ID is required to update user task progress.");
   }
-    if(progress.status==="completed"){
-        progress.completedAt = new Date();
-        await userTaskProgressRepository.updateDailyPlanTaskCompletion(userId,planId,taskProgressId);
-
-    }
-    return userTaskProgressRepository.updateUserTaskProgress(userId, taskProgressId, progress);
+  if(progress.status==="completed"){
+      progress.completedAt = new Date();
+      await userTaskProgressRepository.updateDailyPlanTaskCompletion(userId,planId,taskProgressId);
+      // Trigger streak update
+      await updateUserStreak(userId);
+  }
+  return userTaskProgressRepository.updateUserTaskProgress(userId, taskProgressId, progress);
 }
 
 export const deleteUserTaskProgress = async (userId, taskProgressId) => {

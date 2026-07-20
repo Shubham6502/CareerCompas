@@ -9,6 +9,7 @@ import careerProfileRoutes from "./modules/careerProfile/careerProfile.routes.js
 import dailyPlanRoutes from "./modules/daily-plan/dailyPlan.routes.js";
 import userTaskProgressRoutes from "./modules/userTaskProgress/userTaskProgress.routes.js";
 import learningEngineRoutes from "./modules/learning/learningEngine.routes.js";
+import dashboardRoutes from "./modules/dashboard/dashboard.routes.js";
 import onboarding from "./routes/onboarding.routes.js";
 // import dashboard from "./routes/dashboard.routes.js";
 // import leaderboard from "./routes/leaderboard.js";
@@ -56,7 +57,7 @@ app.use("/api/daily-plan", dailyPlanRoutes);
 app.use("/api/user-task-progress", userTaskProgressRoutes);
 app.use("/api/learning-engine", learningEngineRoutes);
 app.use("/api/onboarding", onboarding);
-// app.use("/api/dashboard", dashboard);
+app.use("/api/dashboard", dashboardRoutes);
 // app.use("/api/leaderboard", leaderboard);
 app.use("/api/roadmap", roadmap);
 

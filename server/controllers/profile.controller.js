@@ -1,8 +1,7 @@
 import mongoose from "mongoose";
 import User from "../models/user.js";
-import task_completion from "../models/task_completion.js";
-import user_roadmap from "../models/user_roadmap.js";
-import Roadmap from "../models/roadmap.js";
+import CareerProfile from "../modules/careerProfile/careerProfile.model.js";
+import Roadmap from "../modules/roadmap/roadmap.model.js";
 import jwt from "jsonwebtoken";
 import { extractPublicId } from "../utils/extractPublicId.js";
 import { v2 as cloudinary } from "cloudinary";
@@ -126,12 +125,12 @@ export const getMaxStreak = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       return res.status(400).json({ message: "Invalid user ID" });
     }
-    const user = await task_completion.findOne({ userId: userId });
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
+    const profile = await CareerProfile.findOne({ userId: userId, isDeleted: false });
+    if (!profile) {
+      return res.status(404).json({ message: "Career profile not found" });
     }
     
-    const maxStreak = user.longestStreak || 0;
+    const maxStreak = profile.longestStreak || 0;
     return res.status(200).json({ maxStreak });
   } catch (error) {
     console.error("Error fetching max streak:", error); 

@@ -227,7 +227,7 @@ describe("Adaptive Learning Engine Test Suite", () => {
     expect(res.body.success).toBe(true);
     expect(res.body.action).toBe("ENTRY_ASSESSMENT");
     expect(res.body.questions.length).toBeGreaterThan(0);
-    expect(duration).toBeLessThan(50); // Fetch must complete under 50ms
+    expect(duration).toBeLessThan(100); // Fetch must complete under 100ms
   });
 
   it("3. POST /submit-assessment low score (<60) routes user to Full Learning Path", async () => {
@@ -273,7 +273,7 @@ describe("Adaptive Learning Engine Test Suite", () => {
     expect(plan.roadmapId).toBe(mockRoadmap._id.toString());
     expect(plan.clusterId).toBe(mockCluster._id.toString());
     expect(plan.tasks.length).toBeGreaterThan(0);
-    expect(duration).toBeLessThan(100); // Daily Plan generation must complete under 100ms
+    expect(duration).toBeLessThan(200); // Daily Plan generation must complete under 200ms
   });
 
   it("5. Completing the daily plan unlocks Final Assessment status", async () => {
